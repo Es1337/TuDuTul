@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tudutul_webapp.apps.TudutulWebappConfig'
 ]
 
 MIDDLEWARE = [
