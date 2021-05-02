@@ -13,6 +13,11 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 import django_heroku
+import environ
+
+# Initialize environment variables
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -78,8 +83,11 @@ WSGI_APPLICATION = 'tudutul.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        'NAME': env('DATABASE_NAME'),
+        'CLIENT': {
+            'host': env('DATABASE_HOST')
+        }
     }
 }
 
