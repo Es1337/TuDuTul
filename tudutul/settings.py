@@ -45,7 +45,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tudutul',
-    'tudutul_webapp.apps.TudutulWebappConfig'
+    'tudutul_webapp.apps.TudutulWebappConfig',
+    'rest_framework',
+    'drf_yasg'
 ]
 
 MIDDLEWARE = [
@@ -91,7 +93,6 @@ DATABASES = {
         }
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
