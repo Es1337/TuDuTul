@@ -1,0 +1,2 @@
+/*! For license information please see main.js.LICENSE.txt */
+(()=>{var __webpack_modules__={"./src/js/index.js":()=>{eval("const dupa = 3;\n\n//# sourceURL=webpack://tudutul_webapp/./src/js/index.js?")}},__webpack_exports__={};__webpack_modules__["./src/js/index.js"]()})();
