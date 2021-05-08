@@ -1,22 +1,24 @@
 from django.shortcuts import redirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.decorators import api_view
 from .forms import RegisterForm
 
-class RegistrationView(APIView):
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'register/register.html'
+    
 
+class RegistrationView(APIView):
+    renderer_classes = [JSONRenderer]
+    
     def get(self, request):
         return Response()
 
     def post(self, request):
+        print(request.POST); 
         form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return Response(data = {"ans": "Success"})
         else:
             answer = form.reason()
         

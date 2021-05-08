@@ -663,6 +663,10 @@ video {
 	display: flex;
 }
 
+.hidden {
+	display: none;
+}
+
 .h-screen {
 	height: 100vh;
 }
@@ -681,6 +685,10 @@ video {
 
 .h-4\/5 {
 	height: 80%;
+}
+
+.h-auto {
+	height: auto;
 }
 
 .w-full {
@@ -797,6 +805,10 @@ video {
 
 .pb-3 {
 	padding-bottom: 0.75rem;
+}
+
+.text-center {
+	text-align: center;
 }
 
 .text-2xl {
