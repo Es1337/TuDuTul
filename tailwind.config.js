@@ -1,7 +1,7 @@
 module.exports = {
   mode: 'jit',
   purge: [
-      './templates/tudutul-webapp/*.html'
+      './tudutul_webapp/templates/tudutul-webapp/*.html'
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
