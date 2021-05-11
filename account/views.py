@@ -21,7 +21,7 @@ class RegistrationView(APIView):
         else:
             answer = form.reason()
         
-        return Response(data = {"ans": answer})
+        return Response(data={"ans": answer})
 
 
 class LoginView(APIView):
@@ -29,23 +29,39 @@ class LoginView(APIView):
     template_name = 'login/login.html'
 
     def get(self, request):
+        user_session_key = 'userLogin'
+
+        if user_session_key in request.session: # przekierujmy zalogowanego
+            return redirect('/account/show', {'userLogin': request.session.get(user_session_key)})
+
         return Response()
 
     def post(self, request):
+        user_session_key = 'userLogin'
+
         form = LoginForm(request.POST)
         if form.is_valid():
             # set session
-            request.session['user'] = form.login
-            return redirect('/asd')
+            request.session['userLogin'] = form.login
+            return redirect('/account/show', {'userLogin': request.session.get(user_session_key)})
         else:
             answer = form.reason()
 
-        return Response(data={"ans": answer, "sesja": request.session})
+        return Response(data={"ans": answer})
 
 
 class AccountView(APIView):
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'login/login.html'
+    template_name = 'account/account.html'
 
     def get(self, request):
-        return Response()
+        return Response(data={"userLogin": request.session.get('userLogin')})
+
+
+class LogoutView(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+
+    def get(self, request):
+        if request.session.get('userLogin') == request.GET.get('login'):
+            request.session.pop(key='userLogin')
+        return redirect('/account/login', {'userLogin': 'Logged out'})

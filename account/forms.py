@@ -47,10 +47,11 @@ class LoginForm:
 
         if user_filter.count() is 0:
             self.alert = f'There is no user with login: {self.login} in database. Try again.'
-        elif check_password(self.password, user_filter[0].password) is True:
-            pass
-        else:
+        elif check_password(self.password, user_filter[0].password) is False:
             self.alert = f'Incorrect password for user: {self.login}. Please try again.'
+        else:
+            pass
+        # else passwords match and we do nothing
 
         return self.alert == ''
 
