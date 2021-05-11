@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TuDuTul</title>
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static "css/landingpage.css" %}"
+    <link rel="stylesheet" type="text/css" href='{% static "css/tailwind_compiled.css" %}'
     />
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;900&display=swap" rel="stylesheet">
@@ -14,35 +14,52 @@
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@900&display=swap" rel="stylesheet"> 
 
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">
-                <p><mark class="redMain">Tu</mark><mark class="blueMain">Du</mark>Tul</p>
-            </div>
-            <nav>
-                <ul>
-                    <li><span>Login</span</li>
-                    <li><span>Sign Up</span</li>
-                    <li><span>Continue without account</span></li>
-                </ul>
-            </nav>
+<body class="mx-auto h-screen mainBackground p-0 m-0 overflow-hidden">
+    <nav class="z-10 mx-auto bg-background bg-opacity-90 border-b-4 border-black m-0 pt-3 pb-3 md:pt-7 md:pb-7 block md:flex justify-around items-center ">
+
+        <!--   left side -->
+        <div class="flex justify-center">
+            <a href="/" class="specialtext text-white font-black text-2xl md:text-5xl "><mark class="redMain">Tu</mark><mark class="blueMain">Du</mark>Tul</a>
         </div>
-        <div class="main">
-            <p class="mainText">
-                Always know what you need <mark class="redMain">Tu</mark><mark class="blueMain">Du</mark>.
-            </p>
-            <span class="darkpurple left"></span>
-            <span class="lightpurple right"></span>
-            <span class="lily upper-left"></span>
-            <span class="coral upper-right"></span>
-            <span class="brownish center"></span>
-            <span class="brownish most-right"></span>
-            <!--<svg class="front" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-                <path fill="#0099ff" fill-opacity="1" d="M0,192L48,192C96,192,192,192,288,213.3C384,235,480,277,576,261.3C672,245,768,171,864,133.3C960,96,1056,96,1152,101.3C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-              </svg>
-            -->
+
+        <!--   right side -->
+        <div class="flex justify-center mt-2 text-sm md:text-md md:m-0">
+          <a href="login" class="inline-block p-2 text-indigo-100 hover:text-indigo-100 mx-2">Login</a>
+          <a href="register" class="inline-block py-2 px-4 shadow-xl text-yellow-700 bg-yellow-400 hover:bg-yellow-300 hover:text-yellow-800 rounded transition ease-in duration-150 mx-2">Sign Up</a>
+          <a href="noaccount" class="inline-block p-2 text-indigo-100 hover:text-indigo-100 mx-2">Continue Without Account</a>
         </div>
+
+    </nav>
+    <div class="h-2/5">
+        <div class="h-full flex flex-col justify-start  items-center mt-20 md:mt-15 font-black text-2xl sm:text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl text-white">
+                <p class="z-10">Always know what you need</p> 
+                <p class="z-10"><mark class="redMain">Tu</mark><mark class="blueMain">Du</mark>.</p>
+        </div>
+    </div>
+    <div class="h-2/5">
+        <div class="h-full flex flex-col justify-start  items-center font-black text-xl sm:text-2xl md:text-3xl lg:text-4xl 2xl:text-5xl text-white">
+                <p class="z-10"><span class="text-yellow-400">#1</span> ToDo app on IO lessons</p> 
+        </div>
+    </div>
+    
+    <section>
+        <div class="wave wave1"></div>
+        <div class="wave wave2"></div>
+        <div class="wave wave3"></div>
+        <div class="wave wave4"></div>
+    </section>
+    
+        
+        <!-- <span class="darkpurple left"></span>
+        <span class="lightpurple right"></span>
+        <span class="lily upper-left"></span>
+        <span class="coral upper-right"></span>
+        <span class="brownish center"></span>
+        <span class="brownish most-right"></span> -->
+        <!--<svg class="front" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path fill="#0099ff" fill-opacity="1" d="M0,192L48,192C96,192,192,192,288,213.3C384,235,480,277,576,261.3C672,245,768,171,864,133.3C960,96,1056,96,1152,101.3C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+            </svg>
+        -->
     </div>
 </body>
 </html>
