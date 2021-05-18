@@ -45,7 +45,7 @@ class LoginForm:
     def is_valid(self):
         user_filter = User.objects.filter(login=self.login)
 
-        if user_filter.count() is 0:
+        if user_filter.count() == 0:
             self.alert = f'There is no user with login: {self.login} in database. Try again.'
         elif check_password(self.password, user_filter[0].password) is False:
             self.alert = f'Incorrect password for user: {self.login}. Please try again.'
