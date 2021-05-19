@@ -1,8 +1,8 @@
 module.exports = {
-  mode: 'jit',
-  purge: [
-      './tudutul_webapp/templates/tudutul-webapp/*.html'
-  ],
+  // mode: 'jit',
+  // purge: [
+  //     './tudutul_webapp/templates/tudutul-webapp/*.html'
+  // ],
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {

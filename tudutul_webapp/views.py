@@ -13,3 +13,7 @@ def login(request, *args, **kwargs):
 
 def register(request, *args, **kwargs):
     return render(request, 'tudutul-webapp/register.html')
+
+
+def offline(request, *args, **kwargs):
+    return render(request, 'tudutul-webapp/offline-notes.html')

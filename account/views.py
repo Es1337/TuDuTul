@@ -40,12 +40,10 @@ class LoginView(APIView):
         user_session_key = 'userLogin'
 
         form = LoginForm(request.POST)
-        for ex in form:
-            print(ex, flush=True)
+
         if form.is_valid():
             # set session
             request.session['userLogin'] = form.login
-            request.session['userEmail'] = form.email
             return redirect('/account/show', {'userLogin': request.session.get(user_session_key)})
         else:
             answer = form.reason()
@@ -58,8 +56,7 @@ class AccountView(APIView):
     template_name = 'account/account.html'
 
     def get(self, request):
-        return Response(data={"userLogin": request.session.get('userLogin'), 
-                            "userEmail": request.session.get('userEmail')})
+        return Response(data={"userLogin": request.session.get('userLogin')})
 
 
 class LogoutView(APIView):
