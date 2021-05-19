@@ -40,6 +40,7 @@ class LoginView(APIView):
         user_session_key = 'userLogin'
 
         form = LoginForm(request.POST)
+
         if form.is_valid():
             # set session
             request.session['userLogin'] = form.login

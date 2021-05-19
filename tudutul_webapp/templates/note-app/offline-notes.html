@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href='{% static "css/tailwind_compiled.css" %}'
+    />
+    <link rel="stylesheet" type="text/css" href='{% static "fontawesome/css/all.css" %}'
+    />
+    
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="mx-auto w-screen h-screen mainBackground p-0 m-0">
+
+        <!-- NAVBAR -->
+        <div class="w-1/6 h-screen bg-background border-r-2 border-yellow-300 rounded flex flex-col items-center">
+            <span class="text-2xl font-black text-white my-5"><span class="redMain">Tu</span><span class="blueMain">Du</span>Tul</span>
+            
+            <!-- BUTTONS AREA -->
+            <div class="w-full flex flex-col items-center">
+                <div class="w-11/12 mx-2 my-2 border-yellow-300 border-2 rounded-2xl">
+                    <div class="w-11/12 hover:w-full my-2 mx-auto hover:my-0 hover:mx-0 hover:py-2 hover:px-auto bg-yellow-200 flex justify-center items-center rounded-xl">
+                        <i class=" my-1 far fa-calendar-alt text-3xl"></i>
+                        <span class="w-5/12 ml-9 text-xl text-center">Calendar</span>
+                    </div>
+                </div>
+                <div class="w-11/12 mx-2 my-2 border-yellow-300 border-2 rounded-2xl">
+                    <div class="w-11/12 hover:w-full my-2 mx-auto hover:my-0 hover:mx-0 hover:py-2 hover:px-auto bg-yellow-200 flex justify-center items-center rounded-xl">
+                        <i class=" my-1 fas fa-sign-in-alt text-3xl"></i>
+                        <span class="w-5/12 ml-9 text-xl text-center">Sign in</span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <!-- TUDU AREA -->
+        <div class="flex flex-col items-center w-2/6 h-screen ">
+            
+        </div>
+        
+        <!-- DUNE AREA -->
+        <div class="flex flex-col items-center w-3/6 h-screen ">test</div>
+        
+    </div>
+    
+</body>
+</html>
