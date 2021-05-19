@@ -1,2 +1,77 @@
-<h1> To jest testowa strona widoczna po zalogowaniu </h1>
-<a href="/account/logout?&login={{userLogin}}"> Wyloguj się </a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href='{% static "css/tailwind_compiled.css" %}'
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;900&display=swap" rel="stylesheet">
+    <title>Login</title>
+</head>
+
+<!-- the body of the document, centered (mx-auto), fills whole screen (h-screen), has the gradient background(mainBackground), no margin(m-0) and padding(p-0) -->
+<body class="mx-auto h-screen mainBackground p-0 m-0">
+
+    <!-- the navbar -->
+    <nav class="mx-auto bg-background bg-opacity-90 border-b-4 border-black m-0 pt-3 pb-3 md:pt-7 md:pb-7 block md:flex justify-around items-center ">
+
+        <!--   left side -->
+        <div class="flex justify-content-start">
+          <a href="/" class="specialtext text-white font-black text-2xl md:text-5xl"><mark class="redMain">Tu</mark><mark class="blueMain">Du</mark>Tul</a>
+        </div>
+
+        <!--   right side -->
+        <div class="flex justify-content-end mt-2 text-sm md:text-md md:m-0">
+          <a class="inline-block p-2 text-indigo-100 hover:text-indigo-100 mx-2">Jesteś zalogowany jako: <mark class="redMain">{{userLogin}}</mark></a>  
+          <a href="/account/logout?&login={{userLogin}}" class="inline-block py-2 px-10 shadow-xl text-yellow-700 bg-yellow-400 hover:bg-yellow-300 hover:text-yellow-800 rounded transition ease-in duration-150 mx-2">Logout</a>
+        </div>
+
+    </nav>
+
+    <!-- the main div -->
+    <!-- <div class="mx-auto w-full flex flex-col justify-center items-center ml-15">
+        <div class="w-3/5  md:w-3/5 lg:w-2/5 h-4/5 bg-background px-10 md:px-5 border-double border-2 border-yellow-300 border-opacity-70 rounded-2xl flex flex-col items-center shadow-xl">
+            Tutaj profil: PROFIL UŻYTKOWNIKA Login: {login} Email: {email} Zdjęcie
+            <h2 class="mt-10 inline-block text-indigo-100 hover:text-indigo-100 text-2xl ml-10 lg:ml-20 md:text-3xl lg:text-4xl">Profil Użytkownika</h2>
+            <p class="inline-block text-indigo-100 hover:text-indigo-100 text-2xl ml-10 lg:ml-20 md:text-3xl lg:text-4xl">Login: <mark class="redMain font-italic">{{userLogin}}</mark></p>
+            <p class="inline-block text-indigo-100 hover:text-indigo-100 text-2xl ml-10 lg:ml-20 md:text-3xl lg:text-4xl">Email: <mark class="redMain font-italic">{{userLogin}}@</mark></p>
+            <img src="../../static/img/user_icon.png" alt="User icon" class="mt-10 mb-20">
+        </div>
+        <div class="mx-auto container h-3/4 m-0 p-0 md:grid md:grid-cols-2">
+            Tutaj małe menu, od góry: Ustawienia Tabele Kalendarz
+            <div class="flex justify-center items-center">
+                <p class="mt-10">Ustawienia</p>
+                <p >Tabele</p>
+                <p class="mb-10">Kalendarz</p>
+                
+            </div>
+        </div>
+    </div> -->
+    <div class="mx-auto container h-3/4 m-0 p-0 md:grid md:grid-cols-2">
+        <div class="mt-20 mb-20 md:my-20 bg-background px-10 md:px-5 border-double border-2 border-yellow-300 border-opacity-70 rounded-2xl flex flex-col items-center shadow-xl">
+            <!-- Tutaj profil: PROFIL UŻYTKOWNIKA Login: {login} Email: {email} Zdjęcie -->
+            <h2 class="mt-10 inline-block text-indigo-100 hover:text-indigo-100 text-2xl ml-10 lg:ml-20 md:text-3xl lg:text-4xl">Profil Użytkownika</h2>
+            <p class="inline-block text-indigo-100 hover:text-indigo-100 text-2xl ml-10 lg:ml-20 md:text-3xl lg:text-4xl">Login: <mark class="redMain font-italic">{{userLogin}}</mark></p>
+            <p class="inline-block text-indigo-100 hover:text-indigo-100 text-2xl ml-10 lg:ml-20 md:text-3xl lg:text-4xl">Email: <mark class="redMain font-italic">{{userLogin}}@gmail.com</mark></p>
+            <img src="../../static/img/user_icon.png" alt="User icon"  width="200" height="200">
+        </div>
+        <div class="mt-20 mb-20 md:my-20 bg-background px-10 md:px-5 border-double border-2 border-yellow-300 border-opacity-30 rounded-2xl flex flex-col items-center shadow-xl">
+            <!-- Tutaj małe menu, od góry: Ustawienia Tabele Kalendarz -->
+            <div class="flex flex-col justify-center items-center">
+                <p class="mt-10 p-2 text-indigo-100 mx-2">Ustawienia</p>
+                <img src="../../static/img/settings_icon.png" alt="User icon"  width="100" height="100">
+                <p class="mt-10 p-2 text-indigo-100 mx-2">Tabele</p>
+                <img src="../../static/img/table_icon.png" alt="User icon"  width="100" height="100">
+                <p class="mt-10 p-2 text-indigo-100 mx-2">Kalendarz</p>
+                <img src="../../static/img/calendar_icon.png" alt="User icon"  width="100" height="100">
+                
+            </div>
+        </div>
+    </div>
+    
+
+</body>
+</html>
