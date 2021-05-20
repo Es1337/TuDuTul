@@ -1,61 +1,100 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href='{% static "css/tailwind_compiled.css" %}'
-    />
-    <link rel="stylesheet" type="text/css" href='{% static "fontawesome/css/all.css" %}'
-    />
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;900&display=swap" rel="stylesheet">
-    <title>Login</title>
-</head>
+{% extends "../index.html" %}
 
-<!-- the body of the document, centered (mx-auto), fills whole screen (h-screen), has the gradient background(mainBackground), no margin(m-0) and padding(p-0) -->
-<body class="mx-auto h-screen mainBackground p-0 m-0">
 
-    <!-- the navbar -->
-    <nav class="mx-auto bg-background bg-opacity-90 border-b-4 border-black m-0 pt-3 pb-3 md:pt-7 md:pb-7 block md:flex justify-around items-center ">
+{% block navbuttons %}
+<div class="flex justify-content-end mt-2 text-sm md:text-md md:m-0">
+    <a class="inline-block p-2 text-indigo-100 hover:text-indigo-100 mx-2">You are logged in as: <mark class="redMain font-bold">{{userLogin}}</mark></a>
+    <a href="/account/logout?&login={{userLogin}}" class="font-bold inline-block py-2 px-10 shadow-xl text-background bg-yellow-400 hover:bg-yellow-300 hover:text-yellow-800 rounded transition ease-in duration-150 mx-2">Logout</a>
+    <a href="noaccount" class="inline-block p-2 text-indigo-100 hover:text-indigo-100 font-bold mx-2 hover:shadow-2xl">Use App</a>
+    <span class="flex h-3 w-3">
+        <span class="animate-ping relative inline-flex rounded-full h-3 w-3 bg-purple-500"></span>
+    </span>
+</div>
+{% endblock %}
 
-        <!--   left side -->
-        <div class="flex justify-content-start">
-          <a href="/" class="specialtext text-white font-black text-2xl md:text-5xl"><mark class="redMain">Tu</mark><mark class="blueMain">Du</mark>Tul</a>
-        </div>
+{% block main %}
+<div class="mx-auto w-1/2 h-3/4 m-0 p-0 flex flex-col items-center justify-center">
+    <div class="px-10 md:px-5 h-4/6 bg-background hover:bg-opacity- transition ease-in duration-150 border-solid border-2 border-yellow-300 border-opacity-70 rounded-2xl rounded-r-none flex flex-col  justify-center items-center shadow-xl">
+        <!-- Tutaj profil: PROFIL UŻYTKOWNIKA Login: {login} Email: {email} Zdjęcie -->
+        <h2 class="mt-10 inline-block mb-5 text-indigo-100 hover:text-indigo-100 text-2xl md:text-3xl lg:text-4xl">Profil Użytkownika</h2>
+        <p class="inline-block mb-5 text-indigo-100 text-2xl md:text-3xl lg:text-4xl">Login: <mark class="redMain font-italic">{{userLogin}}</mark></p>
+        <p class="inline-block mb-5 text-indigo-100 text-2xl md:text-3xl lg:text-4xl">Email: <mark class="redMain font-italic">{{userLogin}}@gmail.com</mark></p>
+        <i class="far fa-user text-8xl p-8 text-yellow-300"></i>
+    </div>
+    <div class="bg-background px-10 md:px-5 border-solid border-2 border-yellow-300 border-opacity-30 rounded-2xl flex flex-col items-center shadow-xl">
+        <!-- Tutaj małe menu, od góry: Ustawienia Tabele Kalendarz -->
+        <div class="flex justify-center items-center">
+            <p class="mt-10 p-2 text-indigo-100 mx-2">Ustawienia</p>
+            <i class="fas fa-cogs text-5xl text-white flex-shrink"></i>
+            <p class="mt-10 p-2 text-indigo-100 mx-2">Tabele</p>
+            <i class="fas fa-table text-5xl text-white flex-shrink"></i>
+            <p class="mt-10 p-2 text-indigo-100 mx-2">Kalendarz</p>
+            <i class=" my-1 far fa-calendar-alt text-5xl text-white flex-shrink"></i>
 
-        <!--   right side -->
-        <div class="flex justify-content-end mt-2 text-sm md:text-md md:m-0">
-          <a class="inline-block p-2 text-indigo-100 hover:text-indigo-100 mx-2">Jesteś zalogowany jako: <mark class="redMain">{{userLogin}}</mark></a>  
-          <a href="/account/logout?&login={{userLogin}}" class="inline-block py-2 px-10 shadow-xl text-yellow-700 bg-yellow-400 hover:bg-yellow-300 hover:text-yellow-800 rounded transition ease-in duration-150 mx-2">Logout</a>
-        </div>
-
-    </nav>
-
-    
-    <div class="mx-auto w-1/2 h-3/4 m-0 p-0 flex items-center justify-center">
-        <div class="px-10 md:px-5 h-4/6 bg-background border-solid border-2 border-r-0 border-yellow-300 border-opacity-70 rounded-2xl rounded-r-none flex flex-col  justify-center items-center shadow-xl">
-            <!-- Tutaj profil: PROFIL UŻYTKOWNIKA Login: {login} Email: {email} Zdjęcie -->
-            <h2 class="mt-10 inline-block mb-5 text-indigo-100 hover:text-indigo-100 text-2xl md:text-3xl lg:text-4xl">Profil Użytkownika</h2>
-            <p class="inline-block mb-5 text-indigo-100 text-2xl md:text-3xl lg:text-4xl">Login: <mark class="redMain font-italic">{{userLogin}}</mark></p>
-            <p class="inline-block mb-5 text-indigo-100 text-2xl md:text-3xl lg:text-4xl">Email: <mark class="redMain font-italic">{{userLogin}}@gmail.com</mark></p>
-            <i class="far fa-user text-8xl p-8 text-yellow-300"></i>
-        </div>
-        <div class="h-4/6 bg-background px-10 md:px-5 border-solid border-2 border-l-4 border-yellow-300 border-opacity-30 rounded-2xl rounded-l-none flex flex-col items-center shadow-xl">
-            <!-- Tutaj małe menu, od góry: Ustawienia Tabele Kalendarz -->
-            <div class="flex flex-col justify-center items-center">
-                <p class="mt-10 p-2 text-indigo-100 mx-2">Ustawienia</p>
-                <i class="fas fa-cogs text-5xl text-white flex-shrink"></i>
-                <p class="mt-10 p-2 text-indigo-100 mx-2">Tabele</p>
-                <i class="fas fa-table text-5xl text-white flex-shrink"></i>
-                <p class="mt-10 p-2 text-indigo-100 mx-2">Kalendarz</p>
-                <i class=" my-1 far fa-calendar-alt text-5xl text-white flex-shrink"></i>
-                
-            </div>
         </div>
     </div>
-    
+</div>
+{% endblock %}
 
-</body>
-</html>
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Document</title>-->
+<!--    {% load static %}-->
+<!--    <link rel="stylesheet" type="text/css" href='{% static "css/tailwind_compiled.css" %}'-->
+<!--    />-->
+<!--    <link rel="stylesheet" type="text/css" href='{% static "fontawesome/css/all.css" %}'-->
+<!--    />-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;900&display=swap" rel="stylesheet">-->
+<!--    <title>Login</title>-->
+<!--</head>-->
+
+<!--&lt;!&ndash; the body of the document, centered (mx-auto), fills whole screen (h-screen), has the gradient background(mainBackground), no margin(m-0) and padding(p-0) &ndash;&gt;-->
+<!--<body class="mx-auto h-screen mainBackground p-0 m-0">-->
+
+<!--    &lt;!&ndash; the navbar &ndash;&gt;-->
+<!--    <nav class="mx-auto bg-background bg-opacity-90 border-b-4 border-black m-0 pt-3 pb-3 md:pt-7 md:pb-7 block md:flex justify-around items-center ">-->
+
+<!--        &lt;!&ndash;   left side &ndash;&gt;-->
+<!--        <div class="flex justify-content-start">-->
+<!--          <a href="/" class="specialtext text-white font-black text-2xl md:text-5xl"><mark class="redMain">Tu</mark><mark class="blueMain">Du</mark>Tul</a>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash;   right side &ndash;&gt;-->
+<!--        <div class="flex justify-content-end mt-2 text-sm md:text-md md:m-0">-->
+<!--          <a class="inline-block p-2 text-indigo-100 hover:text-indigo-100 mx-2">Jesteś zalogowany jako: <mark class="redMain">{{userLogin}}</mark></a>  -->
+<!--          <a href="/account/logout?&login={{userLogin}}" class="inline-block py-2 px-10 shadow-xl text-yellow-700 bg-yellow-400 hover:bg-yellow-300 hover:text-yellow-800 rounded transition ease-in duration-150 mx-2">Logout</a>-->
+<!--        </div>-->
+
+<!--    </nav>-->
+
+<!--    -->
+<!--    <div class="mx-auto w-1/2 h-3/4 m-0 p-0 flex items-center justify-center">-->
+<!--        <div class="px-10 md:px-5 h-4/6 bg-background border-solid border-2 border-r-0 border-yellow-300 border-opacity-70 rounded-2xl rounded-r-none flex flex-col  justify-center items-center shadow-xl">-->
+<!--            &lt;!&ndash; Tutaj profil: PROFIL UŻYTKOWNIKA Login: {login} Email: {email} Zdjęcie &ndash;&gt;-->
+<!--            <h2 class="mt-10 inline-block mb-5 text-indigo-100 hover:text-indigo-100 text-2xl md:text-3xl lg:text-4xl">Profil Użytkownika</h2>-->
+<!--            <p class="inline-block mb-5 text-indigo-100 text-2xl md:text-3xl lg:text-4xl">Login: <mark class="redMain font-italic">{{userLogin}}</mark></p>-->
+<!--            <p class="inline-block mb-5 text-indigo-100 text-2xl md:text-3xl lg:text-4xl">Email: <mark class="redMain font-italic">{{userLogin}}@gmail.com</mark></p>-->
+<!--            <i class="far fa-user text-8xl p-8 text-yellow-300"></i>-->
+<!--        </div>-->
+<!--        <div class="h-4/6 bg-background px-10 md:px-5 border-solid border-2 border-l-4 border-yellow-300 border-opacity-30 rounded-2xl rounded-l-none flex flex-col items-center shadow-xl">-->
+<!--            &lt;!&ndash; Tutaj małe menu, od góry: Ustawienia Tabele Kalendarz &ndash;&gt;-->
+<!--            <div class="flex flex-col justify-center items-center">-->
+<!--                <p class="mt-10 p-2 text-indigo-100 mx-2">Ustawienia</p>-->
+<!--                <i class="fas fa-cogs text-5xl text-white flex-shrink"></i>-->
+<!--                <p class="mt-10 p-2 text-indigo-100 mx-2">Tabele</p>-->
+<!--                <i class="fas fa-table text-5xl text-white flex-shrink"></i>-->
+<!--                <p class="mt-10 p-2 text-indigo-100 mx-2">Kalendarz</p>-->
+<!--                <i class=" my-1 far fa-calendar-alt text-5xl text-white flex-shrink"></i>-->
+<!--                -->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    -->
+
+<!--</body>-->
+<!--</html>-->
