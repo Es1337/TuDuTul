@@ -1,10 +1,8 @@
-from coreapi.document import Field
-from rest_framework import schemas
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
-from .forms import NoteForm
 from rest_framework.schemas import AutoSchema
+from .forms import NoteForm
 import coreapi
 
 class NoteViewSchema(AutoSchema):
@@ -43,8 +41,8 @@ class NoteView(APIView):
         Parameters (Fields are not obligatory)
             - 'table_name' string
             - 'content' string
-            - 'creation_date' date
-            - 'completion_date' date
+            - 'creation_date' date (YYYY-MM-DD format)
+            - 'completion_date' date (YYYY-MM-DD format)
             - 'priority' int (1-10)
             - 'is_done' bool
             - 'repetition' NOTE_REPETITION_CHOICES = (('W', 'Weekly'), ('M', 'Monthly'), ('Y', 'Yearly'), ('N', 'No repetition'))
@@ -53,14 +51,15 @@ class NoteView(APIView):
 
         Response
             - 'ans' string
-            
-        (in progress)
         """
         if 'userLogin' in request.session:
             anwser = ""
             form = NoteForm(request.data, request.session.get('userLogin'))
-
-
+            if form.is_valid():
+                form.save()
+                anwser = 'Note saved successfully'
+            else:
+                anwser = form.reason()
 
             return Response(data = {"ans": anwser})
 

@@ -33,6 +33,18 @@ class LoginViewSchema(AutoSchema):
 
         return super().get_manual_fields(path, method) + extra_fields
 
+class LogoutViewSchema(AutoSchema):
+
+    def get_manual_fields(self, path, method):
+        extra_fields = []
+
+        if method.lower() == 'get':
+            extra_fields = [
+                coreapi.Field('login'),
+            ]
+
+        return super().get_manual_fields(path, method) + extra_fields
+
 class RegistrationView(APIView):
     
     renderer_classes = [JSONRenderer]
@@ -107,6 +119,7 @@ class LoginView(APIView):
 
 
 class AccountView(APIView):
+
     renderer_classes = [JSONRenderer]
 
     def get(self, request):
@@ -120,7 +133,9 @@ class AccountView(APIView):
 
 
 class LogoutView(APIView):
+
     renderer_classes = [JSONRenderer]
+    schema = LogoutViewSchema()
 
     def get(self, request):
         """
@@ -131,5 +146,8 @@ class LogoutView(APIView):
         """
         if request.session.get('userLogin') == request.GET.get('login'):
             request.session.pop(key = 'userLogin')
-            
-        return Response({'userLogin': 'Logged out'})
+            anwser = 'Logged out'
+        else:
+            anwser = 'User ' + request.GET.get('login') + ' is not logged in'
+        
+        return Response({'userLogin': anwser})
