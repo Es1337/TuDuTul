@@ -51,17 +51,17 @@ class RegistrationView(APIView):
             - 'ans' string
         """
         form = RegisterForm(request.data)
-        anwser = ""
+        answer = ""
         registered = False
 
         if form.is_valid():
             form.save()
             registered = True
-            anwser = "User successfully registered"
+            answer = "User successfully registered"
         else:
-            anwser = form.reason()
+            answer = form.reason()
         
-        return Response(data = {"registered": registered, "ans": anwser})
+        return Response(data = {"registered": registered, "ans": answer})
 
 
 class LoginView(APIView):
@@ -99,7 +99,7 @@ class LoginView(APIView):
             # set session
             request.session['userLogin'] = form.login
             logged = True
-            anwser = "User successfully logged in"
+            answer = "User successfully logged in"
         else:
             answer = form.reason()
 
