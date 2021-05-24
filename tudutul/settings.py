@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'account.apps.AccountConfig',
     'api.apps.ApiConfig',
     'rest_framework',
-    #'drf_yasg'
     'rest_framework_swagger'
 ]
 
