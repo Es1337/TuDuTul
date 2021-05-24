@@ -34,7 +34,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['tudutul.herokuapp.com', 'localhost', '127.0.0.1']
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -49,7 +48,8 @@ INSTALLED_APPS = [
     'account.apps.AccountConfig',
     'api.apps.ApiConfig',
     'rest_framework',
-    'drf_yasg'
+    #'drf_yasg'
+    'rest_framework_swagger'
 ]
 
 MIDDLEWARE = [
@@ -65,7 +65,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'tudutul.urls'
 
 TEMPLATES = [
-    {
+    { 
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
         'APP_DIRS': True,
@@ -76,12 +76,15 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': { 
+                'staticfiles' : 'django.templatetags.static',
+            },
         },
     },
 ]
 
 WSGI_APPLICATION = 'tudutul.wsgi.application'
-
+REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
