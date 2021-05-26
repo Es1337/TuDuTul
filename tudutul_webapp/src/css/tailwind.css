@@ -8,8 +8,16 @@
 
 
 .mainBackground {
-    background: linear-gradient(90deg, rgba(106,21,106,1) 0%, rgba(145,56,167,1) 50%, rgba(219,142,142,1) 88%, rgba(221,98,137,1) 100%, rgba(245,72,110,1) 100%);
+    
+    background: linear-gradient(135deg, rgb(77, 10, 77) 0%, rgb(92, 31, 107) 50%, rgb(206, 107, 107) 88%, rgb(199, 83, 120) 100%, rgba(245,72,110,1) 100%);
+    /* background-position: right;
+    transition: background-position 6s; */
 }
+
+/* .mainBackground:hover,
+.mainBackground:focus {
+    background-position: left;
+} */
 
 
 
