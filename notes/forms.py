@@ -1,10 +1,12 @@
 from tudutul.models import Note
 from datetime import date, datetime
+
+
 class NoteForm:
 
     def __init__(self, note_form, login):
         self.creator = login
-        self.name = note_form.get('table_name')
+        self.name = note_form.get('name')
         self.content = note_form.get('content')
         
         today = date.today()
