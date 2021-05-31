@@ -5,10 +5,10 @@ from tudutul.models import User
 class RegisterForm:
 
     def __init__(self, register_form):
-        self.email = register_form["email"]
-        self.login = register_form["login"]
-        self.password = register_form["pass"]
-        self.repeated_password = register_form["repeated_pass"]
+        self.email = register_form.get("email")
+        self.login = register_form.get("login")
+        self.password = register_form.get("pass")
+        self.repeated_password = register_form.get("repeated_pass")
         self.alert = ''
 
     def is_valid(self):
@@ -38,14 +38,14 @@ class RegisterForm:
 class LoginForm:
 
     def __init__(self, login_form):
-        self.login = login_form['login']
-        self.password = login_form['password']
+        self.login = login_form.get('login')
+        self.password = login_form.get('pass')
         self.alert = ''
 
     def is_valid(self):
         user_filter = User.objects.filter(login=self.login)
 
-        if user_filter.count() is 0:
+        if user_filter.count() == 0:
             self.alert = f'There is no user with login: {self.login} in database. Try again.'
         elif check_password(self.password, user_filter[0].password) is False:
             self.alert = f'Incorrect password for user: {self.login}. Please try again.'

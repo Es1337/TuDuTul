@@ -14,13 +14,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@900&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href='{% static "fontawesome/css/all.css" %}'
     />
-    {% block scripts %}
-
-    {% endblock %}
 
 </head>
 <body class="mx-auto h-screen mainBackground p-0 m-0">
-    <nav class="z-10 mx-auto bg-background bg-opacity-90 m-0 pt-3 pb-3 md:pt-7 md:pb-7 flex flex-col md:flex-row justify-center md:justify-around items-center ">
+    <nav class="z-10 mx-auto bg-background bg-opacity-90 border-b-4 border-black m-0 pt-3 pb-3 md:pt-7 md:pb-7 block md:flex justify-around items-center ">
 
         <!--   left side -->
         <div class="flex justify-center">
@@ -29,9 +26,9 @@
 
         <!--   right side -->
         {% block navbuttons %}
-        <div class="flex flex-wrap justify-center mt-2 text-sm items-center gap-2 sm:gap-0 md:items-stretch md:text-md md:m-0">
-          <a href="/account/login" class="inline-block p-2 bg-indigo-200 hover:bg-indigo-100 text-background mx-2 font-bold rounded-md transition ease-in duration-300 shadow-2xl">Login</a>
-          <a href="/account/register" class="inline-block py-2 px-4 text-background bg-yellow-400 hover:bg-yellow-300 hover:text-yellow-800 font-bold rounded transition ease-in duration-300 mx-2 shadow-2xl">Sign Up</a>
+        <div class="flex justify-center mt-2 text-sm md:text-md md:m-0">
+          <a href="/login" class="inline-block p-2 bg-indigo-200 hover:bg-indigo-100 text-background mx-2 font-bold rounded-md transition ease-in duration-300 shadow-2xl">Login</a>
+          <a href="/register" class="inline-block py-2 px-4 text-background bg-yellow-400 hover:bg-yellow-300 hover:text-yellow-800 font-bold rounded transition ease-in duration-300 mx-2 shadow-2xl">Sign Up</a>
           <a href="noaccount" class="inline-block p-2 text-indigo-100 hover:text-indigo-100 font-bold mx-2 hover:shadow-2xl">Use Offline</a>
           <span class="flex h-3 w-3">
             <span class="animate-ping relative inline-flex rounded-full h-3 w-3 bg-purple-500"></span>
@@ -44,13 +41,13 @@
     {% block main %}
     <div class="h-2/5">
         <div class="h-full flex flex-col justify-start  items-center mt-20 md:mt-15 font-black text-2xl sm:text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl text-white">
-                <p class="z-10 text-center">Always know what you need</p> 
+                <p class="z-10">Always know what you need</p> 
                 <p class="z-10"><mark class="redMain">Tu</mark><mark class="blueMain">Du</mark>.</p>
         </div>
     </div>
     <div class="h-2/5">
         <div class="h-full flex flex-col justify-start  items-center font-black text-xl sm:text-2xl md:text-3xl lg:text-4xl 2xl:text-5xl text-white">
-                <p class="z-10 text-center"><span class="text-yellow-400">#1</span> ToDo app on IO lessons</p> 
+                <p class="z-10"><span class="text-yellow-400">#1</span> ToDo app on IO lessons</p> 
         </div>
     </div>
     
@@ -62,18 +59,7 @@
     </section>
 
     {% endblock %}
-    
-        
-        <!-- <span class="darkpurple left"></span>
-        <span class="lightpurple right"></span>
-        <span class="lily upper-left"></span>
-        <span class="coral upper-right"></span>
-        <span class="brownish center"></span>
-        <span class="brownish most-right"></span> -->
-        <!--<svg class="front" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-            <path fill="#0099ff" fill-opacity="1" d="M0,192L48,192C96,192,192,192,288,213.3C384,235,480,277,576,261.3C672,245,768,171,864,133.3C960,96,1056,96,1152,101.3C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-            </svg>
-        -->
     </div>
 </body>
+
 </html>

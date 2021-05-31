@@ -7,13 +7,13 @@ def index(request, *args, **kwargs):
 # Create your views here.
 
 
-# def login(request, *args, **kwargs):
-#     return render(request, 'tudutul-webapp/login.html')
-#
-#
-# def register(request, *args, **kwargs):
-#     return render(request, 'tudutul-webapp/register.html')
-#
-#
+def login(request, *args, **kwargs):
+    return render(request, 'login/login.html')
+
+
+def register(request, *args, **kwargs):
+    return render(request, 'register/register.html')
+
+
 # def offline(request, *args, **kwargs):
-#     return render(request, 'tudutul-webapp/offline-notes.html')
+#     return render(request, 'note-app/offline-notes.html')

@@ -20,29 +20,75 @@ const sendRegistrationData = async formHTML => {
         displayOutputMessage("Invalid email!");
         return;
     }
-    if (form.get('password').length === 0 || form.get('password') != form.get('repeatpassword'))
+    if (form.get('pass').length === 0 || form.get('pass') != form.get('repeated_pass'))
     {
         displayOutputMessage("Invalid password!");
         return;
     }
-    console.log();
+
+    var object = {};
+    form.forEach((value, key) => object[key] = value);
+    
+
     try {
         const response = await fetch("/account/register/", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                'form': form
-            })
+            body: JSON.stringify(object)
         });
-        jsonOBJ = await response.json();
-        displayOutputMessage("MIELI");
+        var jsonOBJ = await response.json();
+
+        var output = "";
+        if(jsonOBJ.registered) {
+            output = jsonOBJ.ans;
+        }
+        else {
+            output += "Registration failed. ";
+            output += jsonOBJ.ans;
+        }
+
+        displayOutputMessage(output);
     } catch (error) {
         displayOutputMessage("Client error, try again.");
     }
+}
 
+const sendLoginData = async formHTML => {
+    const form = new FormData(formHTML);
 
+    if (form.get('pass').length === 0)
+    {
+        displayOutputMessage("Invalid password!");
+        return;
+    }
 
+    var object = {};
+    form.forEach((value, key) => object[key] = value);
+    
+    try {
+        const response = await fetch("/account/login/", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(object)
+        });
+        var jsonOBJ = await response.json();
+
+        var output = "";
+        if(jsonOBJ.logged) {
+            output = jsonOBJ.ans;
+        }
+        else {
+            output += "Login failed. ";
+            output += jsonOBJ.ans;
+        }
+
+        displayOutputMessage(output);
+    } catch (error) {
+        displayOutputMessage("Client error, try again.");
+    }
 }
 
