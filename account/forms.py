@@ -39,7 +39,7 @@ class LoginForm:
 
     def __init__(self, login_form):
         self.login = login_form.get('login')
-        self.password = login_form.get('pass')
+        self.password = login_form.get('password')
         self.alert = ''
 
     def is_valid(self):

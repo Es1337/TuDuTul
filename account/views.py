@@ -106,7 +106,7 @@ class LoginView(APIView):
         """
         user_session_key = 'userLogin'
         logged = False
-        print(request.data)
+
         form = LoginForm(request.data)
         if form.is_valid():
             # set session
