@@ -102,12 +102,6 @@ class NoteView(APIView):
 
         return Response(data={"ans": "User is not logged in"})
 
-    def delete(self, request):
-        """
-        (in progress)
-        """
-        pass  # Wojtek
-
 
 class NoteDetailView(APIView):
     renderer_classes = [JSONRenderer]
@@ -200,3 +194,26 @@ class NoteDetailView(APIView):
             return Response(data={"ans": "Note updated successfully"})
         else:
             return Response(data={"ans": form.reason()})
+
+    def delete(self, request, note_id):
+        response = Response()
+
+        if 'userLogin' not in request.session:
+            response = Response(data={"ans": "User is not logged in"})
+        else:
+            user_login = request.session['userLogin']
+            filter_args = Q(creator__exact=user_login) & Q(id=note_id)
+
+            try:
+                note_to_delete = Note.objects.get(filter_args)
+                response = Response(data={"ans": f'Note with id: {note_to_delete.id} and name: {note_to_delete.name} '
+                                                 f'shall be successfully deleted'})
+                # delete per se:
+                note_to_delete.delete()
+
+            except Note.DoesNotExist:
+                response = Response(data={"ans": f'Note with id: {note_id} was not found or user have '
+                                                 f'no access to delete this note.'})
+
+        return response
+
