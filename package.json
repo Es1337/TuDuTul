@@ -1,0 +1,22 @@
+{
+  "name": "tudutul_webapp",
+  "version": "0.5.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:css": "tailwind build tudutul_webapp/src/css/tailwind.css -o tudutul_webapp/static/css/tailwind_compiled.css",
+    "dev": "npx webpack --mode development --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.3",
+    "autoprefixer": "^10.2.5",
+    "babel-loader": "^8.2.2",
+    "postcss-cli": "^8.3.1",
+    "tailwindcss": "^2.1.2",
+    "webpack": "^5.36.2",
+    "webpack-cli": "^4.7.0"
+  }
+}

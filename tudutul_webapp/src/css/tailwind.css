@@ -1,0 +1,228 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+/* --------------CLASSES----------------- */
+
+.root {
+    --app-background: #400d40;
+    --mincardwidth: 35ch;
+    --maxcardwidth: 65ch;
+
+    --transition-speed: 600ms;
+}
+
+.navbar {
+    position: fixed;
+    height: 100vh;
+    width: 5rem;
+    transition: width 200ms ease;
+    
+}
+
+.navbar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    gap: 2rem;
+}
+
+.nav-item {
+    width: 100%;
+}
+
+.nav-item:last-child {
+    margin-top: auto;
+}
+
+.link-text {
+    display: none;
+    margin-left: 1rem;
+    font-weight: 700;
+}
+
+
+.nav-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 5rem;
+    text-decoration: none;
+    filter: grayscale(100%) opacity(0.7);
+    transition: var(--transition-speed);
+}
+
+.nav-link:hover {
+    filter: grayscale(0%) opacity(1);
+}
+
+.logo {
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-align: center;
+    letter-spacing: 0.3ch;
+}
+
+.navbar:hover {
+    width: 12rem;
+    padding-right: 0;
+}
+
+.navbar:hover .link-text {
+    display: block;
+}
+
+@media only screen and (max-width: 600px) {
+    .navbar {
+      bottom: 0;
+      width: 100vw;
+      height: 5rem;
+    }
+  
+    .logo {
+      display: none;
+    }
+  
+    .navbar-nav {
+      flex-direction: row;
+    }
+  
+    .nav-link {
+      justify-content: center;
+    }
+  }
+  
+
+.mainBackground {
+    
+    background: linear-gradient(135deg, rgb(77, 10, 77) 0%, rgb(92, 31, 107) 50%, rgb(206, 107, 107) 88%, rgb(199, 83, 120) 100%, rgba(245,72,110,1) 100%);
+    /* background-position: right;
+    transition: background-position 6s; */
+}
+
+.cardBackground {
+    background: rgb(60,10,76);
+    background: linear-gradient(135deg, rgba(60,10,76,1) 0%, rgba(66,13,87,1) 18%, rgba(100,29,134,1) 40%, rgba(111,30,162,1) 55%, rgba(137,33,179,1) 69%, rgba(149,17,194,1) 82%); 
+}
+
+
+
+.content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+    background-color: #ffccff;
+    margin-top: -3%;
+}
+
+.cardWidth {
+    min-width: var(--mincardwidth);
+    max-width: var(--maxcardwidth);
+}
+
+.cardBoxWidth {
+    min-width: calc(var(--mincardwidth) + 10px);
+    max-width: calc(var(--maxcardwidth) + 10px);
+}
+
+.toDoScroller {
+    scrollbar-width: thin;
+    scrollbar-color: #400d40 white;
+}
+
+
+/* .mainBackground:hover,
+.mainBackground:focus {
+    background-position: left;
+} */
+
+
+
+.specialtext {
+    -webkit-text-stroke-width: 0.5px;
+    -webkit-text-stroke-color: purple;
+}
+
+.redMain {
+    background: none;
+    color: lightcoral;
+}
+
+.blueMain {
+    background: none;
+    color: lightblue;
+}
+
+section {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 20vh;
+    overflow: hidden;
+}
+
+section .wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: url(./../img/wave.png);
+    background-size: 2000px 100px;
+}
+section .wave.wave1
+{
+    animation: animate 30s linear infinite alternate;
+    z-index: 4;
+    opacity: 0.9;
+    animation-delay: 0s;
+    bottom: 0;
+}
+section .wave.wave2
+{
+    animation: animate2 15s linear infinite alternate;
+    z-index: 3;
+    opacity: 0.5;
+    animation-delay: -5s;
+    bottom: 0;
+}
+section .wave.wave3
+{
+    animation: animate 30s linear infinite alternate;
+    z-index: 2;
+    opacity: 0.2;
+    animation-delay: -2s;
+    bottom: 15px;
+}
+section .wave.wave4
+{
+    animation: animate2 15s linear infinite alternate;
+    z-index: 1;
+    opacity: 0.7;
+    animation-delay: -5s;
+    bottom: 20px;
+}
+@keyframes animate {
+    0% {
+        background-position-x: 0;
+    }
+    100% {
+        background-position-x: 1000px;
+    }
+}
+
+@keyframes animate2 {
+    0% {
+        background-position-x: 0;
+    }
+    100% {
+        background-position-x: -1000px;
+    }
+}
+
