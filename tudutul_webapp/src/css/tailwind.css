@@ -84,6 +84,14 @@
       width: 100vw;
       height: 5rem;
     }
+
+    .navbar:hover {
+        width:100vw;
+    }
+
+    .navbar:hover .link-text {
+        display: none;
+    }
   
     .logo {
       display: none;
