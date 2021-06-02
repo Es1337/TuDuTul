@@ -17,11 +17,7 @@
                 <p class="special-text text-yellow-300 font-black text-md mb-2 text-2xl">Login</p>
                 <p class="special-text text-white font-bold text-md mb-10">You're one step away from TuDuTul.</p>
                 <p class="special-text text-white font-bold text-md mb-10" id="output"></p>
-                <form class="flex flex-col gap-7" method="POST" id="login-form" onsubmit="sendLoginData(document.getElementById('login-form'))">
-                    {% csrf_token %}
-
-                    <p class="text-white">{{ans}}</p>
-    
+                <form class="flex flex-col gap-7" id="login-form" onsubmit="sendLoginData(document.getElementById('login-form'))">
                     <div class="gap-3 flex flex-col h-full">
                     <label class="special-text tracking-wider text-indigo-100 text-lg font-bold  " >Login:</label>
                     <input type="text" name="login" id="login" class="border-b-2 border-yellow-300  p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">

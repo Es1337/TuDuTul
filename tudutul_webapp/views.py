@@ -15,5 +15,9 @@ def register(request, *args, **kwargs):
     return render(request, 'register/register.html')
 
 
-# def offline(request, *args, **kwargs):
-#     return render(request, 'note-app/offline-notes.html')
+def offline(request, *args, **kwargs):
+    return render(request, 'note-app/offline-notes.html')
+
+
+def add_note_offline(request, *args, **kwargs):
+    return render(request, 'note-app/offline-addform.html')
