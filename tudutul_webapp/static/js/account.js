@@ -58,7 +58,7 @@ const sendRegistrationData = async formHTML => {
 const sendLoginData = async formHTML => {
     const form = new FormData(formHTML);
 
-    if (form.get('pass').length === 0)
+    if (form.get('password').length === 0)
     {
         displayOutputMessage("Invalid password!");
         return;
@@ -80,6 +80,7 @@ const sendLoginData = async formHTML => {
         var output = "";
         if(jsonOBJ.logged) {
             output = jsonOBJ.ans;
+            document.location.href = '/online';
         }
         else {
             output += "Login failed. ";
@@ -92,3 +93,6 @@ const sendLoginData = async formHTML => {
     }
 }
 
+const getLoggedUser = async () => {
+    
+}
