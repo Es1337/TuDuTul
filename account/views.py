@@ -5,6 +5,8 @@ from .forms import RegisterForm, LoginForm
 from rest_framework.schemas import AutoSchema
 import coreapi
 
+from tudutul.models import User
+
 class RegistrationViewSchema(AutoSchema):
 
     def get_manual_fields(self, path, method):
@@ -87,11 +89,13 @@ class LoginView(APIView):
         Response
             - 'logged' bool 
             - 'userLogin' string
+            - 'userEmail' string
         """
         user_session_key = 'userLogin'
-
-        if user_session_key in request.session: 
-            return Response(data = {"logged": True, "userLogin": request.session.get(user_session_key)})
+        if user_session_key in request.session:
+            user = User.objects.filter(pk=request.session['userLogin'])
+            email = user[0].email
+            return Response(data = {"logged": True, "userLogin": request.session.get(user_session_key), "userEmail:": email})
 
         return Response(data = {"logged": False})
 
