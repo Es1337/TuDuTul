@@ -80,6 +80,7 @@
 
 @media only screen and (max-width: 600px) {
     .navbar {
+        z-index: 20;
       bottom: 0;
       width: 100vw;
       height: 5rem;
@@ -122,11 +123,11 @@
 
 
 .content {
+    display: block;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.2s ease-out;
-    background-color: #ffccff;
-    margin-top: -3%;
+    transition: max-height 1s ease-out;
+    margin-top: -4%;
 }
 
 .cardWidth {

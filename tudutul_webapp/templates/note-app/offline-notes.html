@@ -5,3 +5,21 @@
 {% block scripts %}
     <script src='{% static "js/offline_notes.js" %}' defer></script>
 {% endblock %}
+
+{% block navbarbuttons %}
+
+<li class="nav-item">
+    <a href="#" class="nav-link">
+        <i class=" my-1 far fa-calendar-alt text-3xl sm:text-5xl text-yellow-300"></i>
+        <span class="link-text text-yellow-300">Calendar</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="/login" class="nav-link">
+        <i class=" my-1 fas fa-sign-in-alt text-3xl sm:text-5xl text-yellow-300"></i>
+        <span class="link-text text-yellow-300">Login</span>
+    </a>
+</li>
+
+{% endblock %}
