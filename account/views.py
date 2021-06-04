@@ -94,6 +94,7 @@ class LoginView(APIView):
         user_session_key = 'userLogin'
         if user_session_key in request.session:
             user = User.objects.filter(pk=request.session['userLogin'])
+            request.session['userEmail'] = user[0].email
             email = user[0].email
             return Response(data = {"logged": True, "userLogin": request.session.get(user_session_key), "userEmail:": email})
 
@@ -115,6 +116,8 @@ class LoginView(APIView):
         if form.is_valid():
             # set session
             request.session['userLogin'] = form.login
+            user = User.objects.filter(pk=request.session['userLogin'])
+            request.session['userEmail'] = user[0].email
             logged = True
             answer = "User successfully logged in"
         else:
