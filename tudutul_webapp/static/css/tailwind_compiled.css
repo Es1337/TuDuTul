@@ -14183,7 +14183,11 @@ video {
 }
 
 .min-h-0 {
-  min-height: 0px;
+  min-height: 0;
+}
+
+.min-h-16 {
+  min-height: 16rem;
 }
 
 .min-h-full {
@@ -32264,6 +32268,7 @@ video {
 
 @media only screen and (max-width: 600px) {
   .navbar {
+    z-index: 20;
     bottom: 0;
     width: 100vw;
     height: 5rem;
@@ -32302,11 +32307,11 @@ video {
 }
 
 .content {
+  display: block;
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.2s ease-out;
-  background-color: #ffccff;
-  margin-top: -3%;
+  transition: max-height 1s ease-out;
+  margin-top: -4%;
 }
 
 .cardWidth {
@@ -46079,7 +46084,11 @@ section .wave.wave4
   }
 
   .sm\:min-h-0 {
-    min-height: 0px;
+    min-height: 0;
+  }
+
+  .sm\:min-h-16 {
+    min-height: 16rem;
   }
 
   .sm\:min-h-full {
@@ -77550,7 +77559,11 @@ section .wave.wave4
   }
 
   .md\:min-h-0 {
-    min-height: 0px;
+    min-height: 0;
+  }
+
+  .md\:min-h-16 {
+    min-height: 16rem;
   }
 
   .md\:min-h-full {
@@ -109021,7 +109034,11 @@ section .wave.wave4
   }
 
   .lg\:min-h-0 {
-    min-height: 0px;
+    min-height: 0;
+  }
+
+  .lg\:min-h-16 {
+    min-height: 16rem;
   }
 
   .lg\:min-h-full {
@@ -140492,7 +140509,11 @@ section .wave.wave4
   }
 
   .xl\:min-h-0 {
-    min-height: 0px;
+    min-height: 0;
+  }
+
+  .xl\:min-h-16 {
+    min-height: 16rem;
   }
 
   .xl\:min-h-full {
@@ -171963,7 +171984,11 @@ section .wave.wave4
   }
 
   .\32xl\:min-h-0 {
-    min-height: 0px;
+    min-height: 0;
+  }
+
+  .\32xl\:min-h-16 {
+    min-height: 16rem;
   }
 
   .\32xl\:min-h-full {
