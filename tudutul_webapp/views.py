@@ -4,7 +4,7 @@ import requests
 from urllib.parse import urlparse
 
 def is_logged(request):
-    if 'userLogin' in request.session:
+    if 'userLogin' in request.session.keys():
         return [True, request.session['userLogin'], request.session['userEmail']]
 
     return [False, None, None]
