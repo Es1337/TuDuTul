@@ -8,6 +8,8 @@ class User(models.Model):
     email = models.EmailField(max_length=127, unique=True)
     password = models.CharField(max_length=255)
     friends_list = models.ManyToManyField('self')
+    # TODO default table
+    # default_table = models.OneToOneField(Table, on_delete=models.CASCADE)
 
 
 class Note(models.Model):
