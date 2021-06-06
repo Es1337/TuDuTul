@@ -22,6 +22,11 @@
     
 }
 
+#tuDuContainer, #duNeContainer {
+    min-height: 300px;
+}
+
+
 .navbar-nav {
     list-style: none;
     padding: 0;

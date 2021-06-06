@@ -56,8 +56,6 @@ const fillDateInnerHTML = async date => {
 
 fillDateInnerHTML(todoDate);
 
-console.log(todoDate);
-
 /* -------------------------- HTML RENDERING FUNCTIONS -------------------------- */
 
 // Arrow function to create collapsible buttons (in our case, TuDu and DuNe cards)
@@ -235,7 +233,6 @@ const addTuDu = async formHTML => {
         let itemCreationDate = Date.parse(itemToAdd.creation_date);
         if (itemCreationDate < Date.parse(allTodos[i].creation_date)) {
         insertAt(allTodos, i, itemToAdd);
-        console.log(allTodos[i]);
         break;
         }
         i++;
@@ -243,7 +240,6 @@ const addTuDu = async formHTML => {
     if (i === tuDuLength) {
         allTodos.push(itemToAdd);
     }
-    console.log(itemToAdd);
 
     getTuDuDisplayModule();
     saveToLocalStorage(allTodos);
@@ -259,9 +255,7 @@ const deleteTuDu = async id => {
 
     if (index !== null) {
         allTodos.splice(index, 1);
-        console.log("REMOVED ITEM");
     } else {
-        console.log("FAILED TO REMOVE");
     }
 
     saveToLocalStorage(allTodos);
@@ -277,8 +271,6 @@ const editTuDu = async (formHTML, index) => {
     if (form.get('is_done') === null) {
         allTodos[index]['is_done'] = 'off';
     }
-
-    console.log("EDIT:", allTodos[index]);
 
     saveToLocalStorage(allTodos);
     allTodos = getFromLocalStorage();
@@ -336,7 +328,7 @@ const getTuDuDisplayModule = async () => {
 // Arrow function to render a FormModule -> works for both editing and adding TuDus
 // We pass id of item into it, then it works as editing form
 // Otherwise it allows us to add (hence the changed method string)
-const getFormModule = async id => {
+const getFormModule = id => {
     let item;
     let index;
     if (id !== undefined) {
@@ -350,12 +342,12 @@ const getFormModule = async id => {
     let completion_date = null;
     let priority = `value=1`;
     let is_done = null;
-    let content = null;
+    let content = '';
     let repetition = `value=0`;
     let category = null;
     let method = `onclick="addTuDu(document.getElementById('add-note-form'));"`;
 
-    if (item) {
+    if (item !== undefined) {
         name = `value="` + item.name + `"`;
         completion_date = `value="` + item.completion_date + `"`;
         priority = `value="` + item.priority + `"`;
@@ -365,8 +357,6 @@ const getFormModule = async id => {
         category = `value="` + item.category + `"`;
         method = `onclick="editTuDu(document.getElementById('add-note-form'), ${index});"`;
     }
-
-    console.log(method);
 
     const mainDisplay = document.querySelector("#feature-display");
     mainDisplay.innerHTML = `
@@ -398,7 +388,7 @@ const getFormModule = async id => {
                 <div class="gap-3 flex flex-col w-1/5">
                     <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >Content:</label>
                     <textarea name="content" id="content" class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
-                        ${item.content}
+                        ${content}
                     </textarea>
                 </div>
         
