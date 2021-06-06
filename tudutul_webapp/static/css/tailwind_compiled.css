@@ -32477,10 +32477,6 @@ html, body {
   margin: 0;
 }
 
-body {
-  font-family: 'Source Sans Pro';
-}
-
 input:focus, textarea:focus, button:focus {
   outline: none;
 }
