@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TuDuTul</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href='{% static "css/tailwind_compiled.css" %}'
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href='{% static "fontawesome/css/all.css" %}'
+    />
+
+    {% block scripts %}
+    <script src='{% static "js/offline_notes.js" %}' defer></script>
+    {% endblock %}
+
+</head>
+{% block body %}
+<body class="mx-auto overflow-visible xl:overflow-hidden flex flex-col xl:h-screen mainBackground p-0 m-0">
+    <!-- <div class="w-full h-1/7 flex ">
+        <div class="p-4 w-1/10 flex justify-center items-center">
+            <i class="fas fa-bars text-white text-2xl"></i>
+        </div>
+        <div class="p-4 w-8/10 flex justify-center items-center">
+            <div class="flex flex-col justify-center items-center">
+                <a href="/" class="specialtext text-white font-black text-5xl "><mark class="redMain">Tu</mark><mark class="blueMain">Du</mark>Tul</a>
+            </div>
+        </div>
+        <div class="w-1/10"></div>
+    </div>
+
+    <div class="flex justify-center items-center">
+    {% block app_section %}
+        <span class="specialtext text-white font-bold tracking-widest text-lg md:text-xl mx-3">26/05/2021</span>
+    {% endblock %}
+    </div> -->
+
+    <nav class="navbar bg-background">
+        <ul class="navbar-nav">
+            <li class="logo">
+                <a href="/" class="nav-link">
+                    <span class="link-text text-2xl text-white specialtext mr-2"><div class="font-black"><mark class="redMain">Tu</mark><mark class="blueMain">Du</mark>Tul</div></span>
+                    <i class="my-1 fas fa-icons text-lg sm:text-4xl text-pink-200"></i>
+                </a>
+            </li>
+            
+            {% block navbarbuttons %}
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class=" my-1 fas fa-table text-3xl sm:text-5xl text-yellow-300"></i>
+                    <span class="link-text text-yellow-300">Boards</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class=" my-1 far fa-calendar-alt text-3xl sm:text-5xl text-yellow-300"></i>
+                    <span class="link-text text-yellow-300">Calendar</span>
+                </a>
+            </li>
+
+            
+
+            <li class="nav-item">
+                <a href="/login" class="nav-link">
+                    <i class=" my-1 fas fa-sign-in-alt text-3xl sm:text-5xl text-yellow-300"></i>
+                    <span class="link-text text-yellow-300">Login</span>
+                </a>
+            </li>
+
+            {% endblock %}
+
+            
+            
+            
+            
+        </ul>
+    </nav>
+
+    <div id="main" class="w-full lg:h-1/4 flex items-center justify-center">
+    {% block info %}
+        <div class="xl:w-3/4 xl:h-full">
+            <p class="mt-10 ml-10 font-bold text-2xl text-yellow-300">Welcome!</p>
+            <p class="mt-5 ml-10 font-bold redMain">This is the offline version of the app!</p>
+            <p id="day-display" class="mt-5 ml-10 font-bold text-xl text-white specialtext"></p>
+            
+        </div>
+    {% endblock %}    
+    </div>
+
+    <div id="feature-display" class="w-full xl:ml-20 xl:h-3/4 flex flex-col xl:flex-row items-center">
+    {% block main %}
+        <div class="mt-10 w-full flex flex-col items-center h-full">
+            <p class="w-full text-center specialtext font-black text-4xl mb-5"><mark class="redMain">Tu</mark><mark class="blueMain">Du</mark></p>
+            <div id="tuDuContainer" class="flex flex-col gap-4 items-center overflow-auto cardBoxWidth w-9/10 lg:w-4/6 h-5/6 toDoScroller">
+
+                
+
+                
+                
+                
+            </div>
+        </div>
+
+        <div class="mb-32 xl:mb-0 mt-10 w-full flex flex-col items-center lg:h-full">
+            <p class="w-full text-center specialtext font-black text-4xl mb-5"><mark class="blueMain">Du</mark><mark class="redMain">Ne</mark></p>
+            <div id="duNeContainer" class="min-h-16 flex flex-col gap-4 items-center overflow-auto cardBoxWidth w-9/10 lg:w-4/6 h-5/6 toDoScroller">
+
+                   
+                
+                
+            </div>
+        </div>
+    {% endblock %}
+        
+    </div>
+
+    
+</body>
+{% endblock %}
+</html>

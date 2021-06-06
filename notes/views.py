@@ -12,6 +12,12 @@ from tudutul.models import Note
 from tudutul.models import Table
 
 
+def get_all_notes_for_user(user_id):
+    boards_shared_with_user = Table.objects.filter(shared_with=user_id)
+    filter_args = Q(creator__exact=user_id) | Q(owning_table_id__in=boards_shared_with_user)
+    return Note.objects.filter(filter_args).values()
+
+
 class NoteViewSchema(AutoSchema):
 
     def get_manual_fields(self, path, method):
@@ -29,6 +35,11 @@ class NoteViewSchema(AutoSchema):
                 coreapi.Field('category'),
                 coreapi.Field('owning_table_id')
             ]
+        if method.lower() == 'get':
+            extra_fields = [
+                coreapi.Field('completion_date'),
+                coreapi.Field('table_id')
+            ]
 
         return super().get_manual_fields(path, method) + extra_fields
 
@@ -39,8 +50,10 @@ class NoteView(APIView):
 
     def get(self, request):
         """
-        Parameters
+        Parameters (optional)
 
+            - 'table_id' int
+            - 'completion_date' date (YYYY-MM-DD)
         Response
 
             - ans - array of note objects for currently logged user, error message is user not logged in
@@ -62,9 +75,15 @@ class NoteView(APIView):
             return Response(data={"ans": "User is not logged in"})
 
         user_id = request.session['userLogin']
-        boards_shared_with_user = Table.objects.filter(shared_with=user_id)
-        filter_args = Q(creator__exact=user_id) | Q(owning_table_id__in=boards_shared_with_user)
-        query = Note.objects.filter(filter_args).values()
+        query = get_all_notes_for_user(user_id)
+
+        if 'table_id' in request.query_params.keys():
+            filter_table_id = request.query_params['table_id']
+            query = query.filter(owning_table_id=filter_table_id)
+        if 'completion_date' in request.query_params.keys():
+            filter_date = request.query_params['completion_date']
+            query = query.filter(completion_date__range=[filter_date, filter_date])
+
         notes = []
         for i, item in enumerate(query):
             notes.append({})
@@ -128,9 +147,7 @@ class NoteDetailView(APIView):
             return Response(data={"ans": "User is not logged in"})
 
         user_id = request.session['userLogin']
-        boards_shared_with_user = Table.objects.filter(shared_with=user_id)
-        filter_args = Q(creator__exact=user_id) | Q(owning_table_id__in=boards_shared_with_user)
-        users_notes = Note.objects.filter(filter_args)
+        users_notes = get_all_notes_for_user(user_id)
 
         if not users_notes.filter(pk=note_id).exists():
             return Response(data={"ans": "Unauthorized"})
@@ -161,10 +178,7 @@ class NoteDetailView(APIView):
             return Response(data={"ans": "User is not logged in"})
 
         user_id = request.session['userLogin']
-        boards_shared_with_user = Table.objects.filter(shared_with=user_id)
-        filter_args = Q(creator__exact=user_id) | Q(owning_table_id__in=boards_shared_with_user)
-        users_notes = Note.objects.filter(filter_args)
-
+        users_notes = get_all_notes_for_user(user_id)
         if not users_notes.filter(pk=note_id).exists():
             return Response(data={"ans": "Unauthorized"})
 

@@ -58,7 +58,7 @@ const sendRegistrationData = async formHTML => {
 const sendLoginData = async formHTML => {
     const form = new FormData(formHTML);
 
-    if (form.get('pass').length === 0)
+    if (form.get('password').length === 0)
     {
         displayOutputMessage("Invalid password!");
         return;
@@ -80,6 +80,7 @@ const sendLoginData = async formHTML => {
         var output = "";
         if(jsonOBJ.logged) {
             output = jsonOBJ.ans;
+            document.location.href = '/online';
         }
         else {
             output += "Login failed. ";
@@ -92,3 +93,29 @@ const sendLoginData = async formHTML => {
     }
 }
 
+const sendLogout = async () => {
+    try {
+        const userDataResponse = await fetch("/account/login/", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        var userJson = await userDataResponse.json();
+
+        const logoutResponse = await fetch("/account/logout?&login=" + userJson.userLogin, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        var logoutJson = await logoutResponse.json();
+
+        if (logoutJson.userLogin == "Logged out") {
+            document.location.href = "/";
+        }
+    }
+    catch (error) {
+        displayOutputMessage("Client error, try again.");
+    }
+}

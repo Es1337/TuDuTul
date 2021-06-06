@@ -17,6 +17,7 @@
 
 </head>
 <body class="mx-auto h-screen mainBackground p-0 m-0">
+    <script src="{% static 'js/account.js' %}"></script>
     <nav class="z-10 mx-auto bg-background bg-opacity-90 border-b-4 border-black m-0 pt-3 pb-3 md:pt-7 md:pb-7 block md:flex justify-around items-center ">
 
         <!--   left side -->
@@ -26,14 +27,25 @@
 
         <!--   right side -->
         {% block navbuttons %}
-        <div class="flex justify-center mt-2 text-sm md:text-md md:m-0">
-          <a href="/login" class="inline-block p-2 bg-indigo-200 hover:bg-indigo-100 text-background mx-2 font-bold rounded-md transition ease-in duration-300 shadow-2xl">Login</a>
-          <a href="/register" class="inline-block py-2 px-4 text-background bg-yellow-400 hover:bg-yellow-300 hover:text-yellow-800 font-bold rounded transition ease-in duration-300 mx-2 shadow-2xl">Sign Up</a>
-          <a href="noaccount" class="inline-block p-2 text-indigo-100 hover:text-indigo-100 font-bold mx-2 hover:shadow-2xl">Use Offline</a>
-          <span class="flex h-3 w-3">
-            <span class="animate-ping relative inline-flex rounded-full h-3 w-3 bg-purple-500"></span>
-          </span>
-        </div>
+            {% if logged %}
+                <div class="flex justify-content-end mt-2 text-sm md:text-md md:m-0">
+                    <a class="inline-block p-2 text-indigo-100 hover:text-indigo-100 mx-2">You are logged in as: <mark class="redMain font-bold">{{userLogin}}</mark></a>
+                    <a href="#" onclick="return sendLogout();" class="font-bold inline-block py-2 px-10 shadow-xl text-background bg-yellow-400 hover:bg-yellow-300 hover:text-yellow-800 rounded transition ease-in duration-150 mx-2">Logout</a>
+                    <a href="noaccount" class="inline-block p-2 text-indigo-100 hover:text-indigo-100 font-bold mx-2 hover:shadow-2xl">Use App</a>
+                    <span class="flex h-3 w-3">
+                        <span class="animate-ping relative inline-flex rounded-full h-3 w-3 bg-purple-500"></span>
+                    </span>
+                </div>  
+            {% else %}
+                <div class="flex justify-center mt-2 text-sm md:text-md md:m-0">
+                    <a href="/login" class="inline-block p-2 bg-indigo-200 hover:bg-indigo-100 text-background mx-2 font-bold rounded-md transition ease-in duration-300 shadow-2xl">Login</a>
+                    <a href="/register" class="inline-block py-2 px-4 text-background bg-yellow-400 hover:bg-yellow-300 hover:text-yellow-800 font-bold rounded transition ease-in duration-300 mx-2 shadow-2xl">Sign Up</a>
+                    <a href="/offline" class="inline-block p-2 text-indigo-100 hover:text-indigo-100 font-bold mx-2 hover:shadow-2xl">Use Offline</a>
+                    <span class="flex h-3 w-3">
+                        <span class="animate-ping relative inline-flex rounded-full h-3 w-3 bg-purple-500"></span>
+                    </span>
+                </div>
+            {% endif%}
         {% endblock %}
 
     </nav>

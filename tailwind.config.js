@@ -55,6 +55,11 @@ module.exports = {
         '5/7': '71.4%',
         '6/7': '85.68%',
       },
+
+      minHeight: {
+        '0': '0',
+        '16': '16rem'
+      },
       borderWidth: {
         '1': '1px'
       }
