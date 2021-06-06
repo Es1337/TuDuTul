@@ -11,7 +11,7 @@
     --mincardwidth: 35ch;
     --maxcardwidth: 65ch;
 
-    --transition-speed: 600ms;
+    --transition-speed: 300ms;
 }
 
 .navbar {
@@ -126,7 +126,7 @@
     display: block;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 1s ease-out;
+    /* transition: max-height var(--transition-speed) ease-out; */
     margin-top: -4%;
 }
 

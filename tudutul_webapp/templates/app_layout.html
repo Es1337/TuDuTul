@@ -80,11 +80,21 @@
             
         </ul>
     </nav>
-    
-    <div class="w-full xl:ml-20 xl:h-full flex flex-col xl:flex-row items-center">
-    
+
+    <div id="main" class="w-full lg:h-1/4 flex items-center justify-center">
+    {% block info %}
+        <div class="xl:w-3/4 xl:h-full">
+            <p class="mt-10 ml-10 font-bold text-2xl text-yellow-300">Welcome!</p>
+            <p class="mt-5 ml-10 font-bold redMain">This is the offline version of the app!</p>
+            <p id="day-display" class="mt-5 ml-10 font-bold text-xl text-white specialtext"></p>
+            
+        </div>
+    {% endblock %}    
+    </div>
+
+    <div id="feature-display" class="w-full xl:ml-20 xl:h-3/4 flex flex-col xl:flex-row items-center">
     {% block main %}
-        <div class="mt-10 w-full flex flex-col items-center lg:h-full">
+        <div class="mt-10 w-full flex flex-col items-center h-full">
             <p class="w-full text-center specialtext font-black text-4xl mb-5"><mark class="redMain">Tu</mark><mark class="blueMain">Du</mark></p>
             <div id="tuDuContainer" class="flex flex-col gap-4 items-center overflow-auto cardBoxWidth w-9/10 lg:w-4/6 h-5/6 toDoScroller">
 
@@ -96,7 +106,7 @@
             </div>
         </div>
 
-        <div class="mb-32 xl:mb-8 mt-10 w-full flex flex-col items-center lg:h-full">
+        <div class="mb-32 xl:mb-0 mt-10 w-full flex flex-col items-center lg:h-full">
             <p class="w-full text-center specialtext font-black text-4xl mb-5"><mark class="blueMain">Du</mark><mark class="redMain">Ne</mark></p>
             <div id="duNeContainer" class="min-h-16 flex flex-col gap-4 items-center overflow-auto cardBoxWidth w-9/10 lg:w-4/6 h-5/6 toDoScroller">
 
