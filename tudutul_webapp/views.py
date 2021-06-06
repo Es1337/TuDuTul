@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.template import RequestContext
 
 
 def index(request, *args, **kwargs):
@@ -22,3 +21,16 @@ def offline(request, *args, **kwargs):
 
 def add_note_offline(request, *args, **kwargs):
     return render(request, 'note-app/offline-addform.html')
+
+
+def calendar_offline(request, *args, **kwargs):
+    return render(request, 'note-app/offline-calendar.html')
+
+def online(request, *args, **kwargs):
+    userLogin = request.session['userLogin']
+    # TODO
+    userEmail = 'userEmail'
+    return render(request, 'account/account.html', {
+        'userLogin' : userLogin,
+        'userEmail' : userEmail
+        })
