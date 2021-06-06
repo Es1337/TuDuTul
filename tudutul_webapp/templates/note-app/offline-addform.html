@@ -8,59 +8,64 @@
 
 {% block main %}
 <div class="mt-10 w-full flex flex-col items-center h-full">
-    <form class="flex flex-col gap-7" id="add-note-form" onsubmit="addTuDu(document.getElementById('add-note-form'))">
-        <div class="gap-3 flex flex-col h-full">
-        <label class="special-text tracking-wider text-indigo-100 text-lg font-bold  " >Name:</label>
-        <input type="text" name="name" id="name" class="border-b-2 border-yellow-300  p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
+    <form class="flex flex-col lg:flex-row gap-7 h-full w-full" id="add-note-form" onsubmit="addTuDu(document.getElementById('add-note-form'))">
+        <div class="h-full w-full flex flex-col items-center gap-3">
+            <div class="gap-3 flex flex-col w-1/5">
+                <label class="special-text tracking-wider text-indigo-100 text-lg font-bold  " >Name:</label>
+                <input type="text" name="name" id="name" class="border-b-2 border-yellow-300  p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
+            </div>
+            
+            <div class="gap-3 flex flex-col w-1/5">
+                <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >Completion date:</label>
+                <input type="time" name="completion_date" id="completion_date" class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
+            </div>
+
+            <div class="gap-3 flex flex-col w-1/5">
+                <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >Priority:</label>
+                <input type="number" min=1 max=3 value=1 name="priority" id="priority" class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
+            </div>
+
+            <div class="gap-3 flex flex-col w-1/5">
+                <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >DuNe:</label>
+                <input type="checkbox" name="is_done" id="is_done" class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
+            </div>
+        </div>
+        
+        <div class="w-full h-full flex flex-col items-center gap-3">
+            <div class="gap-3 flex flex-col w-1/5">
+                <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >Content:</label>
+                <textarea name="content" id="content" class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
+                </textarea>
+            </div>
+    
+    
+            <div class="gap-3 flex flex-col w-1/5">
+               <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >Repetition:</label>
+                <input type="number" value="0" name="repetition" id="repetition" class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
+            </div>
+    
+            <div class="gap-3 flex flex-col w-1/5">
+                <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >Category:</label>
+                <select name="category" id="category" class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
+                    <option value="Personal">Personal</option>
+                    <option value="Work">Work</option>
+                    <option value="IDK">IDK</option>
+                </select>
+            </div>
+    
+            <input
+                type="submit"
+                class="max-w-md inline-block py-2 px-4 shadow-xl text-background font-black bg-yellow-400 hover:bg-yellow-300 hover:text-white rounded transition ease-in duration-400"
+                value="Login"
+            >
+            <script>
+                document.addEventListener("submit", (e) => {
+    
+                    e.preventDefault();
+                });
+            </script>
         </div>
 
-        <div class="gap-3 flex flex-col h-full">
-        <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >Content:</label>
-        <textarea name="content" id="content" class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
-
-        </textarea>
-        </div>
-
-        <div class="gap-3 flex flex-col h-full">
-        <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >Completion date:</label>
-        <input type="time" name="completion_date" id="completion_date" class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
-        </div>
-
-        <div class="gap-3 flex flex-col h-full">
-        <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >Priority:</label>
-        <input type="number" min=1 max=3 value=1 name="priority" id="priority" class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
-        </div>
-
-        <div class="gap-3 flex flex-col h-full">
-        <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >DuNe:</label>
-        <input type="checkbox" name="is_done" id="is_done" class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
-        </div>
-
-        <div class="gap-3 flex flex-col h-full">
-        <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >Repetition:</label>
-        <input type="number" value="0" name="repetition" id="repetition" class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
-        </div>
-
-        <div class="gap-3 flex flex-col h-full">
-        <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >Category:</label>
-        <select name="category" id="category" class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
-            <option value="Personal">Personal</option>
-            <option value="Work">Work</option>
-            <option value="IDK">IDK</option>
-        </select>
-        </div>
-
-        <input
-            type="submit"
-            class="max-w-md inline-block py-2 px-4 shadow-xl text-background font-black bg-yellow-400 hover:bg-yellow-300 hover:text-white rounded transition ease-in duration-400"
-            value="Login"
-        >
-        <script>
-            document.addEventListener("submit", (e) => {
-
-                e.preventDefault();
-            });
-        </script>
     </form>
 </div>
 {% endblock %}

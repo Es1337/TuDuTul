@@ -28,6 +28,9 @@ def offline(request, *args, **kwargs):
 
 def add_note_offline(request, *args, **kwargs):
     return render(request, 'note-app/offline-addform.html')
+      
+def calendar_offline(request, *args, **kwargs):
+    return render(request, 'note-app/offline-calendar.html')
 
 def online(request, *args, **kwargs):
     logged, userLogin, userEmail = is_logged(request)
