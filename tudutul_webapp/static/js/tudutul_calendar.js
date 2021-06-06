@@ -7,29 +7,29 @@ function getMonthFromString(mon){
 $(document).ready(function() {
     $('#demoEvoCalendar').evoCalendar({
         format: "MM dd, yyyy",
-        titleFormat: "MM"
-//        , calendarEvents: [ {
-//            id: "asdfgh1",
-//            name: "Personal",
-//            description: "Masz 3 zadania z kategorii Personal w tym dniu.",
-//            badge: "niewykonane",
-//            date: today,
-//            type: "personal",
-//        }, {
-//            id: "artyu2",
-//            name: "Personal",
-//            description: "Masz 2 zadania z kategorii Personal w tym dniu.",
-//            badge: "niewykonane",
-//            date: "June/10/2021",
-//            type: "personal",
-//        }, {
-//            id: "artyu2",
-//            name: "Work",
-//            description: "Masz 2 zadania z kategorii Work w tym dniu.",
-//            badge: "niewykonane",
-//            date: today,
-//            type: "work",
-//        } ]
+        titleFormat: "MM",
+        calendarEvents: [ {
+           id: "asdfgh1",
+           name: "Personal",
+           description: "Masz 3 zadania z kategorii Personal w tym dniu.",
+           badge: "niewykonane",
+           date: today,
+           type: "personal",
+       }, {
+           id: "artyu2",
+           name: "Personal",
+           description: "Masz 2 zadania z kategorii Personal w tym dniu.",
+           badge: "niewykonane",
+           date: "June/10/2021",
+           type: "personal",
+       }, {
+           id: "artyu2",
+           name: "Work",
+           description: "Masz 2 zadania z kategorii Work w tym dniu.",
+           badge: "niewykonane",
+           date: today,
+           type: "work",
+       } ]
     })
 
     $("#showDateBtn").click(function() {
