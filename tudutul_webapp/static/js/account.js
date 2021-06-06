@@ -93,6 +93,29 @@ const sendLoginData = async formHTML => {
     }
 }
 
-const getLoggedUser = async () => {
-    
+const sendLogout = async () => {
+    try {
+        const userDataResponse = await fetch("/account/login/", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        var userJson = await userDataResponse.json();
+
+        const logoutResponse = await fetch("/account/logout?&login=" + userJson.userLogin, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        var logoutJson = await logoutResponse.json();
+
+        if (logoutJson.userLogin == "Logged out") {
+            document.location.href = "/";
+        }
+    }
+    catch (error) {
+        displayOutputMessage("Client error, try again.");
+    }
 }
