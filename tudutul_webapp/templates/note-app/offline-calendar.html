@@ -1,0 +1,89 @@
+{% extends "../app_layout.html" %}
+
+{% load static %}
+
+{% block scripts %}
+    <!-- Tutaj się dużo działo XD -->
+    <!-- <link rel="stylesheet" type="text/css" href='{% static "css/evo-calendar.css" %}'/> -->
+    <!-- <link rel="stylesheet" type="text/css" href='{% static "css/evo-calendar.min.css" %}'/> -->
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/evo-calendar@1.1.2/evo-calendar/css/evo-calendar.min.css"> -->
+    <!-- Tego cssa wypierdolić i dać do tailwinda -->
+    <!-- <link rel="stylesheet" type="text/css" href="/tudutul_webapp/static/css/evo-calendar.min.css"> -->
+    
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <script src='{% static "js/evo-calendar.js" %}' defer></script>
+    <script src='{% static "js/evo-calendar.min.js" %}' defer></script> -->
+
+    <!-- <link rel="stylesheet" type="text/css" href="../../static/css/evo-calendar.css"> -->
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <script src='{% static "js/evo-calendar.js" %}' defer></script>
+    <script src='{% static "js/tudutul_calendar.js" %}' defer></script>
+    <script src='{% static "js/offline_notes.js" %}' defer></script>
+
+    
+{% endblock %}
+
+{% block navbarbuttons %}
+
+    <li class="nav-item">
+        <a href="/offline" class="nav-link">
+            <i class="fas fa-table text-3xl sm:text-5xl text-white"></i>
+            <span class="link-text text-yellow-300">Tables</span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a href="/login" class="nav-link">
+            <i class=" my-1 fas fa-sign-in-alt text-3xl sm:text-5xl text-yellow-300"></i>
+            <span class="link-text text-yellow-300">Login</span>
+        </a>
+    </li>
+
+{% endblock %}
+
+
+{% block main %}
+
+
+            <!-- <div class="mt-10 w-full flex flex-col items-center lg:h-full">
+                <div class="--noshadow" id="demoEvoCalendar"></div>
+                <div class="items-center mb-10">
+                    <button type="button" 
+                        class="max-w-md inline-block py-2 px-4 shadow-xl text-background font-black bg-yellow-400 hover:bg-yellow-300 hover:text-white rounded transition ease-in duration-400" 
+                        id="showDateBtn">
+                        Wybierz datę
+                    </button>
+                    <button type="button" 
+                        class="max-w-md inline-block py-2 px-4 shadow-xl text-background font-black bg-yellow-400 hover:bg-yellow-300 hover:text-white rounded transition ease-in duration-400" 
+                        id="cancelBtn">
+                        Anuluj
+                    </button>
+                </div>
+            </div> -->
+
+            <div class="--noshadow" id="demoEvoCalendar"></div>
+
+            <div class="items-center mb-10" id="calendarButtons">
+                <button type="button" 
+                    class="max-w-md inline-block py-2 px-4 shadow-xl text-background font-black bg-yellow-400 hover:bg-yellow-300 hover:text-white rounded transition ease-in duration-400" 
+                    id="showDateBtn">
+                    Wybierz datę
+                </button>
+                <button type="button" 
+                    class="max-w-md inline-block py-2 px-4 shadow-xl text-background font-black bg-yellow-400 hover:bg-yellow-300 hover:text-white rounded transition ease-in duration-400" 
+                    id="cancelBtn">
+                    Anuluj
+                </button>
+            </div>
+            
+{% endblock %}
+
+
+
+
+
+
+
+
+
