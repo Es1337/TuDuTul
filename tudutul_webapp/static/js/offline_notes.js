@@ -12,6 +12,15 @@ const TUDU_COLLAPSIBLE_CLASSLIST = ['content', 'w-4/7', 'md:w-3/7', 'xl:w-8/10',
 
 /* -------------------------- INITIAL FUNCTIONS - GET DATE -------------------------- */
 
+const checkIfIdSet = () => {
+    if (localStorage.getItem('id') === null) {
+        localStorage.setItem('id', 1);
+    }
+}
+checkIfIdSet();
+
+/* -------------------------- INITIAL FUNCTIONS - GET DATE -------------------------- */
+
 // Arrow function to format date to our yyyy-mm-dd format
 const formatDate = date => {
     var d = new Date(date),
