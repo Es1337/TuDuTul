@@ -1,13 +1,12 @@
 import coreapi
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.renderers import JSONRenderer
-from rest_framework.schemas import AutoSchema
 from django.forms.models import model_to_dict
+from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response
+from rest_framework.schemas import AutoSchema
+from rest_framework.views import APIView
 
-from tudutul.models import Table, Note
 from table.forms import TableForm
+from tudutul.models import Table, Note
 
 
 # TODO add "share" view with friends and add-by-login
@@ -200,8 +199,3 @@ class TableDetailView(APIView):
             return Response(data={"ans": "Error occured during deleting"})
         
         return Response(data={"ans": "Table deleted successfully"})
-
-
-
-
-        
