@@ -73,10 +73,17 @@ class NoteView(APIView):
             - ‘repetition’ string
             - ‘category’ string
         """
-        if 'userLogin' not in request.session:
-            return Response(data={"ans": "User is not logged in"})
 
-        user_id = request.session['userLogin']
+        user_id = ""
+
+        # dwa sposoby uwierzytelniania do wyboru
+        if 'Authorization' in request.headers:
+            user_id = request.headers['Authorization']
+        elif 'userLogin' not in request.session:
+            return Response(data={"ans": "User is not logged in"})
+        else:
+            user_id = request.session['userLogin']
+
         query = get_all_notes_for_user(user_id)
 
         if 'table_id' in request.query_params.keys():
@@ -112,18 +119,25 @@ class NoteView(APIView):
 
             - 'ans' string
         """
-        if 'userLogin' in request.session:
-            answer = ""
-            form = NoteForm(request.data, request.session.get('userLogin'))
-            if form.is_valid():
-                form.save()
-                answer = 'Note saved successfully'
-            else:
-                answer = form.reason()
 
-            return Response(data={"ans": answer})
+        user_id = ""
 
-        return Response(data={"ans": "User is not logged in"})
+        if 'Authorization' in request.headers:
+            user_id = request.headers['Authorization']
+        elif 'userLogin' not in request.session:
+            return Response(data={"ans": "User is not logged in"})
+        else:
+            user_id = request.session['userLogin']
+
+        answer = ""
+        form = NoteForm(request.data, user_id)
+        if form.is_valid():
+            form.save()
+            answer = 'Note saved successfully'
+        else:
+            answer = form.reason()
+
+        return Response(data={"ans": answer})
 
 
 class NoteDetailView(APIView):
@@ -145,10 +159,15 @@ class NoteDetailView(APIView):
             - ‘repetition’ string
             - ‘category’ string
         """
-        if 'userLogin' not in request.session:
-            return Response(data={"ans": "User is not logged in"})
+        user_id = ""
 
-        user_id = request.session['userLogin']
+        if 'Authorization' in request.headers:
+            user_id = request.headers['Authorization']
+        elif 'userLogin' not in request.session:
+            return Response(data={"ans": "User is not logged in"})
+        else:
+            user_id = request.session['userLogin']
+
         users_notes = get_all_notes_for_user(user_id)
 
         if not users_notes.filter(pk=note_id).exists():
