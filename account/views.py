@@ -55,12 +55,14 @@ class RegistrationView(APIView):
     def post(self, request):
         """
         Parameters
+
             - 'email' string
             - 'login' string
             - 'pass' string
             - 'repeated_pass' string
             
         Response
+
             - 'registered' bool 
             - 'ans' string
         """
@@ -87,6 +89,7 @@ class LoginView(APIView):
     def get(self, request):
         """
         Response
+
             - 'logged' bool 
             - 'userLogin' string
             - 'userEmail' string
@@ -103,9 +106,11 @@ class LoginView(APIView):
     def post(self, request):
         """
         Parameters
+
             - 'login' string
             - 'password' string
         Response
+
             - 'logged' bool
             - 'ans' string
         """
@@ -132,8 +137,8 @@ class AccountView(APIView):
 
     def get(self, request):
         """
-        (in progress)
         Response
+
             - 'logged' bool
             - 'ans' string
         """
@@ -148,8 +153,10 @@ class LogoutView(APIView):
     def get(self, request):
         """
         Parameters
+
             - 'login' string
         Response
+
             - 'userLogin' string
         """
         if request.session.get('userLogin') == request.GET.get('login'):
