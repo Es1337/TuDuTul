@@ -13,6 +13,8 @@ from tudutul.models import Table
 
 
 def get_all_notes_for_user(user_id):
+    # TODO add notes from tables shared by logged user
+    # users_boards = Table.objects.filter(owner=user_id)
     boards_shared_with_user = Table.objects.filter(shared_with=user_id)
     filter_args = Q(creator__exact=user_id) | Q(owning_table_id__in=boards_shared_with_user)
     return Note.objects.filter(filter_args).values()
@@ -95,6 +97,7 @@ class NoteView(APIView):
     def post(self, request):
         """
         Parameters (Fields are not obligatory)
+
             - 'name' string
             - 'content' string
             - 'creation_date' date (YYYY-MM-DD format)
@@ -106,6 +109,7 @@ class NoteView(APIView):
             - 'owning_table_id' int
 
         Response
+
             - 'ans' string
         """
         if 'userLogin' in request.session:
@@ -128,8 +132,6 @@ class NoteDetailView(APIView):
 
     def get(self, request, note_id):
         """
-        Parameters
-
         Response
 
             - 'name' string

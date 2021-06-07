@@ -26,5 +26,6 @@ urlpatterns = [
     path('api/', include('api.urls')),
     path('account/', include('account.urls')),
     path('note/', include('notes.urls')),
+    path('table/', include('table.urls')),
     path('swagger/', schema_view)
 ]
