@@ -195,15 +195,21 @@ class NoteDetailView(APIView):
 
             - 'ans' string
         """
-        if 'userLogin' not in request.session:
-            return Response(data={"ans": "User is not logged in"})
 
-        user_id = request.session['userLogin']
+        user_id = ""
+
+        if 'Authorization' in request.headers:
+            user_id = request.headers['Authorization']
+        elif 'userLogin' not in request.session:
+            return Response(data={"ans": "User is not logged in"})
+        else:
+            user_id = request.session['userLogin']
+
         users_notes = get_all_notes_for_user(user_id)
         if not users_notes.filter(pk=note_id).exists():
             return Response(data={"ans": "Unauthorized"})
 
-        form = NoteForm(request.data, request.session['userLogin'])
+        form = NoteForm(request.data, user_id)
         if form.is_valid():
             edited_note = Note.objects.get(pk=note_id)
             if form.name:
@@ -233,21 +239,26 @@ class NoteDetailView(APIView):
     def delete(self, request, note_id):
         response = Response()
 
-        if 'userLogin' not in request.session:
+        user_login = ""
+
+        if 'Authorization' in request.headers:
+            user_login = request.headers['Authorization']
+        elif 'userLogin' not in request.session:
             response = Response(data={"ans": "User is not logged in"})
         else:
             user_login = request.session['userLogin']
-            filter_args = Q(creator__exact=user_login) & Q(id=note_id)
 
-            try:
-                note_to_delete = Note.objects.get(filter_args)
-                response = Response(data={"ans": f'Note with id: {note_to_delete.id} and name: {note_to_delete.name} '
+        filter_args = Q(creator__exact=user_login) & Q(id=note_id)
+
+        try:
+            note_to_delete = Note.objects.get(filter_args)
+            response = Response(data={"ans": f'Note with id: {note_to_delete.id} and name: {note_to_delete.name} '
                                                  f'shall be successfully deleted'})
-                # delete per se:
-                note_to_delete.delete()
+            # delete per se:
+            note_to_delete.delete()
 
-            except Note.DoesNotExist:
-                response = Response(data={"ans": f'Note with id: {note_id} was not found or user have '
+        except Note.DoesNotExist:
+            response = Response(data={"ans": f'Note with id: {note_id} was not found or user have '
                                                  f'no access to delete this note.'})
 
         return response
