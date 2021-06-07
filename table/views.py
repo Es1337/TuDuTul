@@ -6,7 +6,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.schemas import AutoSchema
 from django.forms.models import model_to_dict
 
-from tudutul.models import Table
+from tudutul.models import Table, Note
 from table.forms import TableForm
 
 
@@ -38,8 +38,6 @@ class TableView(APIView):
 
     def get(self, request):
         """
-        Parameters
-
         Response
 
             - ans - array of table objects for currently logged user, error message is user not logged in
@@ -95,9 +93,13 @@ class TableView(APIView):
 
 
 class TableDetailView(APIView):
+    renderer_classes = [JSONRenderer]
+    schema = TableViewSchema()
+
     def get(self, request, table_id):
         """
         Parameters
+
             - id
         Response
 
@@ -114,7 +116,12 @@ class TableDetailView(APIView):
             return Response(data={"ans": "User is not logged in"})
 
         user_id = request.session['userLogin']
-        table = Table.objects.get(pk=table_id)
+
+        try:
+            table = Table.objects.get(pk=table_id)
+        except Table.DoesNotExist:
+            return Response(data={"ans": "Table does not exist"})
+
         users_tables = get_all_tables_for_user(user_id)
 
         if not users_tables.filter(pk=table_id):
@@ -123,3 +130,78 @@ class TableDetailView(APIView):
         table = model_to_dict(table)
         table['shared_with'] = [user.login for user in table['shared_with']]
         return Response(data={"ans": table})
+    
+    def put(self, request, table_id):
+        """
+        Parameters (Fields are not obligatory)
+
+            - 'name' string
+            - 'is_shared' bool
+        Response
+
+            - 'ans' string
+        """
+        if 'userLogin' not in request.session:
+            return Response(data={"ans": "User is not logged in"})
+
+        form = TableForm(request.data, request.session.get('userLogin'))
+        if form.is_valid():
+            try:
+                edited_table = Table.objects.get(pk=table_id)
+            except Table.DoesNotExist:
+                return Response(data={"ans": "Table does not exist"})
+
+            if edited_table.owner != request.session.get('userLogin'):
+                return Response(data={"ans": "Unauthorized"})
+
+            if form.name:
+                edited_table.name = form.name
+            if form.is_shared:
+                edited_table.is_shared = form.is_shared
+
+            edited_table.save()
+            answer = 'Table updated successfully'
+
+        else:
+            answer = form.reason()
+
+        return Response(data={"ans": answer})
+        
+
+    def delete(self, request, table_id):
+        """
+        Parameters
+
+            - id
+        Response
+
+            - ans - table has been deleted or error message is if user not logged in
+        """
+        if 'userLogin' not in request.session:
+            return Response(data={"ans": "User is not logged in"})
+        
+        try:
+            delete_table = Table.objects.get(pk=table_id)
+        except Table.DoesNotExist:
+            return Response(data={"ans": "Table does not exist"})
+        
+        if delete_table.owner != request.session['userLogin']:
+            return Response(data={"ans": "Unauthorized"})
+        
+        try:
+            notes_to_delete = Note.objects.get(owning_table_id=table_id)
+            notes_to_delete.delete()
+        except:
+            pass
+
+        try:
+            delete_table.delete()
+        except:
+            return Response(data={"ans": "Error occured during deleting"})
+        
+        return Response(data={"ans": "Table deleted successfully"})
+
+
+
+
+        

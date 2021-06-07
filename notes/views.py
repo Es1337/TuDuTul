@@ -97,6 +97,7 @@ class NoteView(APIView):
     def post(self, request):
         """
         Parameters (Fields are not obligatory)
+
             - 'name' string
             - 'content' string
             - 'creation_date' date (YYYY-MM-DD format)
@@ -108,6 +109,7 @@ class NoteView(APIView):
             - 'owning_table_id' int
 
         Response
+
             - 'ans' string
         """
         if 'userLogin' in request.session:
@@ -136,8 +138,6 @@ class NoteDetailView(APIView):
 
     def get(self, request, note_id):
         """
-        Parameters
-
         Response
 
             - 'name' string
