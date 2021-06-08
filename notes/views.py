@@ -6,6 +6,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.schemas import AutoSchema
 from django.db.models import Q
 from django.forms.models import model_to_dict
+from datetime import datetime
 
 from .forms import NoteForm
 from tudutul.models import Note
@@ -65,8 +66,8 @@ class NoteView(APIView):
             - 'name' string
             - 'creator' string
             - ‘content’ string
-            - ‘creation_date’ date (YYYY-MM-DD format)
-            - ‘completion_date’ date (YYYY-MM-DD format)
+            - ‘creation_date’ date (YYYY-MM-DD HH:MM format)
+            - ‘completion_date’ date (YYYY-MM-DD HH:MM format)
             - ‘priority’ int (1-10)
             - 'owning_table_id' int
             - ‘is_done’ bool
@@ -91,7 +92,12 @@ class NoteView(APIView):
             query = query.filter(owning_table_id=filter_table_id)
         if 'completion_date' in request.query_params.keys():
             filter_date = request.query_params['completion_date']
-            query = query.filter(completion_date__range=[filter_date, filter_date])
+            # daily_notes = query.filter(repetition='D', completion_date__lt=filter_date)
+            # weekly_notes = query.filter(repetition='W', completion_date__lt=filter_date)
+            # monthly_notes = query.filter(repetition='M', completion_date__lt=filter_date)
+            # yearly_notes = query.filter(repetition='Y', completion_date__lt=filter_date)
+
+            query = query.filter(completion_date__range=[filter_date, filter_date]) # | daily_notes
 
         notes = []
         for i, item in enumerate(query):
@@ -107,11 +113,11 @@ class NoteView(APIView):
 
             - 'name' string
             - 'content' string
-            - 'creation_date' date (YYYY-MM-DD format)
-            - 'completion_date' date (YYYY-MM-DD format)
+            - 'creation_date' date (YYYY-MM-DD [HH:MM] format)
+            - 'completion_date' date (YYYY-MM-DD [HH:MM] format)
             - 'priority' int (1-10)
             - 'is_done' bool
-            - 'repetition' NOTE_REPETITION_CHOICES = (('W', 'Weekly'), ('M', 'Monthly'), ('Y', 'Yearly'), ('N', 'No repetition'))
+            - 'repetition' NOTE_REPETITION_CHOICES = (('D', 'Daily'), ('W', 'Weekly'), ('M', 'Monthly'), ('Y', 'Yearly'), ('N', 'No repetition'))
             - 'category' NOTE_CATEGORY_CHOICES = (('P', 'Personal'), ('W', 'Work'), ('F', 'Family'))
             - 'owning_table_id' int
 
@@ -151,8 +157,8 @@ class NoteDetailView(APIView):
             - 'name' string
             - 'creator' string
             - ‘content’ string
-            - ‘creation_date’ date (YYYY-MM-DD format)
-            - ‘completion_date’ date (YYYY-MM-DD format)
+            - ‘creation_date’ date (YYYY-MM-DD HH:MM format)
+            - ‘completion_date’ date (YYYY-MM-DD HH:MM format)
             - ‘priority’ int (1-10)
             - 'owning_table_id' int
             - ‘is_done’ bool
@@ -183,8 +189,8 @@ class NoteDetailView(APIView):
             - 'name' string
             - 'creator' string
             - ‘content’ string
-            - ‘creation_date’ date (YYYY-MM-DD format)
-            - ‘completion_date’ date (YYYY-MM-DD format)
+            - ‘creation_date’ date (YYYY-MM-DD [HH:MM] format)
+            - ‘completion_date’ date (YYYY-MM-DD [HH:MM] format)
             - ‘priority’ int (1-10)
             - 'owning_table_id' int
             - ‘is_done’ bool
