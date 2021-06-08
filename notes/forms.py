@@ -21,15 +21,23 @@ class NoteForm:
         self.alert = ''
 
     def is_valid(self):
+        creation_time = self.creation_date
+        completion_time = self.completion_date
         try:
-            self.creation_date = datetime.strptime(self.creation_date, '%Y-%m-%d')
+            self.creation_date = datetime.strptime(creation_time, '%Y-%m-%d %H:%M')
         except ValueError:
-            self.alert = 'Wrong creation date format'
+            try:
+                self.creation_date = datetime.strptime(creation_time, '%Y-%m-%d')
+            except ValueError:
+                self.alert = 'Wrong creation date format'
         
         try:
-            self.creation_date = datetime.strptime(self.completion_date, '%Y-%m-%d')
+            self.completion_date = datetime.strptime(completion_time, '%Y-%m-%d %H:%M')
         except ValueError:
-            self.alert = 'Wrong completion date format'
+            try:
+                self.completion_date = datetime.strptime(completion_time, '%Y-%m-%d')
+            except ValueError:
+                self.alert = 'Wrong creation date format'
 
         if type(self.priority) is not int or self.priority > 10 or self.priority < 1:
             self.alert = 'Wrong priority'
@@ -37,7 +45,7 @@ class NoteForm:
             self.alert = 'Wrong id type'
         elif type(self.is_done) is not bool:
             self.alert = 'is_done should be bool'
-        elif self.repetition not in ['W', 'M', 'Y', 'N']:
+        elif self.repetition not in ['D', 'W', 'M', 'Y', 'N']:
             self.alert = 'Wrong repetition format'
         elif self.category not in ['P', 'W', 'F']:
             self.alert = 'Wrong category format'

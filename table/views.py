@@ -48,10 +48,14 @@ class TableView(APIView):
             - 'owner' string
             - ‘shared_with' array of strings
         """
-        if 'userLogin' not in request.session:
-            return Response(data={"ans": "User is not logged in"})
+        user_id = ""
 
-        user_id = request.session['userLogin']
+        if 'Authorization' in request.headers:
+            user_id = request.headers['Authorization']
+        elif 'userLogin' not in request.session:
+            return Response(data={"ans": "User is not logged in"})
+        else:
+            user_id = request.session['userLogin']
         query = get_all_tables_for_user(user_id)
 
         tables = []
@@ -78,10 +82,16 @@ class TableView(APIView):
             - 'ans' string
         """
 
-        if 'userLogin' not in request.session:
-            return Response(data={'ans': 'User is not logged in'})
+        user_id = ""
 
-        form = TableForm(request.data, request.session.get('userLogin'))
+        if 'Authorization' in request.headers:
+            user_id = request.headers['Authorization']
+        elif 'userLogin' not in request.session:
+            return Response(data={'ans': 'User is not logged in'})
+        else:
+            user_id = request.session['userLogin']
+
+        form = TableForm(request.data, user_id)
         if form.is_valid():
             form.save()
             answer = 'Table saved successfully'
@@ -111,10 +121,15 @@ class TableDetailView(APIView):
             - 'owner' string
             - ‘shared_with' array of strings
         """
-        if 'userLogin' not in request.session:
-            return Response(data={"ans": "User is not logged in"})
 
-        user_id = request.session['userLogin']
+        user_id = ""
+
+        if 'Authorization' in request.headers:
+            user_id = request.headers['Authorization']
+        elif 'userLogin' not in request.session:
+            return Response(data={"ans": "User is not logged in"})
+        else:
+            user_id = request.session['userLogin']
 
         try:
             table = Table.objects.get(pk=table_id)
@@ -140,17 +155,23 @@ class TableDetailView(APIView):
 
             - 'ans' string
         """
-        if 'userLogin' not in request.session:
-            return Response(data={"ans": "User is not logged in"})
+        user_id = ""
 
-        form = TableForm(request.data, request.session.get('userLogin'))
+        if 'Authorization' in request.headers:
+            user_id = request.headers['Authorization']
+        elif 'userLogin' not in request.session:
+            return Response(data={"ans": "User is not logged in"})
+        else:
+            user_id = request.session['userLogin']
+
+        form = TableForm(request.data, user_id)
         if form.is_valid():
             try:
                 edited_table = Table.objects.get(pk=table_id)
             except Table.DoesNotExist:
                 return Response(data={"ans": "Table does not exist"})
 
-            if edited_table.owner != request.session.get('userLogin'):
+            if edited_table.owner != user_id:
                 return Response(data={"ans": "Unauthorized"})
 
             if form.name:
@@ -176,9 +197,14 @@ class TableDetailView(APIView):
 
             - ans - table has been deleted or error message is if user not logged in
         """
-        if 'userLogin' not in request.session:
+
+        user_id = ""
+
+        if 'Authorization' not in request.headers and 'userLogin' not in request.session:
             return Response(data={"ans": "User is not logged in"})
-        
+        else: # jest ok
+            pass
+
         try:
             delete_table = Table.objects.get(pk=table_id)
         except Table.DoesNotExist:

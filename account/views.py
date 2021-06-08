@@ -94,14 +94,21 @@ class LoginView(APIView):
             - 'userLogin' string
             - 'userEmail' string
         """
-        user_session_key = 'userLogin'
-        if user_session_key in request.session:
-            user = User.objects.filter(pk=request.session['userLogin'])
-            request.session['userEmail'] = user[0].email
-            email = user[0].email
-            return Response(data = {"logged": True, "userLogin": request.session.get(user_session_key), "userEmail:": email})
+        user = None
 
-        return Response(data = {"logged": False})
+        user_session_key = 'userLogin'
+
+        if 'Authorization' in request.headers:
+            user = User.objects.filter(pk=request.headers['Authorization'])
+        elif user_session_key in request.session:
+            user = User.objects.filter(pk=request.session['userLogin'])
+        else:
+            return Response(data={"logged": False})
+
+        request.session['userEmail'] = user[0].email
+        email = user[0].email
+        return Response(data = {"logged": True, "userLogin": request.session.get(user_session_key), "userEmail:": email})
+
 
     def post(self, request):
         """
@@ -142,8 +149,11 @@ class AccountView(APIView):
             - 'logged' bool
             - 'ans' string
         """
-        return Response(data = {"userLogin": request.session.get('userLogin')})
 
+        if 'userLogin' in request.session:
+            return Response(data = {"userLogin": request.session.get('userLogin')})
+        if 'Authorization' in request.headers:
+            return Response(data={"userLogin": request.headers['Authorization']})
 
 class LogoutView(APIView):
 
@@ -159,7 +169,9 @@ class LogoutView(APIView):
 
             - 'userLogin' string
         """
-        if request.session.get('userLogin') == request.GET.get('login'):
+        if request.headers.get('Authorization') == request.GET.get('login'):
+            answer = 'Logged out'
+        elif request.session.get('userLogin') == request.GET.get('login'):
             request.session.pop(key = 'userLogin')
             anwser = 'Logged out'
         else:

@@ -6,6 +6,8 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.schemas import AutoSchema
 from django.db.models import Q
 from django.forms.models import model_to_dict
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 from .forms import NoteForm
 from tudutul.models import Note
@@ -65,8 +67,8 @@ class NoteView(APIView):
             - 'name' string
             - 'creator' string
             - ‘content’ string
-            - ‘creation_date’ date (YYYY-MM-DD format)
-            - ‘completion_date’ date (YYYY-MM-DD format)
+            - ‘creation_date’ date (YYYY-MM-DD HH:MM format)
+            - ‘completion_date’ date (YYYY-MM-DD HH:MM format)
             - ‘priority’ int (1-10)
             - 'owning_table_id' int
             - ‘is_done’ bool
@@ -91,7 +93,40 @@ class NoteView(APIView):
             query = query.filter(owning_table_id=filter_table_id)
         if 'completion_date' in request.query_params.keys():
             filter_date = request.query_params['completion_date']
-            query = query.filter(completion_date__range=[filter_date, filter_date])
+            query = query.filter(completion_date__range=[filter_date + ' 00:00', filter_date + ' 23:59'])
+            res = query
+
+            daily_notes = query.filter(repetition='D', completion_date__lt=filter_date)
+            res |= daily_notes
+
+            weekly_notes = query.filter(repetition='W', completion_date__lt=filter_date)
+            for note in weekly_notes:
+                min_date = note['completion_date']
+                max_date = datetime.strptime(filter_date, '%Y-%m-%d')
+                while min_date <= max_date:
+                    min_date += relativedelta(days=7)
+                if min_date.day == max_date.day:
+                    res |= Note.objects.filter(id=note['id']).values()
+
+            monthly_notes = query.filter(repetition='M', completion_date__lt=filter_date)
+            for note in monthly_notes:
+                min_date = note['completion_date']
+                max_date = datetime.strptime(filter_date, '%Y-%m-%d')
+                while min_date <= max_date:
+                    min_date += relativedelta(months=1)
+                if min_date.day == max_date.day:
+                    res |= Note.objects.filter(id=note['id']).values()
+
+            yearly_notes = query.filter(repetition='Y', completion_date__lt=filter_date)
+            for note in yearly_notes:
+                min_date = note['completion_date']
+                max_date = datetime.strptime(filter_date, '%Y-%m-%d')
+                while min_date <= max_date:
+                    min_date += relativedelta(years=1)
+                if min_date.day == max_date.day and min_date.month == max_date.month:
+                    res |= Note.objects.filter(id=note['id']).values()
+
+            query = res
 
         notes = []
         for i, item in enumerate(query):
@@ -107,11 +142,11 @@ class NoteView(APIView):
 
             - 'name' string
             - 'content' string
-            - 'creation_date' date (YYYY-MM-DD format)
-            - 'completion_date' date (YYYY-MM-DD format)
+            - 'creation_date' date (YYYY-MM-DD [HH:MM] format)
+            - 'completion_date' date (YYYY-MM-DD [HH:MM] format)
             - 'priority' int (1-10)
             - 'is_done' bool
-            - 'repetition' NOTE_REPETITION_CHOICES = (('W', 'Weekly'), ('M', 'Monthly'), ('Y', 'Yearly'), ('N', 'No repetition'))
+            - 'repetition' NOTE_REPETITION_CHOICES = (('D', 'Daily'), ('W', 'Weekly'), ('M', 'Monthly'), ('Y', 'Yearly'), ('N', 'No repetition'))
             - 'category' NOTE_CATEGORY_CHOICES = (('P', 'Personal'), ('W', 'Work'), ('F', 'Family'))
             - 'owning_table_id' int
 
@@ -151,8 +186,8 @@ class NoteDetailView(APIView):
             - 'name' string
             - 'creator' string
             - ‘content’ string
-            - ‘creation_date’ date (YYYY-MM-DD format)
-            - ‘completion_date’ date (YYYY-MM-DD format)
+            - ‘creation_date’ date (YYYY-MM-DD HH:MM format)
+            - ‘completion_date’ date (YYYY-MM-DD HH:MM format)
             - ‘priority’ int (1-10)
             - 'owning_table_id' int
             - ‘is_done’ bool
@@ -183,8 +218,8 @@ class NoteDetailView(APIView):
             - 'name' string
             - 'creator' string
             - ‘content’ string
-            - ‘creation_date’ date (YYYY-MM-DD format)
-            - ‘completion_date’ date (YYYY-MM-DD format)
+            - ‘creation_date’ date (YYYY-MM-DD [HH:MM] format)
+            - ‘completion_date’ date (YYYY-MM-DD [HH:MM] format)
             - ‘priority’ int (1-10)
             - 'owning_table_id' int
             - ‘is_done’ bool
@@ -195,15 +230,21 @@ class NoteDetailView(APIView):
 
             - 'ans' string
         """
-        if 'userLogin' not in request.session:
-            return Response(data={"ans": "User is not logged in"})
 
-        user_id = request.session['userLogin']
+        user_id = ""
+
+        if 'Authorization' in request.headers:
+            user_id = request.headers['Authorization']
+        elif 'userLogin' not in request.session:
+            return Response(data={"ans": "User is not logged in"})
+        else:
+            user_id = request.session['userLogin']
+
         users_notes = get_all_notes_for_user(user_id)
         if not users_notes.filter(pk=note_id).exists():
             return Response(data={"ans": "Unauthorized"})
 
-        form = NoteForm(request.data, request.session['userLogin'])
+        form = NoteForm(request.data, user_id)
         if form.is_valid():
             edited_note = Note.objects.get(pk=note_id)
             if form.name:
@@ -233,21 +274,26 @@ class NoteDetailView(APIView):
     def delete(self, request, note_id):
         response = Response()
 
-        if 'userLogin' not in request.session:
+        user_login = ""
+
+        if 'Authorization' in request.headers:
+            user_login = request.headers['Authorization']
+        elif 'userLogin' not in request.session:
             response = Response(data={"ans": "User is not logged in"})
         else:
             user_login = request.session['userLogin']
-            filter_args = Q(creator__exact=user_login) & Q(id=note_id)
 
-            try:
-                note_to_delete = Note.objects.get(filter_args)
-                response = Response(data={"ans": f'Note with id: {note_to_delete.id} and name: {note_to_delete.name} '
+        filter_args = Q(creator__exact=user_login) & Q(id=note_id)
+
+        try:
+            note_to_delete = Note.objects.get(filter_args)
+            response = Response(data={"ans": f'Note with id: {note_to_delete.id} and name: {note_to_delete.name} '
                                                  f'shall be successfully deleted'})
-                # delete per se:
-                note_to_delete.delete()
+            # delete per se:
+            note_to_delete.delete()
 
-            except Note.DoesNotExist:
-                response = Response(data={"ans": f'Note with id: {note_id} was not found or user have '
+        except Note.DoesNotExist:
+            response = Response(data={"ans": f'Note with id: {note_id} was not found or user have '
                                                  f'no access to delete this note.'})
 
         return response
