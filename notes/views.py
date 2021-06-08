@@ -123,7 +123,7 @@ class NoteView(APIView):
                 max_date = datetime.strptime(filter_date, '%Y-%m-%d')
                 while min_date <= max_date:
                     min_date += relativedelta(years=1)
-                if min_date.day == max_date.day:
+                if min_date.day == max_date.day and min_date.month == max_date.month:
                     res |= Note.objects.filter(id=note['id']).values()
 
             query = res
