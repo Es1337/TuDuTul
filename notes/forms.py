@@ -24,18 +24,18 @@ class NoteForm:
         creation_time = self.creation_date
         completion_time = self.completion_date
         try:
-            self.creation_date = datetime.strptime(creation_time, '%Y-%m-%d')
+            self.creation_date = datetime.strptime(creation_time, '%Y-%m-%d %H:%M')
         except ValueError:
             try:
-                self.creation_date = datetime.strptime(creation_time, '%Y-%m-%d %H:%M')
+                self.creation_date = datetime.strptime(creation_time, '%Y-%m-%d')
             except ValueError:
                 self.alert = 'Wrong creation date format'
         
         try:
-            self.completion_date = datetime.strptime(completion_time, '%Y-%m-%d')
+            self.completion_date = datetime.strptime(completion_time, '%Y-%m-%d %H:%M')
         except ValueError:
             try:
-                self.completion_date = datetime.strptime(completion_time, '%Y-%m-%d %H:%M')
+                self.completion_date = datetime.strptime(completion_time, '%Y-%m-%d')
             except ValueError:
                 self.alert = 'Wrong creation date format'
 
@@ -45,7 +45,7 @@ class NoteForm:
             self.alert = 'Wrong id type'
         elif type(self.is_done) is not bool:
             self.alert = 'is_done should be bool'
-        elif self.repetition not in ['W', 'M', 'Y', 'N']:
+        elif self.repetition not in ['D', 'W', 'M', 'Y', 'N']:
             self.alert = 'Wrong repetition format'
         elif self.category not in ['P', 'W', 'F']:
             self.alert = 'Wrong category format'

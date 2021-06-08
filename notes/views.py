@@ -7,6 +7,7 @@ from rest_framework.schemas import AutoSchema
 from django.db.models import Q
 from django.forms.models import model_to_dict
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 from .forms import NoteForm
 from tudutul.models import Note
@@ -92,12 +93,40 @@ class NoteView(APIView):
             query = query.filter(owning_table_id=filter_table_id)
         if 'completion_date' in request.query_params.keys():
             filter_date = request.query_params['completion_date']
-            # daily_notes = query.filter(repetition='D', completion_date__lt=filter_date)
-            # weekly_notes = query.filter(repetition='W', completion_date__lt=filter_date)
-            # monthly_notes = query.filter(repetition='M', completion_date__lt=filter_date)
-            # yearly_notes = query.filter(repetition='Y', completion_date__lt=filter_date)
+            query = query.filter(completion_date__range=[filter_date + ' 00:00', filter_date + ' 23:59'])
+            res = query
 
-            query = query.filter(completion_date__range=[filter_date, filter_date]) # | daily_notes
+            daily_notes = query.filter(repetition='D', completion_date__lt=filter_date)
+            res |= daily_notes
+
+            weekly_notes = query.filter(repetition='W', completion_date__lt=filter_date)
+            for note in weekly_notes:
+                min_date = note['completion_date']
+                max_date = datetime.strptime(filter_date, '%Y-%m-%d')
+                while min_date <= max_date:
+                    min_date += relativedelta(days=7)
+                if min_date.day == max_date.day:
+                    res |= Note.objects.filter(id=note['id']).values()
+
+            monthly_notes = query.filter(repetition='M', completion_date__lt=filter_date)
+            for note in monthly_notes:
+                min_date = note['completion_date']
+                max_date = datetime.strptime(filter_date, '%Y-%m-%d')
+                while min_date <= max_date:
+                    min_date += relativedelta(months=1)
+                if min_date.day == max_date.day:
+                    res |= Note.objects.filter(id=note['id']).values()
+
+            yearly_notes = query.filter(repetition='Y', completion_date__lt=filter_date)
+            for note in yearly_notes:
+                min_date = note['completion_date']
+                max_date = datetime.strptime(filter_date, '%Y-%m-%d')
+                while min_date <= max_date:
+                    min_date += relativedelta(years=1)
+                if min_date.day == max_date.day:
+                    res |= Note.objects.filter(id=note['id']).values()
+
+            query = res
 
         notes = []
         for i, item in enumerate(query):
