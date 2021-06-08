@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.forms.models import model_to_dict
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from itertools import chain
 
 from .forms import NoteForm
 from tudutul.models import Note
@@ -15,11 +16,17 @@ from tudutul.models import Table
 
 
 def get_all_notes_for_user(user_id):
-    # TODO add notes from tables shared by logged user
-    # users_boards = Table.objects.filter(owner=user_id)
+    user_owned_notes = Note.objects.filter(creator__exact=user_id).values()
+
+    users_boards = Table.objects.filter(owner__exact=user_id)
+    notes_from_user_boards = Note.objects.filter(owning_table_id__in=users_boards).values()
+
     boards_shared_with_user = Table.objects.filter(shared_with=user_id)
-    filter_args = Q(creator__exact=user_id) | Q(owning_table_id__in=boards_shared_with_user)
-    return Note.objects.filter(filter_args).values()
+    notes_from_shared_boards = Note.objects.filter(owning_table_id__in=boards_shared_with_user).values()
+
+    # for some reason django wont union three queries properly, so:
+    ids = [v['id'] for v in list(chain(user_owned_notes, notes_from_user_boards, notes_from_shared_boards))]
+    return Note.objects.filter(pk__in=ids).values()
 
 
 class NoteViewSchema(AutoSchema):
