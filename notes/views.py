@@ -15,6 +15,35 @@ from tudutul.models import Note
 from tudutul.models import Table
 
 
+def get_time_delta(repetition_type):
+    if repetition_type == 'D':
+        return relativedelta(days=1)
+    if repetition_type == 'W':
+        return relativedelta(weeks=1)
+    if repetition_type == 'M':
+        return relativedelta(month=1)
+    if repetition_type == 'Y':
+        return relativedelta(year=1)
+    return relativedelta()
+
+
+def get_repeated_notes_for_repetition(query, date, repetition):
+    notes = query.filter(repetition=repetition, creation_date__lte=date, completion_date__gte=date)
+    res = None
+    delta = get_time_delta(repetition)
+    for note in notes:
+        min_date = note['creation_date']
+        max_date = datetime.strptime(date, '%Y-%m-%d')
+        while min_date < max_date:
+            min_date += delta
+        if min_date.day == max_date.day and min_date.month == max_date.month:
+            if not res:
+                res = Note.objects.filter(id=note['id']).values()
+            else:
+                res |= Note.objects.filter(id=note['id']).values()
+    return res
+
+
 def get_all_notes_for_user(user_id):
     user_owned_notes = Note.objects.filter(creator__exact=user_id).values()
 
@@ -48,7 +77,7 @@ class NoteViewSchema(AutoSchema):
             ]
         if method.lower() == 'get':
             extra_fields = [
-                coreapi.Field('completion_date'),
+                coreapi.Field('date'),
                 coreapi.Field('table_id')
             ]
 
@@ -64,7 +93,7 @@ class NoteView(APIView):
         Parameters (optional)
 
             - 'table_id' int
-            - 'completion_date' date (YYYY-MM-DD)
+            - 'date' date (YYYY-MM-DD)  // tudus to be completed on specific day
         Response
 
             - ans - array of note objects for currently logged user, error message is user not logged in
@@ -98,40 +127,26 @@ class NoteView(APIView):
         if 'table_id' in request.query_params.keys():
             filter_table_id = request.query_params['table_id']
             query = query.filter(owning_table_id=filter_table_id)
-        if 'completion_date' in request.query_params.keys():
-            filter_date = request.query_params['completion_date']
+        if 'date' in request.query_params.keys():
+            filter_date = request.query_params['date']
             query = query.filter(completion_date__range=[filter_date + ' 00:00', filter_date + ' 23:59'])
             res = query
 
-            daily_notes = query.filter(repetition='D', completion_date__lt=filter_date)
-            res |= daily_notes
+            daily_notes = get_repeated_notes_for_repetition(query, filter_date, 'D')
+            if daily_notes:
+                res |= daily_notes
 
-            weekly_notes = query.filter(repetition='W', completion_date__lt=filter_date)
-            for note in weekly_notes:
-                min_date = note['completion_date']
-                max_date = datetime.strptime(filter_date, '%Y-%m-%d')
-                while min_date <= max_date:
-                    min_date += relativedelta(days=7)
-                if min_date.day == max_date.day:
-                    res |= Note.objects.filter(id=note['id']).values()
+            weekly_notes = get_repeated_notes_for_repetition(query, filter_date, 'W')
+            if weekly_notes:
+                res |= weekly_notes
 
-            monthly_notes = query.filter(repetition='M', completion_date__lt=filter_date)
-            for note in monthly_notes:
-                min_date = note['completion_date']
-                max_date = datetime.strptime(filter_date, '%Y-%m-%d')
-                while min_date <= max_date:
-                    min_date += relativedelta(months=1)
-                if min_date.day == max_date.day:
-                    res |= Note.objects.filter(id=note['id']).values()
+            monthly_notes = get_repeated_notes_for_repetition(query, filter_date, 'M')
+            if monthly_notes:
+                res |= monthly_notes
 
-            yearly_notes = query.filter(repetition='Y', completion_date__lt=filter_date)
-            for note in yearly_notes:
-                min_date = note['completion_date']
-                max_date = datetime.strptime(filter_date, '%Y-%m-%d')
-                while min_date <= max_date:
-                    min_date += relativedelta(years=1)
-                if min_date.day == max_date.day and min_date.month == max_date.month:
-                    res |= Note.objects.filter(id=note['id']).values()
+            yearly_notes = get_repeated_notes_for_repetition(query, filter_date, 'Y')
+            if yearly_notes:
+                res |= yearly_notes
 
             query = res
 
