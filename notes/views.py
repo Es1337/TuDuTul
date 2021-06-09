@@ -21,9 +21,9 @@ def get_time_delta(repetition_type):
     if repetition_type == 'W':
         return relativedelta(weeks=1)
     if repetition_type == 'M':
-        return relativedelta(month=1)
+        return relativedelta(months=1)
     if repetition_type == 'Y':
-        return relativedelta(year=1)
+        return relativedelta(years=1)
     return None
 
 
