@@ -8,8 +8,6 @@ class User(models.Model):
     email = models.EmailField(max_length=127, unique=True)
     password = models.CharField(max_length=255)
     friends_list = models.ManyToManyField('self')
-    # TODO default table
-    # default_table = models.OneToOneField(Table, on_delete=models.CASCADE)
 
 
 class Note(models.Model):
@@ -19,7 +17,7 @@ class Note(models.Model):
     creation_date = models.DateTimeField(default=timezone.now)
     completion_date = models.DateTimeField()
     priority = models.IntegerField()
-    owning_table_id = models.IntegerField()
+    owning_table_id = models.IntegerField(default=-1)
     is_done = models.BooleanField(default=False)
 
     NOTE_REPETITION_CHOICES = (('D', 'Daily'), ('W', 'Weekly'), ('M', 'Monthly'), ('Y', 'Yearly'), ('N', 'No repetition'))

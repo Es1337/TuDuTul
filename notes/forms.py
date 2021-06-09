@@ -16,7 +16,7 @@ class NoteForm:
         self.is_done = self.__check_none(note_form.get('is_done'), False)
         self.repetition = self.__check_none(note_form.get('repetition'), 'N')
         self.category = self.__check_none(note_form.get('category'), 'P')
-        self.owning_table_id = self.__check_none(note_form.get('owning_table_id'), 1)
+        self.owning_table_id = self.__check_none(note_form.get('owning_table_id'), -1)
 
         self.alert = ''
 
