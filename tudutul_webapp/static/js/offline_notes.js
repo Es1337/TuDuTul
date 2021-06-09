@@ -88,7 +88,7 @@ const createCollapsibles = () => {
 // Arrow function to create button's (in our case, TuDu card's) innerHTML
 // IMPORTANT: The button itself has different CSS styling, specified in TUDU_CARD_CLASSLIST constant
 const fillButtonInnerHTML = item => {
-    const checked = item.is_done == 'on' ? 'checked' : null;
+    const checked = item.is_done == true ? 'checked' : null;
     const priorityHTML = createPropertyHTML(item.priority);
     return `<div class="px-4 mx-auto mb-1 flex justify-between items-center">
                 <p class="font-black text-white tracking-wide text-xl">${item.name}</p>
@@ -161,7 +161,7 @@ const renderTodos = (todos) => {
     todos.forEach(item => {
       const buttonToAdd = createButtonHTML(item);
       const collapsibleToAdd = createCollapsibleHTML(item);
-      if (item.is_done == 'on') {
+      if (item.is_done == true) {
         duNeContainer.appendChild(buttonToAdd);
         duNeContainer.appendChild(collapsibleToAdd);
       } else {
@@ -278,7 +278,9 @@ const editTuDu = async (formHTML, index) => {
     form.forEach((value, key) => allTodos[index][key] = value);
 
     if (form.get('is_done') === null) {
-        allTodos[index]['is_done'] = 'off';
+        allTodos[index]['is_done'] = false;
+    } else {
+        allTodos[index]['is_done'] = true;
     }
 
     saveToLocalStorage(allTodos);
@@ -351,8 +353,8 @@ const getFormModule = id => {
     let completion_date = null;
     let priority = `value=1`;
     let is_done = null;
-    let content = '';
-    let repetition = `value=0`;
+    let content = ``;
+    let repetition = `value=N`;
     let category = null;
     let method = `onclick="addTuDu(document.getElementById('add-note-form'));"`;
 
@@ -360,7 +362,7 @@ const getFormModule = id => {
         name = `value="` + item.name + `"`;
         completion_date = `value="` + item.completion_date + `"`;
         priority = `value="` + item.priority + `"`;
-        is_done = item.is_done === 'on' ? 'checked' : null;
+        is_done = item.is_done === true ? 'checked' : null;
         content = item.content;
         repetition = `value="` + item.repetition + `"`;
         category = `value="` + item.category + `"`;
@@ -369,7 +371,7 @@ const getFormModule = id => {
 
     const mainDisplay = document.querySelector("#feature-display");
     mainDisplay.innerHTML = `
-    <div class="mt-10 w-full flex flex-col items-center h-full">
+    <div class="mt-10 mb-20 lg:mb-0 w-full flex flex-col items-center h-full">
         <form class="flex flex-col lg:flex-row gap-7 h-full w-full" id="add-note-form">
             <div class="h-full w-full flex flex-col items-center gap-3">
                 <div class="gap-3 flex flex-col w-1/5">
@@ -396,30 +398,34 @@ const getFormModule = id => {
             <div class="w-full h-full flex flex-col items-center gap-3">
                 <div class="gap-3 flex flex-col w-1/5">
                     <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >Content:</label>
-                    <textarea name="content" id="content" class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
-                        ${content}
-                    </textarea>
+                    <textarea name="content" id="content" class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">${content}</textarea>
                 </div>
         
         
-                <div class="gap-3 flex flex-col w-1/5">
-                <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >Repetition:</label>
-                    <input type="number" ` + repetition + ` name="repetition" id="repetition" class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
-                </div>
+            <div class="gap-3 flex flex-col w-1/5">
+            <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >Repetition:</label>
+                <select name="repetition" id="repetition" ` + repetition + ` class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
+                    <option value="N">No repetition</option>
+                    <option value="D">Daily</option>
+                    <option value="W">Weekly</option>
+                    <option value="M">Monthly</option>
+                    <option value="Y">Yearly</option>
+                </select>
+            </div>
         
                 <div class="gap-3 flex flex-col w-1/5">
                     <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >Category:</label>
                     <select name="category" id="category" ` + category + ` class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
                         <option value="Personal">Personal</option>
                         <option value="Work">Work</option>
-                        <option value="IDK">IDK</option>
+                        <option value="Family">Family</option>
                     </select>
                 </div>
         
                 <input
                     type="button"
                     class="max-w-md inline-block py-2 px-4 shadow-xl text-background font-black bg-yellow-400 hover:bg-yellow-300 hover:text-white rounded transition ease-in duration-400"
-                    value="Login"
+                    value="Edit"
                      ` + method + ` 
                 >
                 <script>

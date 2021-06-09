@@ -80,7 +80,7 @@ const sendLoginData = async formHTML => {
         var output = "";
         if(jsonOBJ.logged) {
             output = jsonOBJ.ans;
-            document.location.href = '/online';
+            document.location.href = '/app';
         }
         else {
             output += "Login failed. ";

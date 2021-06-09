@@ -85,9 +85,11 @@
     <div id="main" class="w-full lg:h-1/4 flex items-center justify-center">
     {% block info %}
         <div class="xl:w-3/4 xl:h-full">
-            <p class="mt-10 ml-10 font-bold text-2xl text-yellow-300">Welcome!</p>
-            <p class="mt-5 ml-10 font-bold redMain">This is the offline version of the app!</p>
-            <p id="day-display" class="mt-5 ml-10 font-bold text-xl text-white specialtext"></p>
+            <div class="header-two-part-animation">
+                <p class="mt-10 ml-10 font-bold text-2xl text-yellow-300">Welcome!</p>
+                <p class="mt-5 ml-10 font-bold redMain">This is the offline version of the app!</p>
+            </div>
+            <p id="day-display" class="header-two-part-animation mt-5 ml-10 font-bold text-xl text-white specialtext"></p>
             
         </div>
     {% endblock %}    
