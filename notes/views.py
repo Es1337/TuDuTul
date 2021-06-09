@@ -21,16 +21,18 @@ def get_time_delta(repetition_type):
     if repetition_type == 'W':
         return relativedelta(weeks=1)
     if repetition_type == 'M':
-        return relativedelta(month=1)
+        return relativedelta(months=1)
     if repetition_type == 'Y':
-        return relativedelta(year=1)
-    return relativedelta()
+        return relativedelta(years=1)
+    return None
 
 
-def get_repeated_notes_for_repetition(query, date, repetition):
-    notes = query.filter(repetition=repetition, creation_date__lte=date, completion_date__gte=date)
+def get_repeated_notes_for_repetition(query_to_filter, date, repetition):
+    notes = query_to_filter.filter(repetition=repetition, creation_date__lt=date, completion_date__gte=date)
     res = None
     delta = get_time_delta(repetition)
+    if not delta:
+        raise ValueError('Incorrect type of repetition provided')
     for note in notes:
         min_date = note['creation_date']
         max_date = datetime.strptime(date, '%Y-%m-%d')
@@ -129,8 +131,8 @@ class NoteView(APIView):
             query = query.filter(owning_table_id=filter_table_id)
         if 'date' in request.query_params.keys():
             filter_date = request.query_params['date']
-            query = query.filter(completion_date__range=[filter_date + ' 00:00', filter_date + ' 23:59'])
-            res = query
+            query = query.filter(creation_date__range=[filter_date + ' 00:00', filter_date + ' 23:59'])
+            res = query.filter(repetition='N')
 
             daily_notes = get_repeated_notes_for_repetition(query, filter_date, 'D')
             if daily_notes:
@@ -147,7 +149,6 @@ class NoteView(APIView):
             yearly_notes = get_repeated_notes_for_repetition(query, filter_date, 'Y')
             if yearly_notes:
                 res |= yearly_notes
-
             query = res
 
         notes = []
