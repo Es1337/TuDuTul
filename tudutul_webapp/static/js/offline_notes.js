@@ -7,9 +7,16 @@ let allTodos = [];
 
 let state = "tuDuDisplay";
 
-const TUDU_CARD_CLASSLIST = ['collapsible', 'p-3', 'inline-block', 'relative', 'cardBackground', 'border-yellow-300', 'border-1', 'rounded-3xl', 'cardWidth', 'w-4/6', 'md:w-3/6', 'xl:w-9/10'];
+const repetitionTable = {
+    "D": "Daily",
+    "W": "Weekly",
+    "M": "Monthly",
+    "Y": "Yearly"
+}
 
-const TUDU_COLLAPSIBLE_CLASSLIST = ['content', 'w-4/7', 'md:w-3/7', 'xl:w-8/10', 'hidden', 'rounded-b-2xl', 'cardBackground', 'border-yellow-300', 'border-1']
+const TUDU_CARD_CLASSLIST = ['collapsible', 'p-3', 'inline-block', 'relative', 'cardBackground', 'border-yellow-300', 'border-1', 'rounded-3xl', 'cardWidth', 'w-4/6', 'md:w-3/6', 'xl:w-8/10'];
+
+const TUDU_COLLAPSIBLE_CLASSLIST = ['content', 'w-4/7', 'md:w-3/7', 'xl:w-7/10', 'hidden', 'rounded-b-2xl', 'cardBackground', 'border-yellow-300', 'border-1']
 
 /* -------------------------- INITIAL FUNCTIONS - GET DATE -------------------------- */
 
@@ -114,13 +121,15 @@ const fillButtonInnerHTML = item => {
     const checked = item.is_done == true ? 'checked' : null;
     const priorityHTML = createPropertyHTML(item.priority);
     return `<div class="px-4 mx-auto mb-1 flex justify-between items-center">
-                <p class="font-black text-white tracking-wide text-xl">${item.name}</p>
+                <p class="font-black text-white tracking-wide text-2xl">${item.name}</p>
                 <input type="checkbox" ${checked} disabled>
             </div>
-            <p class="mx-4 font-bold text-left text-yellow-300">${item.creation_date_hour}</p>
-            <div class="mx-auto px-4 flex items-center justify-between">
-                <p class="flex font-bold  text-sm text-yellow-300">${item.category}</p>
-                <div>` +
+            <p class="mx-4 mb-2 font-bold text-left text-md text-yellow-300">${item.creation_date_hour}</p>
+            <div class="cardDetails mx-auto px-4 flex items-center justify-around">
+                <div class="w-full h-full font-bold  text-sm text-yellow-200">${item.category}</div>
+                ${item.repetition !== "N" 
+                    ? `<div class="w-full h-full font-bold  text-sm text-yellow-200">${repetitionTable[item.repetition]}</div>` : ''}
+                <div class="w-full h-full text-sm">` +
                     priorityHTML + 
                 `</div>
             </div>`;
@@ -131,15 +140,15 @@ const createPropertyHTML = priority => {
     priority = parseInt(priority, 10);
     switch(priority) {
         case 1:
-            return `<i class=" my-1 fas fa-exclamation text-yellow-200"></i>`;
+            return `<i class="fas fa-exclamation text-yellow-200"></i>`;
             break;
         case 2:
-            return `<i class=" my-1 fas fa-exclamation text-yellow-300"></i>
-                    <i class=" my-1 fas fa-exclamation text-yellow-300"></i>`;
+            return `<i class="fas fa-exclamation text-yellow-300"></i>
+                    <i class="fas fa-exclamation text-yellow-300"></i>`;
         case 3:
-            return `<i class=" my-1 fas fa-exclamation text-red-500"></i>
-                    <i class=" my-1 fas fa-exclamation text-red-500"></i>
-                    <i class=" my-1 fas fa-exclamation text-red-500"></i>`;
+            return `<i class="fas fa-exclamation text-red-500"></i>
+                    <i class="fas fa-exclamation text-red-500"></i>
+                    <i class="fas fa-exclamation text-red-500"></i>`;
         default:
             console.error("WRONG VALUE OF PRIORITY");
             break;
