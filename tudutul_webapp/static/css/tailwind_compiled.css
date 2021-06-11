@@ -32339,6 +32339,10 @@ input[disabled="true"] {
   max-width: calc(var(--maxcardwidth) + 10px);
 }
 
+.cardDetails > *:nth-child(n+2) {
+  border-left: 1px solid yellow;
+}
+
 .toDoScroller {
   scrollbar-width: thin;
   scrollbar-color: #420e42 white;

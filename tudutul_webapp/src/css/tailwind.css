@@ -9,7 +9,7 @@
 .root {
     --app-background: #400d40;
     --mincardwidth: 35ch;
-    --maxcardwidth: 65ch;
+    --maxcardwidth: 55ch;
 
     --transition-speed: 300ms;
 }
@@ -153,6 +153,10 @@ input[disabled="true"] {
 .cardBoxWidth {
     min-width: calc(var(--mincardwidth) + 10px);
     max-width: calc(var(--maxcardwidth) + 10px);
+}
+
+.cardDetails > *:nth-child(n+2) {
+    border-left: 1px solid yellow;
 }
 
 .toDoScroller {
