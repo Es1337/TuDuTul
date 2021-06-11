@@ -1,0 +1,61 @@
+{% extends "../app_layout.html" %}
+
+{% load static %}
+
+{% block scripts %}
+    <script src='{% static "js/online_notes.js" %}' defer></script>
+    <script src='{% static "js/account.js" %}' defer></script>
+{% endblock %}
+
+{% block navbarbuttons %}
+
+<li class="nav-item">
+    <a href="/app/calendar" class="nav-link">
+        <i class=" my-1 far fa-calendar-alt text-3xl sm:text-5xl text-yellow-300"></i>
+        <span class="link-text text-yellow-300">Calendar</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="/app/tables" class="nav-link">
+        <i class=" my-1 fas fa-table text-3xl sm:text-5xl text-yellow-300"></i>
+        <span class="link-text text-yellow-300">Tables</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" onClick="getTuDuDisplayModule();">
+        <i class=" my-1 fas fa-th-list   text-3xl sm:text-5xl text-yellow-300"></i>
+    <span class="link-text text-yellow-300">Display</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" onClick="getFormModule();">
+        <i class=" my-1 fas fa-plus text-3xl sm:text-5xl text-yellow-300"></i>
+        <span class="link-text text-yellow-300">Add</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" onclick="return sendLogout();">
+        <i class=" my-1 fas fa-sign-out-alt text-3xl sm:text-5xl text-yellow-300"></i>
+        <span class="link-text text-yellow-300">Logout</span>
+    </a>
+</li>
+
+{% endblock %}
+
+{% block info %}
+    <div class="xl:w-3/4 xl:h-full">
+        <div class="header-two-part-animation">
+            <p class="mt-10 ml-10 font-bold text-2xl text-yellow-300">Welcome!</p>
+            <p class="mt-5 ml-10 font-bold blueMain">Nice to see you again, <span class="redMain text-lg">{{ userLogin }}!</span></p>
+        </div>
+        <div class="header-two-part-animation">
+            <div id="day-display" class="mt-5 ml-10 font-bold text-xl text-white specialtext"></div>
+            <!-- TODO: FINISH TABLE DISPLAY -->
+            <div id="table-display" class="mt-5 ml-10 font-bold text-xl text-white specialtext">The table is: Personal</div>
+        </div>
+    </div>
+{% endblock %}

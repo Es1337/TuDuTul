@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 import requests
 from urllib.parse import urlparse
@@ -24,18 +24,32 @@ def register(request, *args, **kwargs):
     return render(request, 'register/register.html')
 
 def offline(request, *args, **kwargs):
-    return render(request, 'note-app/offline-notes.html')
+    return render(request, 'offline-app/offline-notes.html')
 
 def add_note_offline(request, *args, **kwargs):
-    return render(request, 'note-app/offline-addform.html')
+    return render(request, 'offline-app/offline-addform.html')
       
 def calendar_offline(request, *args, **kwargs):
-    return render(request, 'note-app/offline-calendar.html')
+    return render(request, 'offline-app/offline-calendar.html')
 
-def online(request, *args, **kwargs):
+def account(request, *args, **kwargs):
     logged, userLogin, userEmail = is_logged(request)
     return render(request, 'account/account.html', {
         'logged' : logged,
         'userLogin' : userLogin,
         'userEmail' : userEmail
         })
+
+def app(request, *args, **kwargs):
+    logged, userLogin, userEmail = is_logged(request)
+    if logged:
+        return render(request, 'online-app/online-notes.html', {
+            'logged': logged,
+            'userLogin': userLogin,
+            'userEmail': userEmail
+        })
+    else:
+        # TODO: Create a Unauthorized page and link it
+        return redirect('/')
+
+# TODO: Create a 404 page

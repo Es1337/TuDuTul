@@ -22,6 +22,18 @@
 </head>
 {% block body %}
 <body class="mx-auto overflow-visible xl:overflow-hidden flex flex-col xl:h-screen mainBackground p-0 m-0">
+    <div id="infoOverlay" class="hidden w-full h-full absolute justify-center items-center bg-black opacity-90 z-10">
+        <div class="bg-background  z-20 border-2 opacity-100 border-yellow-300 rounded-2xl">
+            <div id="overlayHeader" class="px-6 py-2 font-bold text-lg text-yellow-300"></div>
+            <div id="overlayText" class="px-6 py-2 font-bold text-white"></div>
+            <div id="overlayButtons" class="px-4 py-4 flex justify-between items-center">
+                <button
+                    class="max-w-md inline-block py-2 px-4 shadow-xl text-background font-black bg-yellow-400 hover:bg-yellow-300 hover:text-white rounded transition ease-in duration-400"
+                >Delete</button>
+            </div>
+        </div>
+    </div>
+    
     <!-- <div class="w-full h-1/7 flex ">
         <div class="p-4 w-1/10 flex justify-center items-center">
             <i class="fas fa-bars text-white text-2xl"></i>
@@ -85,9 +97,11 @@
     <div id="main" class="w-full lg:h-1/4 flex items-center justify-center">
     {% block info %}
         <div class="xl:w-3/4 xl:h-full">
-            <p class="mt-10 ml-10 font-bold text-2xl text-yellow-300">Welcome!</p>
-            <p class="mt-5 ml-10 font-bold redMain">This is the offline version of the app!</p>
-            <p id="day-display" class="mt-5 ml-10 font-bold text-xl text-white specialtext"></p>
+            <div class="header-two-part-animation">
+                <p class="mt-10 ml-10 font-bold text-2xl text-yellow-300">Welcome!</p>
+                <p class="mt-5 ml-10 font-bold redMain">This is the offline version of the app!</p>
+            </div>
+            <p id="day-display" class="header-two-part-animation mt-5 ml-10 font-bold text-xl text-white specialtext"></p>
             
         </div>
     {% endblock %}    

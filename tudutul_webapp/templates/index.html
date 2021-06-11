@@ -8,17 +8,14 @@
     {% load static %}
     <link rel="stylesheet" type="text/css" href='{% static "css/tailwind_compiled.css" %}'
     />
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;900&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@900&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href='{% static "fontawesome/css/all.css" %}'
     />
+    
 
 </head>
 <body class="mx-auto h-screen mainBackground p-0 m-0">
     <script src="{% static 'js/account.js' %}"></script>
-    <nav class="z-10 mx-auto bg-background bg-opacity-90 border-b-4 border-black m-0 pt-3 pb-3 md:pt-7 md:pb-7 block md:flex justify-around items-center ">
+    <nav class="z-10 mx-auto bg-background bg-opacity-90 border-b-2 border-black m-0 pt-3 pb-3 md:pt-7 md:pb-7 block md:flex justify-around items-center ">
 
         <!--   left side -->
         <div class="flex justify-center">
@@ -31,7 +28,7 @@
                 <div class="flex justify-content-end mt-2 text-sm md:text-md md:m-0">
                     <a class="inline-block p-2 text-indigo-100 hover:text-indigo-100 mx-2">You are logged in as: <mark class="redMain font-bold">{{userLogin}}</mark></a>
                     <a href="#" onclick="return sendLogout();" class="font-bold inline-block py-2 px-10 shadow-xl text-background bg-yellow-400 hover:bg-yellow-300 hover:text-yellow-800 rounded transition ease-in duration-150 mx-2">Logout</a>
-                    <a href="noaccount" class="inline-block p-2 text-indigo-100 hover:text-indigo-100 font-bold mx-2 hover:shadow-2xl">Use App</a>
+                    <a href="app" class="inline-block p-2 text-indigo-100 hover:text-indigo-100 font-bold mx-2 hover:shadow-2xl">Use App</a>
                     <span class="flex h-3 w-3">
                         <span class="animate-ping relative inline-flex rounded-full h-3 w-3 bg-purple-500"></span>
                     </span>
@@ -53,8 +50,8 @@
     {% block main %}
     <div class="h-2/5">
         <div class="h-full flex flex-col justify-start  items-center mt-20 md:mt-15 font-black text-2xl sm:text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl text-white">
-                <p class="z-10">Always know what you need</p> 
-                <p class="z-10"><mark class="redMain">Tu</mark><mark class="blueMain">Du</mark>.</p>
+                <p class="header-two-part-animation z-10">Always know what you need</p> 
+                <p class="header-two-part-animation z-10"><mark class="redMain">Tu</mark><mark class="blueMain">Du</mark>.</p>
         </div>
     </div>
     <div class="h-2/5">
