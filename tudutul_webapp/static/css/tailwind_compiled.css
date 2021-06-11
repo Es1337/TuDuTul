@@ -32211,6 +32211,10 @@ body {
     animation-delay: -0.2s;
 } */
 
+input[disabled="true"] {
+  filter: grayscale(50%) opacity(0.5);
+}
+
 .navbar {
   position: fixed;
   height: 100vh;

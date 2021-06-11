@@ -108,7 +108,7 @@ const getNotesForDayAndTable = async (date, table) => {
 const fillButtonInnerHTML = item => {
     const checked = item.is_done == true ? 'checked' : null;
     const priorityHTML = createPropertyHTML(item.priority);
-    return `<div class="px-4 mx-auto mb-1 flex justify-between items-center">
+    return `<div class=" mb-1 flex justify-between items-center">
                 <p class="font-black text-white tracking-wide text-xl">${item.name}</p>
                 <input type="checkbox" ${checked} disabled>
             </div>
