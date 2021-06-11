@@ -1,8 +1,10 @@
 from django.test import TestCase
 from django.test import Client
+from rest_framework.test import APITestCase
 
+from rest_framework import status
 from tudutul.models import Note, User, Table
-from notes.views import get_all_notes_for_user, NoteView
+from notes.views import get_all_notes_for_user
 
 
 class TestNotes(TestCase):
@@ -141,3 +143,67 @@ class TestNotes(TestCase):
         expected = [note2.id]
         tested = [el['id'] for el in response.data['ans']]
         self.assertListEqual(expected, tested)
+
+    
+class NotesAPITests(APITestCase):
+    def setUp(self):
+        self.client = Client()
+        session = self.client.session
+        session['userLogin'] = 'TestUser'
+        session.save()
+
+        self.user = User(
+            login='TestUser',
+            email='test@user.com',
+            password='password'
+        )
+        self.user.save()
+
+        self.table = Table(
+            name='TestTable',
+            is_shared=False,
+            owner='TestUser'
+        )
+        self.table.save()
+
+        self.note = Note(
+            name='TestNote',
+            creator='TestUser',
+            content='TestContent',
+            completion_date='2021-12-21',
+            priority=5,
+            owning_table_id=self.table.id
+        )
+        self.note.save()
+
+        self.note_data = {
+            "name": 'TestNote',
+            'creator': 'TestUser',
+            'content':'TestContent',
+            'completion_date': '2021-11-11',
+            'priority': 7,
+            'owning_table_id': self.table.id
+        }
+
+    def test_note_get(self):
+        response = self.client.get('/note/', {"table_id": 1}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+
+    def test_note_post(self):
+        response = self.client.post('/note/', self.note_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    
+    def test_note_get_id(self):
+        response = self.client.get('/note/' + str(self.note.id), {}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    
+    def test_note_put_id(self):
+        self.note_data['name'] = 'NewTestName'
+        response = self.client.put('/note/' + str(self.note.id), self.note_data, content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["ans"], 'Note updated successfully')
+        
+    def test_note_delete_id(self):
+        response = self.client.delete('/note/' + str(self.note.id), {}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
