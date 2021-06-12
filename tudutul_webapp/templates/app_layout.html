@@ -16,7 +16,8 @@
     />
 
     {% block scripts %}
-    <script src='{% static "js/offline_notes.js" %}' defer></script>
+    <script type="module" src='{% static "js/offline_notes.js" %}' defer></script>
+    <script type="module" src='{% static "js/render_functions.js" %}' defer></script>
     {% endblock %}
 
 </head>
