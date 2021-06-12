@@ -1078,6 +1078,32 @@
         }
     };
 
+    // Does this event exist
+    EvoCalendar.prototype.selectCalendarEvent = function(arr) {
+        var _ = this;
+        // var index = _.options.calendarEvents.map(function (event) { return event.id }).indexOf(arr);
+
+        if(_.options.calendarEvents != null) {
+            for(var i=0; i < _.options.calendarEvents.length; i++) {
+                // If event doesn't have an id, throw an error message
+                if(_.options.calendarEvents[i].id == arr.id) {
+                    console.log("This event already exists.")
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    };
+
+    // Get current month
+    EvoCalendar.prototype.getCurrentMonth = function() {
+        var _ = this;
+
+        return _.$active.month+1;
+    };
+
+
     // v1.0.0 - Remove Calendar Event(s)
     EvoCalendar.prototype.removeCalendarEvent = function(arr) {
         var _ = this;
