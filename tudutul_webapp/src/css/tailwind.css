@@ -9,9 +9,19 @@
 .root {
     --app-background: #400d40;
     --mincardwidth: 35ch;
-    --maxcardwidth: 65ch;
+    --maxcardwidth: 55ch;
 
     --transition-speed: 300ms;
+}
+/* 
+body {
+    animation-name: fadein;
+    animation-duration: 0.8s;
+    animation-delay: -0.2s;
+} */
+
+input[disabled="true"] {
+    filter: grayscale(50%) opacity(0.5);
 }
 
 .navbar {
@@ -145,11 +155,41 @@
     max-width: calc(var(--maxcardwidth) + 10px);
 }
 
+.cardDetails > *:nth-child(n+2) {
+    border-left: 1px solid yellow;
+}
+
 .toDoScroller {
     scrollbar-width: thin;
     scrollbar-color: #420e42 white;
 }
 
+.header-two-part-animation {
+    animation-name: fadein;
+    animation-timing-function: ease-out;
+    position: relative;
+}
+
+.header-two-part-animation:nth-child(1) {
+    animation-duration: 1.5s;
+    animation-delay: -0.5s;
+}
+
+.header-two-part-animation:nth-child(2) {
+    animation-duration: 1.5s;
+    animation-delay: -0.35s;
+}
+
+@keyframes fadein {
+    from { 
+        opacity: 0;
+        top: -20%;
+    }
+    to { 
+        opacity: 1;
+        top: 0%;
+     }
+}
 
 /* .mainBackground:hover,
 .mainBackground:focus {
