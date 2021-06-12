@@ -51,7 +51,6 @@ console.log("THIS PAGE'S DATE:", todoDate);
 
 fillDateInnerHTML(todoDate);
 
-
 // addTuDu, editTuDu, deleteTuDu
 
 // renderDeleteModal
@@ -63,7 +62,6 @@ fillDateInnerHTML(todoDate);
 // getTuDuDisplayModule
 
 // getFormModule
-
 
 // get allTodos, then renderTodos
 
