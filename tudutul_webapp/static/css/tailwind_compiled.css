@@ -32200,7 +32200,7 @@ video {
 .root {
   --app-background: #400d40;
   --mincardwidth: 35ch;
-  --maxcardwidth: 65ch;
+  --maxcardwidth: 55ch;
   --transition-speed: 300ms;
 }
 
