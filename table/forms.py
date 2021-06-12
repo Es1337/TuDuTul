@@ -19,6 +19,7 @@ class TableForm:
                         is_shared=self.is_shared,
                         )
         db_save.save()
+        return db_save
 
     def reason(self):
         return self.alert

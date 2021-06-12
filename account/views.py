@@ -173,8 +173,8 @@ class LogoutView(APIView):
             answer = 'Logged out'
         elif request.session.get('userLogin') == request.GET.get('login'):
             request.session.pop(key = 'userLogin')
-            anwser = 'Logged out'
+            answer = 'Logged out'
         else:
-            anwser = 'User ' + request.GET.get('login') + ' is not logged in'
+            answer = 'User ' + request.GET.get('login') + ' is not logged in'
         
-        return Response({'userLogin': anwser})
+        return Response({'userLogin': answer})
