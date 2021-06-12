@@ -10,9 +10,9 @@ from tudutul.models import Table, Note, User
 
 
 def get_all_tables_for_user(user_id):
-    users_boards = Table.objects.filter(owner=user_id)
+    users_boards = Table.objects.filter(owner__exact=user_id)
     boards_shared_with_user = Table.objects.filter(shared_with=user_id)
-    return boards_shared_with_user.values() | users_boards.values()
+    return (boards_shared_with_user.values() | users_boards.values()).distinct().order_by('id')
 
 
 class TableViewSchema(AutoSchema):
@@ -63,10 +63,8 @@ class TableView(APIView):
             for key in item:
                 tables[i][key] = item[key]
 
-            tables[i]['shared_with'] = []
             t = Table.objects.get(id=item['id'])
-            for user in t.shared_with.all():
-                tables[i]['shared_with'].append(user.login)
+            tables[i]['shared_with'] = [user.login for user in t.shared_with.all()]
 
         return Response(data={"ans": tables})
 
