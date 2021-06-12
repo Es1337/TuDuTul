@@ -3,7 +3,8 @@
 {% load static %}
 
 {% block scripts %}
-    <script src='{% static "js/offline_notes.js" %}' defer></script>
+    <script type="module" src='{% static "js/render_functions.js" %}' defer></script>
+    <script type="module" src='{% static "js/offline_notes.js" %}' defer></script>
 {% endblock %}
 
 {% block navbarbuttons %}
@@ -16,14 +17,14 @@
 </li>
 
 <li class="nav-item">
-    <a class="nav-link" onClick="getTuDuDisplayModule();">
-        <i class=" my-1 fas fa-tv text-3xl sm:text-5xl text-yellow-300"></i>
+    <a id="displayButton" class="nav-link">
+        <i class=" my-1 fas fa-th-list text-3xl sm:text-5xl text-yellow-300"></i>
         <span class="link-text text-yellow-300">Display</span>
     </a>
 </li>
 
 <li class="nav-item">
-    <a class="nav-link" onClick="getFormModule();">
+    <a id="addButton" class="nav-link">
         <i class=" my-1 fas fa-plus text-3xl sm:text-5xl text-yellow-300"></i>
         <span class="link-text text-yellow-300">Add</span>
     </a>
