@@ -6,10 +6,8 @@ from rest_framework.schemas import AutoSchema
 from rest_framework.views import APIView
 
 from table.forms import TableForm
-from tudutul.models import Table, Note
+from tudutul.models import Table, Note, User
 
-
-# TODO add "share" view with friends and add-by-login
 
 def get_all_tables_for_user(user_id):
     users_boards = Table.objects.filter(owner=user_id)
@@ -25,7 +23,8 @@ class TableViewSchema(AutoSchema):
         if method.lower() in ['post', 'put']:
             extra_fields = [
                 coreapi.Field('name'),
-                coreapi.Field('is_shared')
+                coreapi.Field('is_shared'),
+                coreapi.Field('shared_with')
             ]
 
         return super().get_manual_fields(path, method) + extra_fields
@@ -77,6 +76,7 @@ class TableView(APIView):
 
             - 'name' string
             - 'is_shared' bool
+            - 'shared_with' list of usernames
         Response
 
             - 'ans' string
@@ -93,8 +93,19 @@ class TableView(APIView):
 
         form = TableForm(request.data, user_id)
         if form.is_valid():
-            form.save()
+            created_table = form.save()
             answer = 'Table saved successfully'
+            if request.data['is_shared']:
+                all_ok = True
+                for login in request.data['shared_with']:
+                    if User.objects.filter(login__exact=login).exists():
+                        created_table.shared_with.add(login)
+                    else:
+                        if all_ok:
+                            all_ok = False
+                            answer += ', users not found:'
+                        answer += ' ' + login
+
         else:
             answer = form.reason()
 
@@ -151,6 +162,7 @@ class TableDetailView(APIView):
 
             - 'name' string
             - 'is_shared' bool
+            - 'shared_with' list of logins
         Response
 
             - 'ans' string
@@ -181,13 +193,24 @@ class TableDetailView(APIView):
 
             edited_table.save()
             answer = 'Table updated successfully'
+            if edited_table.is_shared:
+                if request.data['shared_with']:
+                    edited_table.shared_with.clear()
+                all_ok = True
+                for login in request.data['shared_with']:
+                    if User.objects.filter(login__exact=login).exists():
+                        edited_table.shared_with.add(login)
+                    else:
+                        if all_ok:
+                            all_ok = False
+                            answer += ', users not found:'
+                        answer += ' ' + login
 
         else:
             answer = form.reason()
 
         return Response(data={"ans": answer})
         
-
     def delete(self, request, table_id):
         """
         Parameters
