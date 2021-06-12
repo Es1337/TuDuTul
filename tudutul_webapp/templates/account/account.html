@@ -1,7 +1,7 @@
 {% extends "../index.html" %}
 
 
-{% block navbuttons %}
+{% comment %} {% block navbuttons %}
 <div class="flex justify-content-end mt-2 text-sm md:text-md md:m-0">
     <a class="inline-block p-2 text-indigo-100 hover:text-indigo-100 mx-2">You are logged in as: <mark class="redMain font-bold">{{userLogin}}</mark></a>
     <a href="/account/logout?&login={{userLogin}}" class="font-bold inline-block py-2 px-10 shadow-xl text-background bg-yellow-400 hover:bg-yellow-300 hover:text-yellow-800 rounded transition ease-in duration-150 mx-2">Logout</a>
@@ -10,7 +10,7 @@
         <span class="animate-ping relative inline-flex rounded-full h-3 w-3 bg-purple-500"></span>
     </span>
 </div>
-{% endblock %}
+{% endblock %} {% endcomment %}
 
 {% block main %}
 <!-- <div class="mx-auto w-1/2 h-3/4 m-0 p-0 flex flex-row items-center justify-center">
