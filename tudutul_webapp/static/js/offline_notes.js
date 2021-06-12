@@ -488,7 +488,7 @@ const getFormModule = (id, todos) => {
                 <input
                     type="button" id="formButton"
                     class="max-w-md inline-block py-2 px-4 shadow-xl text-background font-black bg-yellow-400 hover:bg-yellow-300 hover:text-white rounded transition ease-in duration-400"
-                    value="${ state === "addForm" ? 'Add' : 'Value' }"
+                    value="${ state === "addForm" ? 'Add' : 'Edit' }"
                      ` + '' + ` 
                 >
                 
