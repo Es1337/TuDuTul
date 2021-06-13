@@ -28,6 +28,11 @@ const getTableId = () => {
     return table;
 }
 
+const createCalendarLink = table => {
+    const calendarButton = document.querySelector("#calendarButton");
+    calendarButton.setAttribute('href', `/app/calendar?table_id=${table}`);
+}
+
 
 /* -------------------------- HTML RENDERING FUNCTIONS -------------------------- */
 
@@ -112,7 +117,7 @@ let allTodos = [];
 let state = "tuDuDisplay";
 
 let tableId = getTableId();
-
+createCalendarLink(tableId);
 // Gets the day
 const todoDate = getDate();
 console.log("THIS PAGE'S DATE:", todoDate);
