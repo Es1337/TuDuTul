@@ -126,9 +126,6 @@ class NoteView(APIView):
 
         query = get_all_notes_for_user(user_id)
 
-        if 'table_id' in request.query_params.keys():
-            filter_table_id = request.query_params['table_id']
-            query = query.filter(owning_table_id=filter_table_id)
         if 'date' in request.query_params.keys():
             filter_date = request.query_params['date']
             query = query.filter(creation_date__range=[filter_date + ' 00:00', filter_date + ' 23:59'])
@@ -150,6 +147,10 @@ class NoteView(APIView):
             if yearly_notes:
                 res |= yearly_notes
             query = res
+
+        if 'table_id' in request.query_params.keys():
+            filter_table_id = request.query_params['table_id']
+            query = query.filter(owning_table_id=filter_table_id)
 
         notes = []
         for i, item in enumerate(query):
