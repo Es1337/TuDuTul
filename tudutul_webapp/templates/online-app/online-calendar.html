@@ -1,0 +1,62 @@
+{% extends "../app_layout.html" %}
+
+{% load static %}
+
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <script src='{% static "js/evo-calendar.js" %}' defer></script>
+    <script src='{% static "js/calendar_online.js" %}' defer></script>
+
+    <!-- <script type="module" src='{% static "js/render_functions.js" %}' defer></script> -->
+    <!-- <script type="module" src='{% static "js/online_notes.js" %}' defer></script> -->
+    <!-- <script src='{% static "js/settings.js" %}' defer></script> -->
+    <script src='{% static "js/account.js" %}' defer></script>
+{% endblock %}
+
+{% block navbarbuttons %}
+
+<li class="nav-item">
+    <a href="/app" class="nav-link">
+        <i class="far fa-sticky-note text-3xl sm:text-5xl text-white"></i>
+        <span class="link-text text-yellow-300">Notes</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="/app/tables" class="nav-link">
+        <i class=" my-1 fas fa-table text-3xl sm:text-5xl text-yellow-300"></i>
+        <span class="link-text text-yellow-300">Tables</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" onclick="return sendLogout();">
+        <i class=" my-1 fas fa-sign-out-alt text-3xl sm:text-5xl text-yellow-300"></i>
+        <span class="link-text text-yellow-300">Logout</span>
+    </a>
+</li>
+
+{% endblock %}
+
+{% block info %}
+    <div class="xl:w-3/4 xl:h-full">
+        <div class="header-two-part-animation">
+            <p id="message" class="mt-10 ml-10 font-bold text-2xl text-yellow-300">Welcome!</p>
+            <p class="mt-5 ml-10 font-bold blueMain">Nice to see you again, <span class="redMain text-lg">{{ userLogin }}!</span></p>
+        </div>
+        <div class="--noshadow" id="demoEvoCalendar"></div>
+
+            <div class="items-center mb-10" id="calendarButtons">
+                <button type="button" 
+                    class="max-w-md inline-block py-2 px-4 shadow-xl text-background font-black bg-yellow-400 hover:bg-yellow-300 hover:text-white rounded transition ease-in duration-400" 
+                    id="showDateBtn">
+                    Wybierz datę
+                </button>
+                <button type="button" 
+                    class="max-w-md inline-block py-2 px-4 shadow-xl text-background font-black bg-yellow-400 hover:bg-yellow-300 hover:text-white rounded transition ease-in duration-400" 
+                    id="cancelBtn">
+                    Anuluj
+                </button>
+            </div>
+    </div>
+{% endblock %}

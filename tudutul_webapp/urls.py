@@ -13,4 +13,5 @@ urlpatterns = [
     path('account', views.account, name="account"),
     path('app', views.app, name="app"),
     path('app/tables', views.tables, name="tables"),
+    path('app/calendar', views.calendar_online, name="calendar_online")
 ]

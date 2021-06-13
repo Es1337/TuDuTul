@@ -66,4 +66,17 @@ def app(request):
     except ex.ObjectDoesNotExist:
         return redirect('/app/tables')
 
+def calendar_online(request, *args, **kwargs):
+    logged, userLogin, userEmail = is_logged(request)
+    if logged:
+        return render(request, 'online-app/online-calendar.html', {
+            'logged': logged,
+            'userLogin': userLogin,
+            'userEmail': userEmail
+        })
+    else:
+        # TODO: Create a Unauthorized page and link it
+        return redirect('/')
+
+
 # TODO: Create a 404 page

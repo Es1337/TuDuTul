@@ -32200,7 +32200,7 @@ video {
 .root {
   --app-background: #400d40;
   --mincardwidth: 35ch;
-  --maxcardwidth: 65ch;
+  --maxcardwidth: 55ch;
   --transition-speed: 300ms;
 }
 
@@ -33000,18 +33000,18 @@ tr.calendar-body .calendar-day .day[disabled] {
   background-color: #4d004d;
 }
 
-.event-container > .event-icon > div.event-bullet-work,
-.event-indicator > .type-bullet > div.type-work {
+.event-container > .event-icon > div.event-bullet-Work,
+.event-indicator > .type-bullet > div.type-Work {
   background-color: #ff7575;
 }
 
-.event-container > .event-icon > div.event-bullet-personal,
-.event-indicator > .type-bullet > div.type-personal {
+.event-container > .event-icon > div.event-bullet-Personal,
+.event-indicator > .type-bullet > div.type-Personal {
   background-color: #ac59d3;
 }
 
-.event-container > .event-icon > div.event-bullet-other,
-.event-indicator > .type-bullet > div.type-other {
+.event-container > .event-icon > div.event-bullet-Family,
+.event-indicator > .type-bullet > div.type-Family {
   background-color: #6a0683;
 }
 
