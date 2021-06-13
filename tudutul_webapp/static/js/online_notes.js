@@ -190,7 +190,7 @@ const editTuDu = async (formHTML, id) => {
     const itemToEdit = allTodos.filter(item => item.id === id)[0];
     form.forEach((value, key) => itemToEdit[key] = value);
     itemToEdit.creation_date = [formatDate(todoDate), itemToEdit.creation_date_hour].join(' ');
-    itemToEdit.owning_table_id = tableId;
+    itemToEdit.owning_table_id = parseInt(tableId, 10);
     if (form.get('is_done') === null) {
         itemToEdit.is_done = false;
     } else {
