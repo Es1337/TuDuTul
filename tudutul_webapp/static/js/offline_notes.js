@@ -1,7 +1,7 @@
 import { repetitionTable, TUDU_CARD_CLASSLIST, TUDU_COLLAPSIBLE_CLASSLIST, formatDate, getDate, insertAt, getItemIndex } from './settings.js'
 import  { fillDateInnerHTML, createCollapsibles, fillButtonInnerHTML, createPropertyHTML, fillCollapsibleInnerHTML,
     createButtonHTML, setOverlaySection, resetOverlay, turnOnModal,
-    turnOffModal, renderModal } from './render_functions.js'
+    turnOffModal, renderModal, checkCompletionDateRead } from './render_functions.js'
 // IMPORTANT: ALLTODOS ARRAY IS LOADED AROUND LINE 290
 
 /* -------------------------- VARIABLES AND CONSTANTS -------------------------- */
@@ -330,19 +330,6 @@ const renderOfflineDeleteModal = id => {
     functionButton.addEventListener("click", () => {
         deleteTuDu(id, allTodos, todoDate, true);
     })
-}
-
-const checkCompletionDateRead = () => {
-    const repetitionBox = document.querySelector("#repetition");
-    const completionDateBox = document.querySelector("#completion_date");
-    if (repetitionBox.value === "N") {
-        completionDateBox.value = "";
-        completionDateBox.setAttribute('disabled', true);
-    } else {
-        completionDateBox.removeAttribute('disabled');
-    }
-
-    console.log(completionDateBox.getAttribute('disabled'));
 }
 
 

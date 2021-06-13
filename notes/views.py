@@ -189,6 +189,8 @@ class NoteView(APIView):
 
         answer = ""
         form = NoteForm(request.data, user_id)
+
+        print("NOTE CREATION DATE:", form.creation_date);
         if form.is_valid():
             form.save()
             answer = 'Note saved successfully'

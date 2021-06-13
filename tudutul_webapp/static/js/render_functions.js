@@ -1,5 +1,11 @@
 import { repetitionTable, TUDU_CARD_CLASSLIST, TUDU_COLLAPSIBLE_CLASSLIST, formatDate, getDate, insertAt, getItemIndex } from './settings.js'
 
+const categoryTable = {
+    "P": "Personal",
+    "W": "Work",
+    "F": "Family"
+}
+
 const fillDateInnerHTML = async date => {
     const dateDisplay = await document.querySelector("#day-display");
     dateDisplay.innerHTML = `The day is: ${date}`;
@@ -28,13 +34,16 @@ const createCollapsibles = () => {
 const fillButtonInnerHTML = item => {
     const checked = item.is_done == true ? 'checked' : null;
     const priorityHTML = createPropertyHTML(item.priority);
+
+    const category = (item.category === 'P' || item.category === 'W' || item.category === 'F') ? categoryTable[item.category] : item.category; 
+
     return `<div class="px-4 mx-auto mb-1 flex justify-between items-center">
                 <p class="font-black text-white tracking-wide text-2xl">${item.name}</p>
                 <input type="checkbox" ${checked} disabled>
             </div>
             <p class="mx-4 mb-2 font-bold text-left text-md text-yellow-300">${item.creation_date_hour}</p>
             <div class="cardDetails mx-auto px-4 flex items-center justify-around">
-                <div class="w-full h-full font-bold  text-sm text-yellow-200">${item.category}</div>
+                <div class="w-full h-full font-bold  text-sm text-yellow-200">${category}</div>
                 ${item.repetition !== "N" 
                     ? `<div class="w-full h-full font-bold  text-sm text-yellow-200">${repetitionTable[item.repetition]}</div>` : ''}
                 <div class="w-full h-full text-sm">` +
@@ -104,17 +113,20 @@ const turnOffModal = async () => {
     resetOverlay();
 }
 
-// THIS FUNCTION IS POORLY WRITTEN, YOU NEED TO BIND EVENT
+// THIS FUNCTION IS POORLY WRITTEN, YOU NEED TO ADD EVENT LISTENER OUTSIDE OF IT TO FUNCTIONBUTTOn
 const renderModal = (header, text, functionButtonText) => {
 
-    const buttonsHTML = `<button
+    let buttonsHTML = `<button
                             id="turnOffButton"
                             class="max-w-md inline-block py-2 px-4 mr-2 shadow-xl text-background font-black bg-indigo-200 hover:bg-indigo-100 rounded transition ease-in duration-400"
-                        >X</button>
-                        <button
-                            id="functionButton"
-                            class="max-w-md inline-block py-2 px-2 shadow-xl text-background font-black bg-yellow-400 hover:bg-yellow-300 hover:text-white rounded transition ease-in duration-400"
-                        >${ functionButtonText }</button>`;
+                        >X</button>`;
+
+    if (functionButtonText !== undefined) {
+        buttonsHTML += `<button
+        id="functionButton"
+        class="max-w-md inline-block py-2 px-2 shadow-xl text-background font-black bg-yellow-400 hover:bg-yellow-300 hover:text-white rounded transition ease-in duration-400"
+    >${ functionButtonText }</button>`;
+    }
 
     setOverlaySection('Header', header);
     setOverlaySection('Text', text);
@@ -130,7 +142,18 @@ const renderModal = (header, text, functionButtonText) => {
     turnOnModal();
 }
 
+const checkCompletionDateRead = () => {
+    const repetitionBox = document.querySelector("#repetition");
+    const completionDateBox = document.querySelector("#completion_date");
+    if (repetitionBox.value === "N") {
+        completionDateBox.value = "";
+        completionDateBox.setAttribute('disabled', true);
+    } else {
+        completionDateBox.removeAttribute('disabled');
+    }
 
+    console.log(completionDateBox.getAttribute('disabled'));
+}
 
 
 
@@ -139,4 +162,4 @@ const renderModal = (header, text, functionButtonText) => {
 
 export { fillDateInnerHTML, createCollapsibles, fillButtonInnerHTML, createPropertyHTML, fillCollapsibleInnerHTML,
     createButtonHTML, setOverlaySection, resetOverlay, turnOnModal,
-    turnOffModal, renderModal }
+    turnOffModal, renderModal, checkCompletionDateRead }
