@@ -28,6 +28,11 @@ const getTableId = () => {
     return table;
 }
 
+const createCalendarLink = table => {
+    const calendarButton = document.querySelector("#calendarButton");
+    calendarButton.setAttribute('href', `/app/calendar?table_id=${table}`);
+}
+
 
 /* -------------------------- HTML RENDERING FUNCTIONS -------------------------- */
 
@@ -112,7 +117,7 @@ let allTodos = [];
 let state = "tuDuDisplay";
 
 let tableId = getTableId();
-
+createCalendarLink(tableId);
 // Gets the day
 const todoDate = getDate();
 console.log("THIS PAGE'S DATE:", todoDate);
@@ -141,7 +146,7 @@ const addTuDu = async formHTML => {
     let itemToAdd = {};
     form.forEach((value, key) => itemToAdd[key] = value);
     itemToAdd.creation_date = [formatDate(todoDate), itemToAdd.creation_date_hour].join(' ');
-    itemToAdd.owning_table_id = tableId;
+    itemToAdd.owning_table_id = parseInt(tableId, 10);
     if (form.get('is_done') === null) {
         itemToAdd.is_done = false;
     } else {
@@ -185,7 +190,7 @@ const editTuDu = async (formHTML, id) => {
     const itemToEdit = allTodos.filter(item => item.id === id)[0];
     form.forEach((value, key) => itemToEdit[key] = value);
     itemToEdit.creation_date = [formatDate(todoDate), itemToEdit.creation_date_hour].join(' ');
-    itemToEdit.owning_table_id = tableId;
+    itemToEdit.owning_table_id = parseInt(tableId, 10);
     if (form.get('is_done') === null) {
         itemToEdit.is_done = false;
     } else {
