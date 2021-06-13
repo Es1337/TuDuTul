@@ -152,7 +152,7 @@ const addTuDu = async formHTML => {
     }
     itemToAdd.priority = parseInt(itemToAdd.priority, 10);
     delete itemToAdd.creation_date_hour;
-
+    console.log(itemToAdd);
     try {
         const response = await fetch(`/note/`, {
             method: 'POST',
