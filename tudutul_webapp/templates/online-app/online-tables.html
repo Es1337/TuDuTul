@@ -10,13 +10,6 @@
 {% block navbarbuttons %}
 
 <li class="nav-item">
-    <a href="/offline/calendar" class="nav-link">
-        <i class=" my-1 far fa-calendar-alt text-3xl sm:text-5xl text-yellow-300"></i>
-        <span class="link-text text-yellow-300">Calendar</span>
-    </a>
-</li>
-
-<li class="nav-item">
     <a href="#" id="displayButton" class="nav-link">
         <i class=" my-1 fas fa-table text-3xl sm:text-5xl text-yellow-300"></i>
         <span class="link-text text-yellow-300">Display</span>
@@ -30,12 +23,21 @@
     </a>
 </li>
 
-<li class="nav-item">
-    <a href="/login" class="nav-link">
-        <i class=" my-1 fas fa-sign-in-alt text-3xl sm:text-5xl text-yellow-300"></i>
-        <span class="link-text text-yellow-300">Login</span>
-    </a>
-</li>
+{% if logged %}
+        <li class="nav-item">
+        <a href="/logout" class="nav-link">
+            <i class=" my-1 fas fa-sign-out-alt text-3xl sm:text-5xl text-yellow-300"></i>
+            <span class="link-text text-yellow-300">Logout</span>
+        </a>
+    </li>
+{% else %}
+    <li class="nav-item">
+        <a href="/login" class="nav-link">
+            <i class=" my-1 fas fa-sign-in-alt text-3xl sm:text-5xl text-yellow-300"></i>
+            <span class="link-text text-yellow-300">Login</span>
+        </a>
+    </li>
+{% endif %}
 
 {% endblock %}
 

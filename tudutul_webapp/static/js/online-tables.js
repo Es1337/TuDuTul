@@ -95,7 +95,7 @@ const createTableCollapsibles = () => {
 }
 
 const fillTableButtonInnerHTML = item => {
-    let category = item.is_shared ? "Shared" : "Private";
+    let category = item.is_shared ? "Shared" : "Personal";
     return `<div class="px-4 mx-auto mb-1 flex justify-between items-center">
                 <p class="font-black text-white tracking-wide text-xl">${item.name}</p>
             </div>
@@ -173,7 +173,7 @@ const addTable = async formHTML => {
 
     itemToAdd.users_added = formHTML.querySelector("#users-added").value;
 
-    var is_shared = itemToAdd.category === "Private" ? true : false;
+    var is_shared = itemToAdd.category === "Shared" ? true : false;
     var shared_with = itemToAdd.users_added.split("<br>");
 
     sendToAPI(itemToAdd.name, is_shared, shared_with);
@@ -296,7 +296,7 @@ const getFormModule = async id => {
     let method = `addTable`;
 
     if (item !== undefined) {
-        var is_shared = item.ans.category ===  true ? "Shared" : "Private";
+        var is_shared = item.ans.category ===  true ? "Shared" : "Personal";
         var shared_with = "";
         item.ans.shared_with.forEach(user => shared_with += user + "<br>");
         name = `value="` + item.ans.name + `"`;
@@ -338,7 +338,7 @@ const getFormModule = async id => {
                 <div class="gap-3 flex flex-col w-1/5">
                     <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >Category:</label>
                     <select name="category" id="category" ` + category + ` class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
-                        <option value="Private">Personal</option>
+                        <option value="Personal">Personal</option>
                         <option value="Shared">Shared</option>
                     </select>
                 </div>
