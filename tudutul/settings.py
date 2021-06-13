@@ -15,6 +15,12 @@ import os
 import django_heroku
 import environ
 
+DEBUG = True
+
+if DEBUG:
+    import mimetypes
+    mimetypes.add_type("application/javascript", ".js", True)
+
 # Initialize environment variables
 env = environ.Env()
 environ.Env.read_env()
