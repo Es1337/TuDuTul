@@ -30,20 +30,6 @@
 </li>
 
 <li class="nav-item">
-    <a class="nav-link" onClick="getTuDuDisplayModule();">
-        <i class=" my-1 fas fa-th-list   text-3xl sm:text-5xl text-yellow-300"></i>
-    <span class="link-text text-yellow-300">Display</span>
-    </a>
-</li>
-
-<li class="nav-item">
-    <a class="nav-link" onClick="getFormModule();">
-        <i class=" my-1 fas fa-plus text-3xl sm:text-5xl text-yellow-300"></i>
-        <span class="link-text text-yellow-300">Add</span>
-    </a>
-</li>
-
-<li class="nav-item">
     <a class="nav-link" onclick="return sendLogout();">
         <i class=" my-1 fas fa-sign-out-alt text-3xl sm:text-5xl text-yellow-300"></i>
         <span class="link-text text-yellow-300">Logout</span>
@@ -55,7 +41,7 @@
 {% block info %}
     <div class="xl:w-3/4 xl:h-full">
         <div class="header-two-part-animation">
-            <p class="mt-10 ml-10 font-bold text-2xl text-yellow-300">Welcome!</p>
+            <p id="message" class="mt-10 ml-10 font-bold text-2xl text-yellow-300">Welcome!</p>
             <p class="mt-5 ml-10 font-bold blueMain">Nice to see you again, <span class="redMain text-lg">{{ userLogin }}!</span></p>
         </div>
         <div class="--noshadow" id="demoEvoCalendar"></div>

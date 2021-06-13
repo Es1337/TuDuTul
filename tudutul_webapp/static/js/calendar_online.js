@@ -45,7 +45,7 @@ function noteCategory(category){
     }
 }
 
-function getDate(date) {
+function getRightDate(date) {
     date = date.substring(0, 10);
     return date;
 }
@@ -69,31 +69,6 @@ const formatHourMinutes = date => {
 var day = String(today.getDate()).padStart(2, '0');
 var month = String(today.getMonth() + 1).padStart(2, '0');
 var year = today.getFullYear();
-
-
-const getMonthlySync = (date) => {
-    var table = 0;
-
-    try {
-        const response = fetch(`/note?table_id=${table}&date=${date}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        });
-        const responseJSON = response.data;
-        console.log(responseJSON);
-        let notes = responseJSON["ans"];
-        notes = notes.map(item => {
-            item.creation_date_hour = formatHourMinutes(item.creation_date);
-            return item;
-        })
-        return notes;
-    } catch (error) {
-        // renderModal("Getting notes failed!", error);
-        console.log(error);
-    }
-}
 
 
 const getNotesForDayAndTable = async (date) => {
@@ -126,16 +101,16 @@ const getTodos = (date) => {
     });
 }
 
-// without callback
-const getMonthlyTodos = async (month, year) => {
-    let days = await daysInMonth(month, year);
+
+const getMonthlyTodos = (month, year) => {
+    let days = daysInMonth(month, year);
     let promises = [];
     let monthlyTodos = [];
 
     for (let i=1; i<=days; i++){
-        let current_day = await [year, getDayInMonth(month), getDayInMonth(i)].join('-');
-        let prom = await getNotesForDayAndTable(current_day);
-        await promises.push(prom);
+        let current_day = [year, getDayInMonth(month), getDayInMonth(i)].join('-');
+        let prom = getNotesForDayAndTable(current_day).then( any => monthlyTodos.push(any));
+        promises.push(prom);
         console.log(prom);
     }
 
@@ -147,32 +122,6 @@ const getMonthlyTodos = async (month, year) => {
     return monthlyTodos;
 
 }
-
-
-// with callback
-// const getMonthlyTodos = (month, year, callback) => {
-//     let days = daysInMonth(month, year);
-
-//     for (let i=1; i<=days; i++){
-//         current_day = [year, getDayInMonth(month), getDayInMonth(i)].join('-');
-
-//         // getNotesForDayAndTable(current_day).then(notes => {
-//         //     allTodos[i] = notes;
-//         //     console.log(allTodos[i]);
-//         // });
-//         allTodos[i] = callback(current_day);
-//     }
-
-// }
-
-
-
-
-// getNotesForDayAndTable.then(res => {
-//         console.log("Notatka: ", res);
-//     }).catch(err => {
-//         console.log("Error: ", err)
-//     })
 
 
 $(document).ready(function() {
@@ -189,25 +138,42 @@ $(document).ready(function() {
     // var days = daysInMonth(month, year);
 
     // for (let i=1; i<=days; i++){
-    //     current_day = [year, getDayInMonth(month), getDayInMonth(i)].join('-');
-    //     dailyTodos = getFromLocalStorage(current_day);
-        
-    //     if (dailyTodos.length > 0) {
-    //         for (let j=0; j<dailyTodos.length; j++){
-    //             current_event = {
-    //                 id: "" + j + i + month + year,
-    //                 name: dailyTodos[j].name,
-    //                 description: dailyTodos[j].content,
-    //                 badge: "Priorytet: " + dailyTodos[j].priority,
-    //                 date: dailyTodos[j].creation_date,
-    //                 type: dailyTodos[j].category,
-    //             }
-    //             var eventExists = $("#demoEvoCalendar").evoCalendar("selectCalendarEvent", current_event);
-    //             if (!eventExists) {
-    //                 $("#demoEvoCalendar").evoCalendar("addCalendarEvent", current_event);
-    //             }
+    //     let current_day = [year, getDayInMonth(month), getDayInMonth(i)].join('-');
+    //     // console.log(current_day);
+    //     // dailyTodos = getMonthlySync(current_day);
+    //     // console.log(dailyTodos);
+
+    //     Promise.all([getNotesForDayAndTable(current_day)]).then( dailyTodos => {
+    //         console.log("The day is: " + current_day);
+    //         document.getElementById("message").innerHTML = "Loading events...";
+    //         // console.log(dailyTodos);
+
+    //         if (dailyTodos[0].length > 0) {
+    //             // console.log(dailyTodos[0]);
+    //             dailyTodos[0].forEach( dailyTodo => {
+    //                 // console.log(dailyTodo);
+    //                 console.log(dailyTodo.creation_date);
+    //                 let current_event = {
+    //                     id: "" + dailyTodo.id + i + month + year,
+    //                     name: dailyTodo.name,
+    //                     description: "Autor notatki: " + dailyTodo.creator,
+    //                     badge: "" + isDoneBadge(dailyTodo.is_done),
+    //                     date: getRightDate(dailyTodo.creation_date),
+    //                     type: noteCategory(dailyTodo.category),
+    //                 }
+                    
+    //                 console.log(current_event);
+    //                 var eventExists = $("#demoEvoCalendar").evoCalendar("selectCalendarEvent", current_event);
+    //                 console.log(eventExists);
+    //                 if (!eventExists) {
+    //                     $("#demoEvoCalendar").evoCalendar("addCalendarEvent", current_event);
+    //                 }
+
+    //             });
     //         }
-    //     }
+    //         document.getElementById("message").innerHTML = "Welcome!";
+
+    //     });
     // }
     
 
@@ -218,94 +184,49 @@ $(document).ready(function() {
         var month = $("#demoEvoCalendar").evoCalendar("getCurrentMonth");
         var year = dateFormat[2];
         var days = daysInMonth(month, year);
-
-        let monthly = getMonthlyTodos(month, year);
-        console.log(monthly);
-        
-        // console.log(allTodos);
+        let count = 0;
 
         for (let i=1; i<=days; i++){
             let current_day = [year, getDayInMonth(month), getDayInMonth(i)].join('-');
-            // console.log(current_day);
-            // dailyTodos = getMonthlySync(current_day);
-            // console.log(dailyTodos);
 
-            // Promise.all([getNotesForDayAndTable(current_day)]).then( dailyTodos => {
-            //     console.log("The day is: " + current_day);
-            //     // console.log(dailyTodos);
+            Promise.all([getNotesForDayAndTable(current_day)]).then( dailyTodos => {
+                console.log("The day is: " + current_day);
+                count ++;
+                document.getElementById("message").innerHTML = "Loading events...";
+                // if(month != $("#demoEvoCalendar").evoCalendar("getCurrentMonth")){
+                //     i = days;
+                // }
 
-            //     if (dailyTodos[0].length > 0) {
-            //         // console.log(dailyTodos);
-            //         dailyTodos.forEach( dailyTodo => {
+                if (dailyTodos[0].length > 0) {
+                    // console.log(dailyTodos[0]);
+                    dailyTodos[0].forEach( dailyTodo => {
+                        // console.log(dailyTodo);
+                        console.log(dailyTodo.creation_date);
+                        let current_event = {
+                            id: "" + dailyTodo.id + i + month + year,
+                            name: dailyTodo.name,
+                            description: "Autor notatki: " + dailyTodo.creator,
+                            badge: "" + isDoneBadge(dailyTodo.is_done),
+                            date: getRightDate(dailyTodo.creation_date),
+                            type: noteCategory(dailyTodo.category),
+                        }
                         
-            //             // current_event = {
-            //             //     id: "" + dailyTodo.id + i + month + year,
-            //             //     name: dailyTodo.name,
-            //             //     description: "Autor notatki: " + dailyTodo.creator,
-            //             //     badge: "" + isDoneBadge(dailyTodo.is_done),
-            //             //     date: getDate(dailyTodos.creation_date),
-            //             //     type: noteCategory(dailyTodo.category),
-            //             // }
-                        
-            //             // console.log(current_event);
+                        console.log(current_event);
+                        var eventExists = $("#demoEvoCalendar").evoCalendar("selectCalendarEvent", current_event);
+                        console.log(eventExists);
+                        if (!eventExists) {
+                            $("#demoEvoCalendar").evoCalendar("addCalendarEvent", current_event);
+                        }
 
-            //         });
-            //         // for (let j=0; j<dailyTodos.length; j++){
-            //         //     current_event = {
-            //         //         id: "" + dailyTodos[j].id + i + month + year,
-            //         //         name: dailyTodos[j].name,
-            //         //         description: "Autor notatki: " + dailyTodos[j].creator,
-            //         //         badge: "" + isDoneBadge(dailyTodos[j].is_done),
-            //         //         date: getDate(dailyTodos[j].creation_date),
-            //         //         type: noteCategory(dailyTodos[j].category),
-            //         //     }
-    
-            //         //     console.log(current_event.id);
-    
-            //         //     var eventExists = $("#demoEvoCalendar").evoCalendar("selectCalendarEvent", current_event);
-            //         //     console.log(eventExists);
-            //         //     if (!eventExists) {
-            //         //         $("#demoEvoCalendar").evoCalendar("addCalendarEvent", current_event);
-            //         //     }
-    
-            //         // }
-            //     }
+                    });
+                }
 
-            // });
-            
-            // getNotesForDayAndTable(current_day).then(res => {
-            //     console.log("Notatka: ", res);
-            //     dailyTodos = res;
-            // }).catch(err => {
-            //     console.log("Error: ", err)
-            // });
+                if(count > days-2) { 
+                    document.getElementById("message").innerHTML = "Welcome!";
+                    console.log("Załaduj welcome");
+                }
 
-            // console.log("To jest w tablicy Todosow: ");
-            // console.log(allTodos);
-            
-            
-            // if (dailyTodos.length > 0) {
-            //     console.log(dailyTodos);
-            //     for (let j=0; j<dailyTodos.length; j++){
-            //         current_event = {
-            //             id: "" + dailyTodos[j].id + i + month + year,
-            //             name: dailyTodos[j].name,
-            //             description: "Autor notatki: " + dailyTodos[j].creator,
-            //             badge: "" + isDoneBadge(dailyTodos[j].is_done),
-            //             date: getDate(dailyTodos[j].creation_date),
-            //             type: noteCategory(dailyTodos[j].category),
-            //         }
-
-            //         console.log(current_event.id);
-
-            //         var eventExists = $("#demoEvoCalendar").evoCalendar("selectCalendarEvent", current_event);
-            //         console.log(eventExists);
-            //         if (!eventExists) {
-            //             $("#demoEvoCalendar").evoCalendar("addCalendarEvent", current_event);
-            //         }
-
-            //     }
-            // }
+            });
         }
 
     });
