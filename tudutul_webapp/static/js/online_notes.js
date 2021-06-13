@@ -146,7 +146,7 @@ const addTuDu = async formHTML => {
     let itemToAdd = {};
     form.forEach((value, key) => itemToAdd[key] = value);
     itemToAdd.creation_date = [formatDate(todoDate), itemToAdd.creation_date_hour].join(' ');
-    itemToAdd.owning_table_id = tableId;
+    itemToAdd.owning_table_id = parseInt(tableId, 10);
     if (form.get('is_done') === null) {
         itemToAdd.is_done = false;
     } else {
