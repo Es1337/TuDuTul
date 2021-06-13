@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from rest_framework.schemas import AutoSchema
+from rest_framework import status
 from django.db.models import Q
 from django.forms.models import model_to_dict
 from datetime import datetime
@@ -126,9 +127,6 @@ class NoteView(APIView):
 
         query = get_all_notes_for_user(user_id)
 
-        if 'table_id' in request.query_params.keys():
-            filter_table_id = request.query_params['table_id']
-            query = query.filter(owning_table_id=filter_table_id)
         if 'date' in request.query_params.keys():
             filter_date = request.query_params['date']
             query = query.filter(creation_date__range=[filter_date + ' 00:00', filter_date + ' 23:59'])
@@ -150,6 +148,10 @@ class NoteView(APIView):
             if yearly_notes:
                 res |= yearly_notes
             query = res
+
+        if 'table_id' in request.query_params.keys():
+            filter_table_id = request.query_params['table_id']
+            query = query.filter(owning_table_id=filter_table_id)
 
         notes = []
         for i, item in enumerate(query):
@@ -304,7 +306,7 @@ class NoteDetailView(APIView):
         if 'Authorization' in request.headers:
             user_login = request.headers['Authorization']
         elif 'userLogin' not in request.session:
-            response = Response(data={"ans": "User is not logged in"})
+            return Response(data={"ans": "User is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
         else:
             user_login = request.session['userLogin']
 
@@ -318,8 +320,8 @@ class NoteDetailView(APIView):
             note_to_delete.delete()
 
         except Note.DoesNotExist:
-            response = Response(data={"ans": f'Note with id: {note_id} was not found or user have '
-                                                 f'no access to delete this note.'})
+            response = Response(data={"ans": f'Note with id: {note_id} was not found or user has '
+                                             f'no access to delete this note.'}, status=status.HTTP_401_UNAUTHORIZED)
 
         return response
 

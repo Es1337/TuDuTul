@@ -11,5 +11,6 @@ urlpatterns = [
     path('offline/add', views.add_note_offline, name="add_note_offline"),
     path('offline/calendar', views.calendar_offline, name="calendar_offline"),
     path('account', views.account, name="account"),
-    path('app', views.app, name="app")
+    path('app', views.app, name="app"),
+    path('app/tables', views.tables, name="tables"),
 ]

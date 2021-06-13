@@ -1,0 +1,62 @@
+{% extends "../app_layout.html" %}
+
+{% load static %}
+
+{% block scripts %}
+    <script src='{% static "js/online-tables.js" %}' defer></script>
+{% endblock %}
+
+{% block navbarbuttons %}
+
+<li class="nav-item">
+    <a href="/offline/calendar" class="nav-link">
+        <i class=" my-1 far fa-calendar-alt text-3xl sm:text-5xl text-yellow-300"></i>
+        <span class="link-text text-yellow-300">Calendar</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="#" class="nav-link" onClick="getTableDisplayModule();">
+        <i class=" my-1 fas fa-table text-3xl sm:text-5xl text-yellow-300"></i>
+        <span class="link-text text-yellow-300">Display</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="#" class="nav-link" onClick="getFormModule();">
+        <i class=" my-1 fas fa-plus text-3xl sm:text-5xl text-yellow-300"></i>
+        <span class="link-text text-yellow-300">Add</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="/login" class="nav-link">
+        <i class=" my-1 fas fa-sign-in-alt text-3xl sm:text-5xl text-yellow-300"></i>
+        <span class="link-text text-yellow-300">Login</span>
+    </a>
+</li>
+
+{% endblock %}
+
+{% block info %}
+    <div class="xl:w-3/4 xl:h-full">
+        <div class="header-two-part-animation">
+            <p class="mt-10 ml-10 font-bold text-2xl text-yellow-300">Welcome!</p>
+            <p class="mt-5 ml-10 font-bold blueMain">Nice to see you again, <span class="redMain text-lg">{{ userLogin }}!</span></p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block main %}
+    <div class="mt-10 w-full flex flex-col items-center h-full">
+            <p class="w-full text-center specialtext font-black text-4xl mb-5"><mark class="redMain">Tab</mark><mark class="blueMain">Les</mark></p>
+            <div id="tablesContainer" class="flex flex-col gap-4 items-center overflow-auto cardBoxWidth w-9/10 lg:w-4/6 h-5/6 toDoScroller">
+
+                
+
+                
+                
+                
+            </div>
+        </div>
+{% endblock %}

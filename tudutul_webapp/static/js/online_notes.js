@@ -19,7 +19,7 @@ const getTableId = () => {
     // Returns a URLSearchParams object instance
     const parameterList = new URLSearchParams(address);
 
-    const table = 0;
+    let table = 0;
 
     if (parameterList.has("table_id")) {
         table = parameterList.get("table_id");

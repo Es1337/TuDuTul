@@ -32,6 +32,14 @@ def add_note_offline(request, *args, **kwargs):
 def calendar_offline(request, *args, **kwargs):
     return render(request, 'offline-app/offline-calendar.html')
 
+def tables(request, *args, **kwargs):
+    logged, userLogin, userEmail = is_logged(request)
+    return render(request, 'online-app/online-tables.html', {
+        'logged' : logged,
+        'userLogin' : userLogin,
+        'userEmail' : userEmail
+        })
+
 def account(request, *args, **kwargs):
     logged, userLogin, userEmail = is_logged(request)
     return render(request, 'account/account.html', {
@@ -40,13 +48,16 @@ def account(request, *args, **kwargs):
         'userEmail' : userEmail
         })
 
-def app(request, *args, **kwargs):
+def app(request):
     logged, userLogin, userEmail = is_logged(request)
+    # TODO: HOW?
+    # response = requests.get('http://127.0.0.1:8000/table/'+ str(table_id))
     if logged:
         return render(request, 'online-app/online-notes.html', {
             'logged': logged,
             'userLogin': userLogin,
-            'userEmail': userEmail
+            'userEmail': userEmail,
+            'activeTable': request.GET.get('table_id', -1)
         })
     else:
         # TODO: Create a Unauthorized page and link it
