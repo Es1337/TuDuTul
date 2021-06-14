@@ -28,8 +28,8 @@ function getDayInMonth(day){
 }
 
 function isDoneBadge(isDone){
-    if (isDone) { return "Zrealizowane"; }
-    else { return "Do zrobienia"; }
+    if (isDone) { return "TuDu"; }
+    else { return "DuNe"; }
 }
 
 function noteCategory(category){
@@ -230,7 +230,7 @@ $(document).ready(function() {
                         let current_event = {
                             id: "" + dailyTodo.id + i + month + year,
                             name: dailyTodo.name,
-                            description: "Autor notatki: " + dailyTodo.creator,
+                            description: "Note author: " + dailyTodo.creator,
                             badge: "" + isDoneBadge(dailyTodo.is_done),
                             date: getRightDate(dailyTodo.creation_date),
                             type: noteCategory(dailyTodo.category),
