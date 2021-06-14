@@ -110,7 +110,7 @@ $(document).ready(function() {
                     id: "" + j + i + month + year,
                     name: dailyTodos[j].name,
                     description: dailyTodos[j].content,
-                    badge: "Priorytet: " + dailyTodos[j].priority,
+                    badge: "Priority: " + dailyTodos[j].priority,
                     date: dailyTodos[j].creation_date,
                     type: dailyTodos[j].category,
                 }
@@ -180,15 +180,29 @@ $(document).ready(function() {
                             type: dailyTodos[j].category,
                         }
                         console.log(current_event.id);
-    
+
                         var eventExists = $("#demoEvoCalendar").evoCalendar("selectCalendarEvent", current_event);
                         console.log(eventExists);
                         if (!eventExists) {
                             $("#demoEvoCalendar").evoCalendar("addCalendarEvent", current_event);
                         }
+                    current_event = {
+                        id: "" + j + i + month + year,
+                        name: dailyTodos[j].name,
+                        description: dailyTodos[j].content,
+                        badge: "Priority: " + dailyTodos[j].priority,
+                        date: dailyTodos[j].creation_date,
+                        type: dailyTodos[j].category,
+                    }
+                    console.log(current_event.id);
+
+                    var eventExists = $("#demoEvoCalendar").evoCalendar("selectCalendarEvent", current_event);
+                    console.log(eventExists);
+                    if (!eventExists) {
+                        $("#demoEvoCalendar").evoCalendar("addCalendarEvent", current_event);
                     }
 
-                    
+
 
                 }
             }

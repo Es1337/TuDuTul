@@ -1,16 +1,13 @@
+import { renderModal } from './render_functions.js'
+
 /* -------------------------- VARIABLES AND CONSTANTS -------------------------- */
-let tables = [];
 
 let state = "tableDisplay";
+let tableList = [];
 
+const TUDU_CARD_CLASSLIST = ['collapsible', 'p-3', 'inline-block', 'relative', 'cardBackground', 'border-yellow-300', 'border-1', 'rounded-3xl', 'cardWidth', 'w-3/6', 'md:w-3/6', 'xl:w-6/10', 'mb-2'];
 
-const TUDU_CARD_CLASSLIST = ['collapsible', 'p-3', 'inline-block', 'relative', 'cardBackground', 'border-yellow-300', 'border-1', 'rounded-3xl', 'cardWidth', 'w-4/6', 'md:w-3/6', 'xl:w-9/10'];
-
-const TUDU_COLLAPSIBLE_CLASSLIST = ['content', 'w-4/7', 'md:w-3/7', 'xl:w-8/10', 'hidden', 'rounded-b-2xl', 'cardBackground', 'border-yellow-300', 'border-1'];
-
-const redirectToMain = (id) => {
-    window.location.href = "/app?table_id=" + id;
-}
+const TUDU_COLLAPSIBLE_CLASSLIST = ['content', 'w-3/7', 'md:w-3/7', 'xl:w-6/10', 'hidden', 'rounded-b-2xl', 'cardBackground', 'border-yellow-300', 'border-1'];
 
 const getFromAPI = async () => {
     const response = await fetch("/table", {
@@ -51,22 +48,37 @@ const sendToAPI = async (name, is_shared, shared_with) => {
     return {ans: ""};
 }
 
-const checkIfIdSet = () => {
-    const tablesJSON = getFromAPI().then(function(result) { 
-        console.log(result.ans)
-    });
-    // tablesJSON.forEach(item => console.log(item));
-    // console.log(tablesJSON);
-    if (localStorage.getItem('table-id') === null) {
-        localStorage.setItem('table-id', 1);
-    }
+const renderTableDeleteModal = (id) => {
+    let headerHTML = `Delete Table`;
+    let textHTML = `Do you want to delete the table?`;
+
+    renderModal(headerHTML, textHTML, 'Delete');
+
+    const functionButton = document.querySelector("#functionButton");
+    functionButton.addEventListener("click", () => {
+        deleteTable(id);
+    })
 }
-// checkIfIdSet();
+
+const updateTables = () => {
+    getFromAPI().then(tablesJSON => {
+        tableList = tablesJSON["ans"];
+        console.log(tableList);
+        getTableDisplayModule();
+        renderTables(tableList);
+    });
+}
+
+updateTables();
+
+const redirectToMain = (id) => {
+    window.location.href = "/app?table_id=" + id;
+}
+
 
 /* -------------------------- HTML RENDERING FUNCTIONS -------------------------- */
 
-// Arrow function to create collapsible buttons (in our case, TuDu and DuNe cards)
-const createCollapsibles = () => {
+const createTableCollapsibles = () => {
     const collapsibles = document.getElementsByClassName("collapsible");
     
     for (let item of collapsibles) {
@@ -82,10 +94,8 @@ const createCollapsibles = () => {
     }
 }
 
-// Arrow function to create button's (in our case, TuDu card's) innerHTML
-// IMPORTANT: The button itself has different CSS styling, specified in TUDU_CARD_CLASSLIST constant
-const fillButtonInnerHTML = item => {
-    let category = item.is_shared ? "Shared" : "Private";
+const fillTableButtonInnerHTML = item => {
+    let category = item.is_shared ? "Shared" : "Personal";
     return `<div class="px-4 mx-auto mb-1 flex justify-between items-center">
                 <p class="font-black text-white tracking-wide text-xl">${item.name}</p>
             </div>
@@ -94,149 +104,109 @@ const fillButtonInnerHTML = item => {
             </div>`;
 }
 
-// Function to create innerHTML of the collapsible button's content
-// IMPORTANT: The button itself has different CSS styling, specified in TUDU_CARD_CLASSLIST constant
-const fillCollapsibleInnerHTML = item => {
+const fillTableCollapsibleInnerHTML = item => {
     let users = item.owner;
     item.shared_with.forEach(user => users += '<br>' + user);
     return `<br/>
             <br/>
-            <div class="bg-white p-2 mx-3 mb-3 block max-w-full font-medium specialtext  rounded-b-xl">${users}</div>
+            <div class="bg-white p-2 mx-3 mb-3 block max-w-full font-medium specialtext  rounded-b-xl">
+                <p class="font-bold redMain">Users added:</p>
+                ${users}
+            </div>
             <div class="px-3 pb-3 flex justify-end items-center">
-                <i class="editIcon my-1 px-2 fas fa-edit text-md sm:text-lg text-white cursor-pointer" onClick="getFormModule(${item.id});"></i>
-                <i class="deleteIcon my-1 px-2 fas fa-trash-alt text-md sm:text-lg text-white cursor-pointer" onClick="deleteTable(${item.id});"></i>
+                <i class="editIcon my-1 px-2 fas fa-edit text-md sm:text-lg text-white cursor-pointer" onclick="getFormModule(${item.id});"></i>
+                <i class="deleteIcon my-1 px-2 fas fa-trash-alt text-md sm:text-lg text-white cursor-pointer" onclick="deleteTable(${item.id});"></i>
                 <i class="openIcon my-1 px-2 fas fa-arrow-alt-circle-right text-md sm:text-lg text-white cursor-pointer" onclick="redirectToMain(${item.id});"></i>
             </div>`;
 }
 
-// Functino that creates the collapsible HTML and adds according classes to it
-// It consists of a div, inside the div we have the area that displays the item's content + the edit and delete buttons
-const createCollapsibleHTML = item => {
+const createTableCollapsibleHTML = item => {
     const collapsible = document.createElement('div');
     collapsible.classList.add(...TUDU_COLLAPSIBLE_CLASSLIST);
-    collapsible.innerHTML = fillCollapsibleInnerHTML(item);
+    collapsible.innerHTML = fillTableCollapsibleInnerHTML(item);
+
+    const editTableButton = collapsible.getElementsByClassName("editIcon")[0];
+    const deleteTableButton = collapsible.getElementsByClassName("deleteIcon")[0];
+    const openTableButton = collapsible.getElementsByClassName("openIcon")[0];
+
+    editTableButton.addEventListener("click", () => {
+        getFormModule(item.id);
+    })
+    deleteTableButton.addEventListener("click", () => {
+        renderTableDeleteModal(item.id);
+    })
+    openTableButton.addEventListener("click", () => {
+        redirectToMain(item.id);
+    })
+
     return collapsible;
 }
 
-// TODO: Change the code up there to template maybe -> possibility for one file with HTML for buttons / cards
-const createButtonHTML = item => {
+const createTableButtonHTML = item => {
     const button = document.createElement('button');
     button.classList.add(...TUDU_CARD_CLASSLIST);
-    button.innerHTML = fillButtonInnerHTML(item);
+    button.innerHTML = fillTableButtonInnerHTML(item);
     return button;
 }
 
-// Arrow function to render Tables based on the tables list
 const renderTables = (tables) => {
-    
+    if (state === "addForm" || state === "editForm") return;
     const tablesContainer = document.querySelector("#tablesContainer");
 
     tablesContainer.innerHTML = '';
   
     tables.forEach(item => {
-        const buttonToAdd = createButtonHTML(item);
-        const collapsibleToAdd = createCollapsibleHTML(item);
+        const buttonToAdd = createTableButtonHTML(item);
+        const collapsibleToAdd = createTableCollapsibleHTML(item);
 
         tablesContainer.appendChild(buttonToAdd);
         tablesContainer.appendChild(collapsibleToAdd);
     });
 
-    createCollapsibles();
+    createTableCollapsibles();
   }
 
   /* -------------------------- TUDU HANDLING FUNCTIONS -------------------------- */
 
-// Arrow function allowing us to insert item in array on specific index 
-const insertAt = (array, index, ...items) => {
-    array.splice(index, 0, ...items);
-}
-
-// Function that increments the current id of note and allows us to get incremental id's
-// Saved in the localStorage under the 'id' field
-const getId = () => {
-    const reference = localStorage.getItem('table-id');
-    let currentId;
-    if (reference) {
-        currentId = parseInt(reference, 10);
-    }
-    localStorage.setItem('table-id', JSON.stringify(currentId + 1));
-
-    return currentId;
-}
-
-
-// Arrow function to download todos for a set day
-// TODO: Convert function to read from a certain day
-const getFromLocalStorage = () => {
-    const reference = localStorage.getItem('tables');
-  
-    if (reference) {
-        // convert back from JSON into array
-        tableList = JSON.parse(reference);
-    } else {
-        tableList = [];
-    }
-    console.log("GETTING FROM LOCAL STORAGE");
-    return tableList;
-}
-  
-// Arrow function to save todos array (in our code in form of todos) to local storage
-const saveToLocalStorage = tables => {
-    localStorage.setItem('tables', JSON.stringify(tables));
-}
-
-// Function that returns a TuDu's index in the 'tables' array
-const getItemIndex = id => {
-    const length = tables.length;
-
-    for (let i = 0; i < length; i++) {
-        if (tables[i].id == id) {
-            return i;
-        }
-    }
-
-    return null;
-}
-
-// Arrow function to save ToDo from a form object
 const addTable = async formHTML => {
     const form = new FormData(formHTML);
 
     let itemToAdd = {};
     form.forEach((value, key) => itemToAdd[key] = value);
 
-    itemToAdd.id = getId();
-    itemToAdd.creator = "You";
     itemToAdd.users_added = formHTML.querySelector("#users-added").value;
 
-    var is_shared = itemToAdd.category === "Private" ? true : false;
+    var is_shared = itemToAdd.category === "Shared" ? true : false;
     var shared_with = itemToAdd.users_added.split("<br>");
 
     sendToAPI(itemToAdd.name, is_shared, shared_with);
-    getFromAPI().then(data => tables = data);
-    state = "";
-    getTableDisplayModule();
+    updateTables();
 }
 
-// Function that deletes a tudu with given id of tudu
 const deleteTable = async id => {
-    let index;
-    index = getItemIndex(id);
-
     let url = "/table/" + id;
-    const response = await fetch(url, {
-        method: 'DELETE'
-    });
+    try {
+        const response = await fetch(url, {
+            method: 'DELETE'
+        });
+    
+        const deleteJSON = await response.json();
+        console.log(await deleteJSON.ans);
 
-    const deleteJSON = await response.json();
-    console.log(await deleteJSON.ans);
+        let modalHeader = "Operation successful!";
+        if (!response.ok) {
+            modalHeader = "Operation failed!";
+        }
 
-    getFromAPI().then(data => tables = data);
-    state = "";
-    getTableDisplayModule();
+        renderModal(modalHeader, deleteJSON["ans"]);
+    }
+    catch(error) {
+        renderModal("Operation failed - client side error!", error);
+    }
+
+    updateTables();
 }
 
-// IMPORTANT: THIS METHOD TAKES THE INDEX OF THE TUDU IN THE ARRAY, NOT THE ID OF IT!
 const editTable = async (formHTML, id) => {
     const form = new FormData(formHTML);
 
@@ -260,26 +230,19 @@ const editTable = async (formHTML, id) => {
 
     const editJSON = await response.json();
     console.log(await editJSON.ans);
-    state = "";
-    getTableDisplayModule();
-}
 
-// EXAMPLE OF INSERTAT USAGE
-// let num = [1,2,3,6,7,8];
-// let insert = [4,5];
-// insertAt(num, 2, ...insert); // [1,2,4,5,3,6,7,8]
-// console.log(num);
+    updateTables();
+}
 
  /* -------------------------- TUDU LOADING -------------------------- */
 
-tables = getFromAPI().then(function(result) { 
+getFromAPI().then(function(result) { 
     renderTables(result.ans);
 });
 
 
  /* -------------------------- MODULE RENDERING FUNCTIONS -------------------------- */
 
-// Arrow function that allows us to render TuDu displaying
 const getTableDisplayModule = async () => {
     if (state == "tableDisplay") return;
 
@@ -298,7 +261,7 @@ const getTableDisplayModule = async () => {
     </div>
     `
 
-    tables = getFromAPI().then(function(result) { 
+    tableList = getFromAPI().then(function(result) { 
         renderTables(result.ans);
     });
     state = "tableDisplay";
@@ -306,17 +269,14 @@ const getTableDisplayModule = async () => {
 
 const addUser = async () => {
     let userEmail = document.getElementById('user-email').value;
-
+    console.log(userEmail);
     document.getElementById('users-field').innerHTML += userEmail + '<br>';
     document.getElementById('users-added').value += userEmail + '<br>';
 }
 
-// Arrow function to render a FormModule -> works for both editing and adding TuDus
-// We pass id of item into it, then it works as editing form
-// Otherwise it allows us to add (hence the changed method string)
 const getFormModule = async id => {
     let item;
-
+    
     if (id !== undefined) {
         let url = "/table/" + id;
         const res = await fetch(url, {
@@ -326,20 +286,26 @@ const getFormModule = async id => {
     }
 
     if (state == "addForm" && item === undefined) return;
+    
+    if (item === undefined) {
+        state = "addForm";
+    } else {
+        state = "editForm";
+    }
 
     let name = null;
     let users_added = '';
     let category = null;
-    let method = `onclick="addTable(document.getElementById('add-table-form'));"`;
+    let method = `addTable`;
 
     if (item !== undefined) {
-        var is_shared = item.ans.category ===  true ? "Shared" : "Private";
+        var is_shared = item.ans.category ===  true ? "Shared" : "Personal";
         var shared_with = "";
         item.ans.shared_with.forEach(user => shared_with += user + "<br>");
         name = `value="` + item.ans.name + `"`;
         users_added = shared_with;
         category = `value="` + is_shared + `"`;
-        method = `onclick="editTable(document.getElementById('add-table-form'),` + id + `);"`;
+        method = `editTable`;
     }
 
     const mainDisplay = document.querySelector("#feature-display");
@@ -357,8 +323,9 @@ const getFormModule = async id => {
                     <input type="text" name="user-email" id="user-email" class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
                     </input>
                     <button 
+                        id="addUserButton"
                         class="max-w-md inline-block py-2 px-4 shadow-xl text-background font-black bg-yellow-400 hover:bg-yellow-300 hover:text-white rounded transition ease-in duration-400"
-                        type="button" onclick="addUser()">
+                        type="button">
                             Add
                     </button>
                 </div>
@@ -374,16 +341,17 @@ const getFormModule = async id => {
                 <div class="gap-3 flex flex-col w-1/5">
                     <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >Category:</label>
                     <select name="category" id="category" ` + category + ` class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
-                        <option value="Private">Personal</option>
+                        <option value="Personal">Personal</option>
                         <option value="Shared">Shared</option>
                     </select>
                 </div>
         
                 <input
                     type="button"
+                    id="formButton"
                     class="max-w-md inline-block py-2 px-4 shadow-xl text-background font-black bg-yellow-400 hover:bg-yellow-300 hover:text-white rounded transition ease-in duration-400"
                     value="Submit"
-                     ` + method + ` 
+                     ` + '' + ` 
                 >
                 <script>
                     document.addEventListener("submit", (e) => {
@@ -396,10 +364,33 @@ const getFormModule = async id => {
         </form>
     </div>
     `;
+    
+    const addUserButton = document.querySelector("#addUserButton");
+    console.log(addUserButton);
+    addUserButton.addEventListener("click", () => {
+        addUser();
+    });
 
-    if (item === undefined) {
-        state = "addForm";
-    } else {
-        state = "editForm";
+    const formButton = document.querySelector("#formButton");
+    if (method === "addTable") {
+        formButton.addEventListener("click", () => {
+            addTable(document.getElementById('add-table-form'));
+        })
+    } else if (method === "editTable") {
+        formButton.addEventListener("click", () => {
+            editTable(document.getElementById('add-table-form'), id);
+        })
     }
 }
+
+const displayButton = document.querySelector("#displayButton");
+console.log(displayButton);
+displayButton.addEventListener("click", () => {
+    getTableDisplayModule();
+});
+
+const addButton = document.querySelector("#addButton");
+console.log(addButton);
+addButton.addEventListener("click", () => {
+    getFormModule();
+});

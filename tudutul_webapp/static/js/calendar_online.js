@@ -28,8 +28,8 @@ function getDayInMonth(day){
 }
 
 function isDoneBadge(isDone){
-    if (isDone) { return "Zrealizowane"; }
-    else { return "Do zrobienia"; }
+    if (isDone) { return "TuDu"; }
+    else { return "DuNe"; }
 }
 
 function noteCategory(category){
@@ -71,8 +71,33 @@ var month = String(today.getMonth() + 1).padStart(2, '0');
 var year = today.getFullYear();
 
 
-const getNotesForDayAndTable = async (date) => {
+const getTableId = () => {
+      
+    // Address of the current window
+    const address = window.location.search;
+  
+    // Returns a URLSearchParams object instance
+    const parameterList = new URLSearchParams(address);
+
     let table = 0;
+
+    if (parameterList.has("table_id")) {
+        table = parameterList.get("table_id");
+    }
+
+    return table;
+}
+
+const createNotesLink = table => {
+    const notesButton = document.querySelector("#notesButton");
+    notesButton.setAttribute('href', `/app?table_id=${table}`);
+}
+
+let tableId = getTableId();
+createNotesLink(tableId);
+
+const getNotesForDayAndTable = async (date) => {
+    let table = tableId;
 
     try {
         const response = await fetch(`/note?table_id=${table}&date=${date}`, {
@@ -205,7 +230,7 @@ $(document).ready(function() {
                         let current_event = {
                             id: "" + dailyTodo.id + i + month + year,
                             name: dailyTodo.name,
-                            description: "Autor notatki: " + dailyTodo.creator,
+                            description: "Note author: " + dailyTodo.creator,
                             badge: "" + isDoneBadge(dailyTodo.is_done),
                             date: getRightDate(dailyTodo.creation_date),
                             type: noteCategory(dailyTodo.category),
@@ -242,7 +267,8 @@ $(document).ready(function() {
         if(month < 10) month = '0' + month;
         var fullDate = [year, month, day].join('-');
 
-        window.location.href = window.location.href.replace("/calendar", "?date=" + fullDate);
+        let url = `/app?date=${fullDate}&table_id=${tableId}`;
+        window.location.href = url;
     });
 
 

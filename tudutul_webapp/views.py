@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-import requests
-from urllib.parse import urlparse
+from tudutul.models import Table
+import django.core.exceptions as ex
 
 def is_logged(request):
     if 'userLogin' in request.session.keys() and 'userEmail' in request.session.keys():
@@ -50,18 +50,21 @@ def account(request, *args, **kwargs):
 
 def app(request):
     logged, userLogin, userEmail = is_logged(request)
-    # TODO: HOW?
-    # response = requests.get('http://127.0.0.1:8000/table/'+ str(table_id))
-    if logged:
-        return render(request, 'online-app/online-notes.html', {
-            'logged': logged,
-            'userLogin': userLogin,
-            'userEmail': userEmail,
-            'activeTable': request.GET.get('table_id', -1)
-        })
-    else:
-        # TODO: Create a Unauthorized page and link it
-        return redirect('/')
+    try:
+        activeTable = Table.objects.get(pk=request.GET.get('table_id', 0))
+    
+        if logged:
+            return render(request, 'online-app/online-notes.html', {
+                'logged': logged,
+                'userLogin': userLogin,
+                'userEmail': userEmail,
+                'activeTable': activeTable.name
+            })
+        else:
+            # TODO: Create a Unauthorized page and link it
+            return redirect('/')
+    except ex.ObjectDoesNotExist:
+        return redirect('/app/tables')
 
 def calendar_online(request, *args, **kwargs):
     logged, userLogin, userEmail = is_logged(request)

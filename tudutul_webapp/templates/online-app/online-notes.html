@@ -11,7 +11,7 @@
 {% block navbarbuttons %}
 
 <li class="nav-item">
-    <a href="/app/calendar" class="nav-link">
+    <a id="calendarButton" href="" class="nav-link">
         <i class=" my-1 far fa-calendar-alt text-3xl sm:text-5xl text-yellow-300"></i>
         <span class="link-text text-yellow-300">Calendar</span>
     </a>
@@ -38,12 +38,21 @@
     </a>
 </li>
 
-<li class="nav-item">
-    <a class="nav-link" onclick="return sendLogout();">
-        <i class=" my-1 fas fa-sign-out-alt text-3xl sm:text-5xl text-yellow-300"></i>
-        <span class="link-text text-yellow-300">Logout</span>
-    </a>
-</li>
+{% if logged %}
+        <li class="nav-item">
+        <a href="/logout" class="nav-link">
+            <i class=" my-1 fas fa-sign-out-alt text-3xl sm:text-5xl text-yellow-300"></i>
+            <span class="link-text text-yellow-300">Logout</span>
+        </a>
+    </li>
+{% else %}
+    <li class="nav-item">
+        <a href="/login" class="nav-link">
+            <i class=" my-1 fas fa-sign-in-alt text-3xl sm:text-5xl text-yellow-300"></i>
+            <span class="link-text text-yellow-300">Login</span>
+        </a>
+    </li>
+{% endif %}
 
 {% endblock %}
 

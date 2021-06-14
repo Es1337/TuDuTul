@@ -3,38 +3,41 @@
 {% load static %}
 
 {% block scripts %}
-    <script src='{% static "js/online-tables.js" %}' defer></script>
+    <script type="module" src='{% static "js/render_functions.js" %}' defer></script>
+    <script type="module" src='{% static "js/online-tables.js" %}' defer></script>
 {% endblock %}
 
 {% block navbarbuttons %}
 
 <li class="nav-item">
-    <a href="/offline/calendar" class="nav-link">
-        <i class=" my-1 far fa-calendar-alt text-3xl sm:text-5xl text-yellow-300"></i>
-        <span class="link-text text-yellow-300">Calendar</span>
-    </a>
-</li>
-
-<li class="nav-item">
-    <a href="#" class="nav-link" onClick="getTableDisplayModule();">
+    <a href="#" id="displayButton" class="nav-link">
         <i class=" my-1 fas fa-table text-3xl sm:text-5xl text-yellow-300"></i>
         <span class="link-text text-yellow-300">Display</span>
     </a>
 </li>
 
 <li class="nav-item">
-    <a href="#" class="nav-link" onClick="getFormModule();">
+    <a href="#" id="addButton" class="nav-link">
         <i class=" my-1 fas fa-plus text-3xl sm:text-5xl text-yellow-300"></i>
         <span class="link-text text-yellow-300">Add</span>
     </a>
 </li>
 
-<li class="nav-item">
-    <a href="/login" class="nav-link">
-        <i class=" my-1 fas fa-sign-in-alt text-3xl sm:text-5xl text-yellow-300"></i>
-        <span class="link-text text-yellow-300">Login</span>
-    </a>
-</li>
+{% if logged %}
+        <li class="nav-item">
+        <a href="/logout" class="nav-link">
+            <i class=" my-1 fas fa-sign-out-alt text-3xl sm:text-5xl text-yellow-300"></i>
+            <span class="link-text text-yellow-300">Logout</span>
+        </a>
+    </li>
+{% else %}
+    <li class="nav-item">
+        <a href="/login" class="nav-link">
+            <i class=" my-1 fas fa-sign-in-alt text-3xl sm:text-5xl text-yellow-300"></i>
+            <span class="link-text text-yellow-300">Login</span>
+        </a>
+    </li>
+{% endif %}
 
 {% endblock %}
 
@@ -50,7 +53,7 @@
 {% block main %}
     <div class="mt-10 w-full flex flex-col items-center h-full">
             <p class="w-full text-center specialtext font-black text-4xl mb-5"><mark class="redMain">Tab</mark><mark class="blueMain">Les</mark></p>
-            <div id="tablesContainer" class="flex flex-col gap-4 items-center overflow-auto cardBoxWidth w-9/10 lg:w-4/6 h-5/6 toDoScroller">
+            <div id="tablesContainer" class="mb-6 lg:mb-0 flex flex-col gap-4 items-center overflow-auto cardBoxWidth w-9/10 lg:w-4/6 h-5/6 toDoScroller">
 
                 
 
