@@ -5,7 +5,7 @@ import { renderModal } from './render_functions.js'
 let state = "tableDisplay";
 let tableList = [];
 
-const TUDU_CARD_CLASSLIST = ['collapsible', 'p-3', 'inline-block', 'relative', 'cardBackground', 'border-yellow-300', 'border-1', 'rounded-3xl', 'cardWidth', 'w-3/6', 'md:w-3/6', 'xl:w-6/10'];
+const TUDU_CARD_CLASSLIST = ['collapsible', 'p-3', 'inline-block', 'relative', 'cardBackground', 'border-yellow-300', 'border-1', 'rounded-3xl', 'cardWidth', 'w-3/6', 'md:w-3/6', 'xl:w-6/10', 'mb-2'];
 
 const TUDU_COLLAPSIBLE_CLASSLIST = ['content', 'w-3/7', 'md:w-3/7', 'xl:w-6/10', 'hidden', 'rounded-b-2xl', 'cardBackground', 'border-yellow-300', 'border-1'];
 

@@ -32326,7 +32326,8 @@ input[disabled="true"] {
   max-height: 0;
   overflow: hidden;
   /* transition: max-height var(--transition-speed) ease-out; */
-  margin-top: -4%;
+  margin-top: -6%;
+  margin-bottom: 2%;
 }
 
 .cardWidth {
