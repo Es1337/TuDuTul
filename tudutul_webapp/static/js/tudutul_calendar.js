@@ -139,21 +139,56 @@ $(document).ready(function() {
                 console.log(dailyTodos);
                 for (let j=0; j<dailyTodos.length; j++){
 
-                    current_event = {
-                        id: "" + j + i + month + year,
-                        name: dailyTodos[j].name,
-                        description: dailyTodos[j].content,
-                        badge: "Priorytet: " + dailyTodos[j].priority,
-                        date: dailyTodos[j].creation_date,
-                        type: dailyTodos[j].category,
-                    }
-                    console.log(current_event.id);
+                    if(dailyTodos[j].completion_date.length > 6){
+                        let repetition = 1;
+                        let dateFormat = dailyTodos[j].completion_date.split("-");
+                        let day = dateFormat[2];
+                        let untilDay = parseInt(day);
+                        switch (dailyTodos[j].repetition){
+                            case "D":
+                                repetition = 1;
+                            case "W":
+                                repetition = 7;
+                        }
+                        console.log("Sprawdzanie daty");
+                        console.log(untilDay);
+                        for(let k=i; k<=untilDay; k+=repetition){
+                            let new_creation_date = [year, getDayInMonth(month), getDayInMonth(k)].join('-');
+                            current_event = {
+                                id: "" + k + j + i + month + year,
+                                name: dailyTodos[j].name,
+                                description: dailyTodos[j].content,
+                                badge: "Priorytet: " + dailyTodos[j].priority,
+                                date: new_creation_date,
+                                type: dailyTodos[j].category,
+                            }
 
-                    var eventExists = $("#demoEvoCalendar").evoCalendar("selectCalendarEvent", current_event);
-                    console.log(eventExists);
-                    if (!eventExists) {
-                        $("#demoEvoCalendar").evoCalendar("addCalendarEvent", current_event);
+                            var eventExists = $("#demoEvoCalendar").evoCalendar("selectCalendarEvent", current_event);
+                            console.log(eventExists);
+                            if (!eventExists) {
+                                $("#demoEvoCalendar").evoCalendar("addCalendarEvent", current_event);
+                            }
+                        }
                     }
+                    else {
+                        current_event = {
+                            id: "" + j + i + month + year,
+                            name: dailyTodos[j].name,
+                            description: dailyTodos[j].content,
+                            badge: "Priorytet: " + dailyTodos[j].priority,
+                            date: dailyTodos[j].creation_date,
+                            type: dailyTodos[j].category,
+                        }
+                        console.log(current_event.id);
+    
+                        var eventExists = $("#demoEvoCalendar").evoCalendar("selectCalendarEvent", current_event);
+                        console.log(eventExists);
+                        if (!eventExists) {
+                            $("#demoEvoCalendar").evoCalendar("addCalendarEvent", current_event);
+                        }
+                    }
+
+                    
 
                 }
             }
