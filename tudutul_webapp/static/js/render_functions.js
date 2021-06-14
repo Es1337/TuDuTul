@@ -41,7 +41,8 @@ const fillButtonInnerHTML = item => {
                 <p class="font-black text-white tracking-wide text-2xl">${item.name}</p>
                 <input type="checkbox" ${checked} disabled>
             </div>
-            <p class="mx-4 mb-2 font-bold text-left text-md text-yellow-300">${item.creation_date_hour}</p>
+            <p class="mx-4 ${item.creator !== "You" ? '' : 'mb-2'} font-bold text-left text-md text-yellow-300">${item.creation_date_hour}</p>
+            ${item.creator !== "You" ? `<p class="mx-4 mb-2 font-bold text-left text-md text-white">Author:<span class="text-yellow-200"> ${item.creator}</span></p>` : ''}
             <div class="cardDetails mx-auto px-4 flex items-center justify-around">
                 <div class="w-full h-full font-bold  text-sm text-yellow-200">${category}</div>
                 ${item.repetition !== "N" 
