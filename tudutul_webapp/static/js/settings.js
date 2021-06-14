@@ -7,7 +7,7 @@ const repetitionTable = {
 
 const TUDU_CARD_CLASSLIST = ['collapsible', 'p-3', 'inline-block', 'relative', 'cardBackground', 'border-yellow-300', 'border-1', 'rounded-3xl', 'cardWidth', 'w-4/6', 'md:w-3/6', 'xl:w-8/10'];
 
-const TUDU_COLLAPSIBLE_CLASSLIST = ['content', 'w-4/7', 'md:w-3/7', 'xl:w-7/10', 'hidden', 'rounded-b-2xl', 'cardBackground', 'border-yellow-300', 'border-1'];
+const TUDU_COLLAPSIBLE_CLASSLIST = ['content', 'mb-2', 'w-4/7', 'md:w-3/7', 'xl:w-7/10', 'hidden', 'rounded-b-2xl', 'cardBackground', 'border-yellow-300', 'border-1'];
 
 /* -------------------------- INITIAL FUNCTIONS - GET DATE -------------------------- */
 

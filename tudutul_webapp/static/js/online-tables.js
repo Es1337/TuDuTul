@@ -5,9 +5,9 @@ import { renderModal } from './render_functions.js'
 let state = "tableDisplay";
 let tableList = [];
 
-const TUDU_CARD_CLASSLIST = ['collapsible', 'p-3', 'inline-block', 'relative', 'cardBackground', 'border-yellow-300', 'border-1', 'rounded-3xl', 'cardWidth', 'w-4/6', 'md:w-3/6', 'xl:w-9/10'];
+const TUDU_CARD_CLASSLIST = ['collapsible', 'p-3', 'inline-block', 'relative', 'cardBackground', 'border-yellow-300', 'border-1', 'rounded-3xl', 'cardWidth', 'w-3/6', 'md:w-3/6', 'xl:w-6/10', 'mb-2'];
 
-const TUDU_COLLAPSIBLE_CLASSLIST = ['content', 'w-4/7', 'md:w-3/7', 'xl:w-8/10', 'hidden', 'rounded-b-2xl', 'cardBackground', 'border-yellow-300', 'border-1'];
+const TUDU_COLLAPSIBLE_CLASSLIST = ['content', 'w-3/7', 'md:w-3/7', 'xl:w-6/10', 'hidden', 'rounded-b-2xl', 'cardBackground', 'border-yellow-300', 'border-1'];
 
 const getFromAPI = async () => {
     const response = await fetch("/table", {
@@ -109,7 +109,10 @@ const fillTableCollapsibleInnerHTML = item => {
     item.shared_with.forEach(user => users += '<br>' + user);
     return `<br/>
             <br/>
-            <div class="bg-white p-2 mx-3 mb-3 block max-w-full font-medium specialtext  rounded-b-xl">${users}</div>
+            <div class="bg-white p-2 mx-3 mb-3 block max-w-full font-medium specialtext  rounded-b-xl">
+                <p class="font-bold redMain">Users added:</p>
+                ${users}
+            </div>
             <div class="px-3 pb-3 flex justify-end items-center">
                 <i class="editIcon my-1 px-2 fas fa-edit text-md sm:text-lg text-white cursor-pointer" onclick="getFormModule(${item.id});"></i>
                 <i class="deleteIcon my-1 px-2 fas fa-trash-alt text-md sm:text-lg text-white cursor-pointer" onclick="deleteTable(${item.id});"></i>

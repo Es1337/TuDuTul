@@ -110,7 +110,7 @@ $(document).ready(function() {
                     id: "" + j + i + month + year,
                     name: dailyTodos[j].name,
                     description: dailyTodos[j].content,
-                    badge: "Priorytet: " + dailyTodos[j].priority,
+                    badge: "Priority: " + dailyTodos[j].priority,
                     date: dailyTodos[j].creation_date,
                     type: dailyTodos[j].category,
                 }
@@ -143,7 +143,7 @@ $(document).ready(function() {
                         id: "" + j + i + month + year,
                         name: dailyTodos[j].name,
                         description: dailyTodos[j].content,
-                        badge: "Priorytet: " + dailyTodos[j].priority,
+                        badge: "Priority: " + dailyTodos[j].priority,
                         date: dailyTodos[j].creation_date,
                         type: dailyTodos[j].category,
                     }
