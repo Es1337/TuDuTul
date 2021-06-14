@@ -89,10 +89,6 @@ class TestAPITables(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
 
-    def test_table_post(self):
-        response = self.client.post('/table/', {"name": "Table", "is_shared": True}, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-    
     def test_table_get_id(self):
         response = self.client.get('/table/' + str(self.table.id), {}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
