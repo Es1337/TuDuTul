@@ -32204,6 +32204,17 @@ video {
   --transition-speed: 300ms;
 }
 
+/* 
+body {
+    animation-name: fadein;
+    animation-duration: 0.8s;
+    animation-delay: -0.2s;
+} */
+
+input[disabled="true"] {
+  filter: grayscale(50%) opacity(0.5);
+}
+
 .navbar {
   position: fixed;
   height: 100vh;
@@ -32328,9 +32339,59 @@ video {
   max-width: calc(var(--maxcardwidth) + 10px);
 }
 
+.cardDetails > *:nth-child(n+2) {
+  border-left: 1px solid yellow;
+}
+
 .toDoScroller {
   scrollbar-width: thin;
   scrollbar-color: #420e42 white;
+}
+
+.header-two-part-animation {
+  -webkit-animation-name: fadein;
+          animation-name: fadein;
+  -webkit-animation-timing-function: ease-out;
+          animation-timing-function: ease-out;
+  position: relative;
+}
+
+.header-two-part-animation:nth-child(1) {
+  -webkit-animation-duration: 1.5s;
+          animation-duration: 1.5s;
+  -webkit-animation-delay: -0.5s;
+          animation-delay: -0.5s;
+}
+
+.header-two-part-animation:nth-child(2) {
+  -webkit-animation-duration: 1.5s;
+          animation-duration: 1.5s;
+  -webkit-animation-delay: -0.35s;
+          animation-delay: -0.35s;
+}
+
+@-webkit-keyframes fadein {
+  from {
+    opacity: 0;
+    top: -20%;
+  }
+
+  to {
+    opacity: 1;
+    top: 0%;
+  }
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+    top: -20%;
+  }
+
+  to {
+    opacity: 1;
+    top: 0%;
+  }
 }
 
 /* .mainBackground:hover,
@@ -32476,6 +32537,10 @@ html, body {
   padding: 0;
   margin: 0;
 }
+
+/* body {
+    font-family: 'Source Sans Pro';
+} */
 
 input:focus, textarea:focus, button:focus {
   outline: none;

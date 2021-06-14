@@ -32,7 +32,7 @@ class TestNotes(TestCase):
             name='TestNote',
             creator='TestUser',
             content='TestContent',
-            completion_date='2021-12-21',
+            creation_date='2021-12-21',
             priority=5,
             owning_table_id=self.table1.id
         )
@@ -51,7 +51,7 @@ class TestNotes(TestCase):
             name='TestTableNote',
             creator='TestTableUser',
             content='TestContent',
-            completion_date='2021-12-21',
+            creation_date='2021-12-21',
             priority=5,
             owning_table_id=self.table1.id
         )
@@ -70,7 +70,7 @@ class TestNotes(TestCase):
             name='TestSharedNote',
             creator='TestSharedUser',
             content='TestContent',
-            completion_date='2021-12-21',
+            creation_date='2021-12-21',
             priority=5,
             owning_table_id=table2.id
         )
@@ -90,7 +90,7 @@ class TestNotes(TestCase):
             name='TestSharedNote',
             creator='TestSharedUser',
             content='TestContent',
-            completion_date='2021-12-21',
+            creation_date='2021-12-21',
             priority=5,
             owning_table_id=table2.id
         )
@@ -100,7 +100,7 @@ class TestNotes(TestCase):
             name='TestTableNote',
             creator='TestTableUser',
             content='TestContent',
-            completion_date='2021-12-21',
+            creation_date='2021-12-21',
             priority=5,
             owning_table_id=self.table1.id
         )
@@ -115,11 +115,11 @@ class TestNotes(TestCase):
             name='TestNote',
             creator='TestUser',
             content='TestContent',
-            completion_date='2021-12-23 16:30',
+            creation_date='2021-12-23 16:30',
             priority=5
         )
 
-        response = self.client.get('/note/', {'completion_date': '2021-12-23'})
+        response = self.client.get('/note/', {'date': '2021-12-23'})
         expected = [note2.id]
         tested = [el['id'] for el in response.data['ans']]
         self.assertListEqual(expected, tested)
@@ -134,7 +134,7 @@ class TestNotes(TestCase):
             name='TestSharedNote',
             creator='TestUser',
             content='TestContent',
-            completion_date='2021-12-21',
+            creation_date='2021-12-21',
             priority=5,
             owning_table_id=table2.id
         )
@@ -144,7 +144,135 @@ class TestNotes(TestCase):
         tested = [el['id'] for el in response.data['ans']]
         self.assertListEqual(expected, tested)
 
-    
+    def test_get_request_returns_daily_note_after_a_day(self):
+        note2 = Note.objects.create(
+            name='TestDailyNote',
+            creator='TestUser',
+            content='TestContent',
+            creation_date='2021-12-21',
+            completion_date='2022-12-22',
+            repetition='D',
+            priority=5
+        )
+
+        response = self.client.get('/note/', {'date': '2021-12-22'})
+        expected = [note2.id]
+        tested = [el['id'] for el in response.data['ans']]
+        self.assertListEqual(expected, tested)
+
+    def test_get_request_returns_weekly_note_after_a_week(self):
+        note2 = Note.objects.create(
+            name='TestWeeklyNote',
+            creator='TestUser',
+            content='TestContent',
+            creation_date='2021-12-21',
+            completion_date='2021-12-30',
+            repetition='W',
+            priority=5
+        )
+
+        response = self.client.get('/note/', {'date': '2021-12-28'})
+        expected = [note2.id]
+        tested = [el['id'] for el in response.data['ans']]
+        self.assertListEqual(expected, tested)
+
+    def test_get_request_returns_monthly_note_after_a_month(self):
+        note2 = Note.objects.create(
+            name='TestMonthlyNote',
+            creator='TestUser',
+            content='TestContent',
+            creation_date='2021-12-21',
+            completion_date='2022-02-21',
+            repetition='M',
+            priority=5
+        )
+
+        response = self.client.get('/note/', {'date': '2022-01-21'})
+        expected = [note2.id]
+        tested = [el['id'] for el in response.data['ans']]
+        self.assertListEqual(expected, tested)
+
+    def test_get_request_returns_yearly_note_after_a_year(self):
+        note2 = Note.objects.create(
+            name='TestYearlyNote',
+            creator='TestUser',
+            content='TestContent',
+            creation_date='2021-12-21',
+            completion_date='2022-12-22',
+            repetition='Y',
+            priority=5
+        )
+
+        response = self.client.get('/note/', {'date': '2022-12-21'})
+        expected = [note2.id]
+        tested = [el['id'] for el in response.data['ans']]
+        self.assertListEqual(expected, tested)
+
+    def test_get_request_doesnt_return_daily_after_completion_date(self):
+        note2 = Note.objects.create(
+            name='TestDailyNote',
+            creator='TestUser',
+            content='TestContent',
+            creation_date='2021-12-21',
+            completion_date='2021-12-22',
+            repetition='D',
+            priority=5
+        )
+
+        response = self.client.get('/note/', {'date': '2022-12-23'})
+        expected = []
+        tested = [el['id'] for el in response.data['ans']]
+        self.assertListEqual(expected, tested)
+
+    def test_get_request_doesnt_return_weekly_after_completion_date(self):
+        note2 = Note.objects.create(
+            name='TestWeeklyNote',
+            creator='TestUser',
+            content='TestContent',
+            creation_date='2021-12-02',
+            completion_date='2021-12-15',
+            repetition='W',
+            priority=5
+        )
+
+        response = self.client.get('/note/', {'date': '2021-12-16'})
+        expected = []
+        tested = [el['id'] for el in response.data['ans']]
+        self.assertListEqual(expected, tested)
+
+    def test_get_request_doesnt_return_monthly_after_completion_date(self):
+        note2 = Note.objects.create(
+            name='TestMonthlyNote',
+            creator='TestUser',
+            content='TestContent',
+            creation_date='2021-12-21',
+            completion_date='2021-01-20',
+            repetition='M',
+            priority=5
+        )
+
+        response = self.client.get('/note/', {'date': '2022-01-21'})
+        expected = []
+        tested = [el['id'] for el in response.data['ans']]
+        self.assertListEqual(expected, tested)
+
+    def test_get_request_doesnt_return_yearly_after_completion_date(self):
+        note2 = Note.objects.create(
+            name='TestYearlyNote',
+            creator='TestUser',
+            content='TestContent',
+            creation_date='2021-12-21',
+            completion_date='2022-12-20',
+            repetition='Y',
+            priority=5
+        )
+
+        response = self.client.get('/note/', {'date': '2022-12-21'})
+        expected = []
+        tested = [el['id'] for el in response.data['ans']]
+        self.assertListEqual(expected, tested)
+        
+        
 class NotesAPITests(APITestCase):
     def setUp(self):
         self.client = Client()

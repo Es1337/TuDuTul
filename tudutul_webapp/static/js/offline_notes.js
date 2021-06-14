@@ -1,14 +1,13 @@
+import { repetitionTable, TUDU_CARD_CLASSLIST, TUDU_COLLAPSIBLE_CLASSLIST, formatDate, getDate, insertAt, getItemIndex } from './settings.js'
+import  { fillDateInnerHTML, createCollapsibles, fillButtonInnerHTML, createPropertyHTML, fillCollapsibleInnerHTML,
+    createButtonHTML, setOverlaySection, resetOverlay, turnOnModal,
+    turnOffModal, renderModal } from './render_functions.js'
 // IMPORTANT: ALLTODOS ARRAY IS LOADED AROUND LINE 290
 
 /* -------------------------- VARIABLES AND CONSTANTS -------------------------- */
 let allTodos = [];
 
 let state = "tuDuDisplay";
-
-
-const TUDU_CARD_CLASSLIST = ['collapsible', 'p-3', 'inline-block', 'relative', 'cardBackground', 'border-yellow-300', 'border-1', 'rounded-3xl', 'cardWidth', 'w-4/6', 'md:w-3/6', 'xl:w-9/10'];
-
-const TUDU_COLLAPSIBLE_CLASSLIST = ['content', 'w-4/7', 'md:w-3/7', 'xl:w-8/10', 'hidden', 'rounded-b-2xl', 'cardBackground', 'border-yellow-300', 'border-1']
 
 /* -------------------------- INITIAL FUNCTIONS - GET DATE -------------------------- */
 
@@ -19,139 +18,62 @@ const checkIfIdSet = () => {
 }
 checkIfIdSet();
 
-/* -------------------------- INITIAL FUNCTIONS - GET DATE -------------------------- */
-
-// Arrow function to format date to our yyyy-mm-dd format
-const formatDate = date => {
-    var d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
-
-    if (month.length < 2) 
-        month = '0' + month;
-
-    if (day.length < 2)
-        day = '0' + day;
-
-    return [year, month, day].join('-');
-}
-
-// Arrow function to get all the GET parameters
-const getDate = () => {
-  
-    // Address of the current window
-    address = window.location.search;
-  
-    // Returns a URLSearchParams object instance
-    parameterList = new URLSearchParams(address);
-
-    if (parameterList.has("date")) {
-        date = parameterList.get("date");
-    } else {
-        date = formatDate(Date.now());
-    }
-
-    return date;
-}
 
 // Gets the day
 const todoDate = getDate();
-
-const fillDateInnerHTML = async date => {
-    const dateDisplay = await document.querySelector("#day-display");
-    dateDisplay.innerHTML = `The day is: ${date}`;
-}
+console.log("THIS PAGE'S DATE:", todoDate);
 
 fillDateInnerHTML(todoDate);
 
+// Arrow function to download todos for a set day
+// TODO: Convert function to read from a certain day
+const getFromLocalStorage = date => {
+    
+    const reference = localStorage.getItem(date);
+    let toDoList = [];
+
+    if (reference) {
+        // convert back from JSON into array
+        try {
+            toDoList = JSON.parse(reference);
+        } catch(error) {
+            console.log(error);
+        }
+    }
+
+    console.log("GETTING LOCAL STORAGE DATE:", date);
+    console.log("GETTING FROM LOCAL STORAGE", toDoList);
+    return toDoList;
+}
+
 /* -------------------------- HTML RENDERING FUNCTIONS -------------------------- */
 
-// Arrow function to create collapsible buttons (in our case, TuDu and DuNe cards)
-const createCollapsibles = () => {
-    const collapsibles = document.getElementsByClassName("collapsible");
-    let i;
-    
-    for (let i = 0; i < collapsibles.length; i++) {
-        collapsibles[i].addEventListener("click", async function() {
-            this.classList.toggle("active");
-            var content = this.nextElementSibling;
-            if (content.style.minHeight){
-                content.style.minHeight = null;
-            } else {
-                content.style.minHeight = content.scrollHeight + "px";
-            } 
-            });
-    }
-}
-
-// Arrow function to create button's (in our case, TuDu card's) innerHTML
-// IMPORTANT: The button itself has different CSS styling, specified in TUDU_CARD_CLASSLIST constant
-const fillButtonInnerHTML = item => {
-    const checked = item.is_done == 'on' ? 'checked' : null;
-    const priorityHTML = createPropertyHTML(item.priority);
-    return `<div class="px-4 mx-auto mb-1 flex justify-between items-center">
-                <p class="font-black text-white tracking-wide text-xl">${item.name}</p>
-                <input type="checkbox" ${checked} disabled>
-            </div>
-            <p class="mx-4 font-bold text-left text-yellow-300">${item.completion_date}</p>
-            <div class="mx-auto px-4 flex items-center justify-between">
-                <p class="flex font-bold  text-sm text-yellow-300">${item.category}</p>
-                <div>` +
-                    priorityHTML + 
-                `</div>
-            </div>`;
-}
-
-// Arrow function to create HTML associated with priority of a card
-const createPropertyHTML = priority => {
-    priority = parseInt(priority, 10);
-    switch(priority) {
-        case 1:
-            return `<i class=" my-1 fas fa-exclamation text-yellow-200"></i>`;
-            break;
-        case 2:
-            return `<i class=" my-1 fas fa-exclamation text-yellow-300"></i>
-                    <i class=" my-1 fas fa-exclamation text-yellow-300"></i>`;
-        case 3:
-            return `<i class=" my-1 fas fa-exclamation text-red-500"></i>
-                    <i class=" my-1 fas fa-exclamation text-red-500"></i>
-                    <i class=" my-1 fas fa-exclamation text-red-500"></i>`;
-        default:
-            console.error("WRONG VALUE OF PRIORITY");
-            break;
-    }
-}
-
-// Function to create innerHTML of the collapsible button's content
-// IMPORTANT: The button itself has different CSS styling, specified in TUDU_CARD_CLASSLIST constant
-const fillCollapsibleInnerHTML = item => {
-    return `<div class="bg-white p-2 mx-3 mb-3 block max-w-full font-medium specialtext  rounded-b-xl">${item.content}</div>
-            <div class="px-3 pb-3 flex justify-end items-center">
-                <i class="editIcon my-1 px-2 fas fa-edit text-md sm:text-lg text-white cursor-pointer" onClick="getFormModule(${item.id});"></i>
-                <i class="deleteIcon my-1 fas fa-trash-alt text-md sm:text-lg text-white cursor-pointer" onClick="deleteTuDu(${item.id});"></i>
-            </div>`;
-}
+// IMPORT createCollapsibles!!! and fillButtonInnerHTML
 
 // Functino that creates the collapsible HTML and adds according classes to it
 // It consists of a div, inside the div we have the area that displays the item's content + the edit and delete buttons
-const createCollapsibleHTML = item => {
+const createCollapsibleHTML = (item, todos) => {
     const collapsible = document.createElement('div');
     collapsible.classList.add(...TUDU_COLLAPSIBLE_CLASSLIST);
     collapsible.innerHTML = fillCollapsibleInnerHTML(item);
-    return collapsible;
-}
+    
+    const editTuDuButton = collapsible.getElementsByClassName("editIcon")[0];
+    const deleteTuDuButton = collapsible.getElementsByClassName("deleteIcon")[0];
 
-// TODO: Change the code up there to template maybe -> possibility for one file with HTML for buttons / cards
-const createButtonHTML = item => {
-    const button = document.createElement('button');
-    button.classList.add(...TUDU_CARD_CLASSLIST);
-    button.innerHTML = fillButtonInnerHTML(item);
-    return button;
+    editTuDuButton.addEventListener("click", () => {
+        getFormModule(item.id, todos);
+    })
+    deleteTuDuButton.addEventListener("click", () => {
+        renderOfflineDeleteModal(item.id);
+    })
+
+    return collapsible;
 }
 
 // Arrow function to render Todos based on the allTodos list
 const renderTodos = (todos) => {
+    if (state === "addForm" || state === "editForm") return;
+
     const tuDuContainer = document.querySelector("#tuDuContainer");
     const duNeContainer = document.querySelector("#duNeContainer");
 
@@ -160,8 +82,8 @@ const renderTodos = (todos) => {
   
     todos.forEach(item => {
       const buttonToAdd = createButtonHTML(item);
-      const collapsibleToAdd = createCollapsibleHTML(item);
-      if (item.is_done == 'on') {
+      const collapsibleToAdd = createCollapsibleHTML(item, todos);
+      if (item.is_done == true) {
         duNeContainer.appendChild(buttonToAdd);
         duNeContainer.appendChild(collapsibleToAdd);
       } else {
@@ -171,14 +93,9 @@ const renderTodos = (todos) => {
     });
 
     createCollapsibles();
-  }
+}
 
   /* -------------------------- TUDU HANDLING FUNCTIONS -------------------------- */
-
-// Arrow function allowing us to insert item in array on specific index 
-const insertAt = (array, index, ...items) => {
-    array.splice(index, 0, ...items);
-}
 
 // Function that increments the current id of note and allows us to get incremental id's
 // Saved in the localStorage under the 'id' field
@@ -192,97 +109,189 @@ const getId = () => {
     return currentId;
 }
 
-// Arrow function to download todos for a set day
-// TODO: Convert function to read from a certain day
-const getFromLocalStorage = () => {
-    const reference = localStorage.getItem(todoDate);
-  
-    if (reference) {
-        // convert back from JSON into array
-        toDoList = JSON.parse(reference);
-    } else {
-        toDoList = [];
-    }
-    console.log("GETTING FROM LOCAL STORAGE");
-    return toDoList;
-}
   
 // Arrow function to save todos array (in our code in form of allTodos) to local storage
-const saveToLocalStorage = todos => {
-    localStorage.setItem(todoDate, JSON.stringify(todos));
-}
-
-// Function that returns a TuDu's index in the 'allTodos' array
-const getItemIndex = id => {
-    const length = allTodos.length;
-
-    for (let i = 0; i < length; i++) {
-        if (allTodos[i].id == id) {
-            return i;
-        }
-    }
-
-    return null;
+const saveToLocalStorage = (todos, date) => {
+    console.log("SAVE TO LOCAL STORAGE TODOS:", todos);
+    console.log("SAVE TO LOCAL STORAGE DATE:", date);
+    localStorage.setItem(date, JSON.stringify(todos));
 }
 
 // Arrow function to save ToDo from a form object
-const addTuDu = async formHTML => {
+const addTuDu = formHTML => {
     const form = new FormData(formHTML);
   
     let itemToAdd = {};
     form.forEach((value, key) => itemToAdd[key] = value);
+    
     itemToAdd.id = getId();
     itemToAdd.creator = "You";
     itemToAdd.creation_date = formatDate(todoDate);
     itemToAdd.owning_table_id = -1;
-
-    const tuDuLength = allTodos.length;
-    let i = 0;
-    while (i < tuDuLength) {
-        let itemCreationDate = Date.parse(itemToAdd.creation_date);
-        if (itemCreationDate < Date.parse(allTodos[i].creation_date)) {
-        insertAt(allTodos, i, itemToAdd);
-        break;
-        }
-        i++;
-    } 
-    if (i === tuDuLength) {
-        allTodos.push(itemToAdd);
+    if (form.get('is_done') === null) {
+        itemToAdd.is_done = false;
+    } else {
+        itemToAdd.is_done = true;
+    }
+    if (itemToAdd.repetition === "N") {
+        itemToAdd.completion_date = "2137-12-12";
+    }
+    if (itemToAdd.repetition !== "N") {
+        addRepeatingTudus(itemToAdd);
+        allTodos = getFromLocalStorage(todoDate);
+        getTuDuDisplayModule();
+        return;
     }
 
+    allTodos.push(itemToAdd);
+    sortTudusByHour(allTodos);
+
+    saveToLocalStorage(allTodos, todoDate);
+    allTodos = getFromLocalStorage(todoDate);
+    
     getTuDuDisplayModule();
-    saveToLocalStorage(allTodos);
-    allTodos = getFromLocalStorage();
+}
+
+const incrementDate = (date, increment) => {
+    let year = date.getFullYear(),
+        month = date.getMonth(),
+        day = date.getDate();
+
+    switch(increment) {
+        case 'Y':
+            year++;
+            break;
+        case 'W':
+            day += 7;
+            break;
+        case 'M':
+            month++;
+            break;
+        case 'D':
+            day++;
+            break;
+        default:
+            break;
+    }
+
+    return new Date(year, month, day);
+}
+
+const addRepeatingTudus = (item) => {
+    let currentDate = new Date(item.creation_date);
+    let endDate = new Date(item.completion_date);
+
+    endDate = incrementDate(endDate, "D");
+
+    let repetition = item.repetition;
+
+    console.log("ADD INITIAL CURRENT DATE:", currentDate);
+    console.log("ADD END DATE:", endDate);
+
+    let tempTodo = [];
+
+    while (currentDate < endDate) {
+        console.log("ADD CURRENT DATE:", currentDate);
+        
+        tempTodo = getFromLocalStorage(formatDate(currentDate));
+        tempTodo.push(item);
+        sortTudusByHour(tempTodo);
+
+        saveToLocalStorage(tempTodo, formatDate(currentDate));
+        currentDate = incrementDate(currentDate, repetition);
+    }
+}
+
+const deleteRepeatingTudus = item => {
+    let currentDate = new Date(item.creation_date);
+    let endDate = new Date(item.completion_date);
+
+    endDate = incrementDate(endDate, "D");
+
+    console.log("DELETE INITIAL CURRENT DATE:", currentDate);
+    console.log("DELETE END DATE:", endDate);
+    
+    let tempTodo = [];
+    while (currentDate < endDate) {
+        console.log("DELETE CURRENT DATE:", currentDate);
+
+        tempTodo = getFromLocalStorage(formatDate(currentDate));
+        deleteTuDu(item.id, tempTodo, formatDate(currentDate), false);
+        currentDate = incrementDate(currentDate, item.repetition);
+    }
+}
+
+const sortTudusByHour = todos => {
+    todos.sort((a, b) => (new Date('1/1/1999 ' + a.creation_date_hour) > new Date('1/1/1999 ' + b.creation_date_hour)) ? 1 : -1);
 }
 
 // Function that deletes a tudu with given id of tudu
-const deleteTuDu = async id => {
+const deleteTuDu = (id, todos, date, checkRepetition) => {
     let index;
-    const length = allTodos.length;
+    const length = todos.length;
 
-    index = getItemIndex(id);
+    index = getItemIndex(id, todos);
+    
+    if (index === null) return;
+    
+    console.log("DELETE TUDU DATE:", date);
+    console.log("DELETE TUDU ITEM:", todos[index]);
+
+    if (checkRepetition && todos[index].repetition !== "N") {
+        deleteRepeatingTudus(todos[index]);
+        return;
+    }
 
     if (index !== null) {
-        allTodos.splice(index, 1);
+        todos.splice(index, 1);
     } else {
+        renderModal("Delete failed!", "There seems to be a problem with your browser's local storage. Try again.");
     }
 
-    saveToLocalStorage(allTodos);
-    renderTodos(allTodos);
+    console.log("SINGLE ITEM DELETIONS");
+
+    turnOffModal();
+    saveToLocalStorage(todos, date);
+    renderTodos(todos);
 }
 
-// IMPORTANT: THIS METHOD TAKES THE INDEX OF THE TUDU IN THE ARRAY, NOT THE ID OF IT!
-const editTuDu = async (formHTML, index) => {
+const editTuDu = (formHTML, id) => {
     const form = new FormData(formHTML);
+
+    const index = getItemIndex(id, allTodos);
+
+    if (index === null) return;
+
+    const newTuDu = {...allTodos[index]};
+
+    console.log("EDIT TUDU REPETITION:", allTodos[index].repetition);
+
+    if (allTodos[index].repetition !== "N") {
+        console.log("DELETING EDITED TUDU");
+        deleteTuDu(id, allTodos, todoDate, true);
+    } else {
+        deleteTuDu(id, allTodos, todoDate, false);
+    }
     
-    form.forEach((value, key) => allTodos[index][key] = value);
+    form.forEach((value, key) => newTuDu[key] = value);
 
     if (form.get('is_done') === null) {
-        allTodos[index]['is_done'] = 'off';
+        newTuDu['is_done'] = false;
+    } else {
+        newTuDu['is_done'] = true;
     }
 
-    saveToLocalStorage(allTodos);
-    allTodos = getFromLocalStorage();
+    console.log("NEW TUDU");
+    if (newTuDu.repetition !== "N") {
+        addRepeatingTudus(newTuDu);
+    } else {
+        allTodos.push(newTuDu);
+        sortTudusByHour(allTodos);
+        saveToLocalStorage(allTodos, todoDate);
+    }
+
+    // saveToLocalStorage(allTodos, todoDate);
+    allTodos = getFromLocalStorage(todoDate);
     getTuDuDisplayModule();
 }
 
@@ -294,15 +303,52 @@ const editTuDu = async (formHTML, index) => {
 
  /* -------------------------- TUDU LOADING -------------------------- */
 
-allTodos = getFromLocalStorage();
-renderTodos(allTodos);
+ allTodos = getFromLocalStorage(todoDate);
+ renderTodos(allTodos);
+ 
+ console.log("INITAL TODO:", allTodos);
 
-console.log(allTodos);
+const displayButton = document.querySelector("#displayButton");
+console.log(displayButton);
+displayButton.addEventListener("click", () => {
+    getTuDuDisplayModule();
+});
 
- /* -------------------------- MODULE RENDERING FUNCTIONS -------------------------- */
+const addButton = document.querySelector("#addButton");
+console.log(addButton);
+addButton.addEventListener("click", () => {
+    getFormModule();
+});
+
+const renderOfflineDeleteModal = id => {
+    let headerHTML = `Delete TuDu`;
+    let textHTML = `Do you want to delete the TuDu?`;
+
+    renderModal(headerHTML, textHTML, 'Delete');
+
+    const functionButton = document.querySelector("#functionButton");
+    functionButton.addEventListener("click", () => {
+        deleteTuDu(id, allTodos, todoDate, true);
+    })
+}
+
+const checkCompletionDateRead = () => {
+    const repetitionBox = document.querySelector("#repetition");
+    const completionDateBox = document.querySelector("#completion_date");
+    if (repetitionBox.value === "N") {
+        completionDateBox.value = "";
+        completionDateBox.setAttribute('disabled', true);
+    } else {
+        completionDateBox.removeAttribute('disabled');
+    }
+
+    console.log(completionDateBox.getAttribute('disabled'));
+}
+
+
 
 // Arrow function that allows us to render TuDu displaying
-const getTuDuDisplayModule = async () => {
+const getTuDuDisplayModule = () => {
     if (state == "tuDuDisplay") return;
 
     const mainDisplay = document.querySelector("#feature-display");
@@ -328,48 +374,60 @@ const getTuDuDisplayModule = async () => {
             
         </div>
     </div>`;
-    renderTodos(allTodos);
-
 
     state = "tuDuDisplay";
+    renderTodos(allTodos);
+
 }
 
 // Arrow function to render a FormModule -> works for both editing and adding TuDus
 // We pass id of item into it, then it works as editing form
 // Otherwise it allows us to add (hence the changed method string)
-const getFormModule = id => {
+const getFormModule = (id, todos) => {
     let item;
     let index;
     if (id !== undefined) {
-        index = getItemIndex(id);
-        item = allTodos[index];
+        index = getItemIndex(id, todos);
+        item = todos[index];
     }
 
     if (state == "addForm" && item === undefined) return;
 
+    if (item === undefined) {
+        state = "addForm";
+    } else {
+        state = "editForm";
+    }
+
     let name = null;
+    let creation_date_hour = null;
     let completion_date = null;
+    let completion_date_disabled = null;
     let priority = `value=1`;
     let is_done = null;
-    let content = '';
-    let repetition = `value=0`;
+    let content = ``;
+    let repetition = `N`;
     let category = null;
-    let method = `onclick="addTuDu(document.getElementById('add-note-form'));"`;
+    let method = `addTuDu`;
 
     if (item !== undefined) {
         name = `value="` + item.name + `"`;
+        creation_date_hour = `value="` + item.creation_date_hour + `"`;
         completion_date = `value="` + item.completion_date + `"`;
         priority = `value="` + item.priority + `"`;
-        is_done = item.is_done === 'on' ? 'checked' : null;
+        is_done = item.is_done === true ? 'checked' : null;
         content = item.content;
-        repetition = `value="` + item.repetition + `"`;
-        category = `value="` + item.category + `"`;
-        method = `onclick="editTuDu(document.getElementById('add-note-form'), ${index});"`;
+        repetition = item.repetition;
+        category = item.category;
+        method = `editTuDu`;
     }
 
+    completion_date_disabled = repetition === `N` || item.repetition === 'N' ? 'disabled="true"' : null;
+
+    // CONVERT THIS UGLY ASS INNER HTML TO CHANGING THE DOM
     const mainDisplay = document.querySelector("#feature-display");
     mainDisplay.innerHTML = `
-    <div class="mt-10 w-full flex flex-col items-center h-full">
+    <div class="mt-10 mb-20 lg:mb-0 w-full flex flex-col items-center h-full">
         <form class="flex flex-col lg:flex-row gap-7 h-full w-full" id="add-note-form">
             <div class="h-full w-full flex flex-col items-center gap-3">
                 <div class="gap-3 flex flex-col w-1/5">
@@ -379,7 +437,7 @@ const getFormModule = id => {
                 
                 <div class="gap-3 flex flex-col w-1/5">
                     <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >Completion date:</label>
-                    <input type="time" name="completion_date" id="completion_date" ` + completion_date + ` class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
+                    <input type="time" name="creation_date_hour" id="creation_date_hour" ` + creation_date_hour + ` class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
                 </div>
 
                 <div class="gap-3 flex flex-col w-1/5">
@@ -396,51 +454,67 @@ const getFormModule = id => {
             <div class="w-full h-full flex flex-col items-center gap-3">
                 <div class="gap-3 flex flex-col w-1/5">
                     <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >Content:</label>
-                    <textarea name="content" id="content" class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
-                        ${content}
-                    </textarea>
+                    <textarea name="content" id="content" class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">${content}</textarea>
                 </div>
         
         
                 <div class="gap-3 flex flex-col w-1/5">
                 <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >Repetition:</label>
-                    <input type="number" ` + repetition + ` name="repetition" id="repetition" class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
+                    <select name="repetition" id="repetition" ` + '' + 
+                    ` class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md"
+                    >
+                        <option value="N" ${repetition == "N" ? 'selected' : ''}>No repetition</option>
+                        <option value="D" ${repetition == "D" ? 'selected' : ''}>Daily</option>
+                        <option value="W" ${repetition == "W" ? 'selected' : ''}>Weekly</option>
+                        <option value="M" ${repetition == "M" ? 'selected' : ''}>Monthly</option>
+                        <option value="Y" ${repetition == "Y" ? 'selected' : ''}>Yearly</option>
+                    </select>
+                </div>
+
+                <div class="gap-3 flex flex-col w-1/5">
+                <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >Last repeat date:</label>
+                    <input type="date" name="completion_date" ` + completion_date_disabled + ` id="completion_date" ` + completion_date + ` class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
                 </div>
         
                 <div class="gap-3 flex flex-col w-1/5">
                     <label class="special-text tracking-wider text-indigo-100 text-lg font-bold " >Category:</label>
-                    <select name="category" id="category" ` + category + ` class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
-                        <option value="Personal">Personal</option>
-                        <option value="Work">Work</option>
-                        <option value="IDK">IDK</option>
+                    <select name="category" id="category" ` + '' + ` class="border-b-2 border-yellow-300 p-2 bg-transparent border-0 text-white tracking-wider flex-shrink max-w-md">
+                        <option value="Personal" ${category == "Personal" ? 'selected' : ''}>Personal</option>
+                        <option value="Work" ${category == "Work" ? 'selected' : ''}>Work</option>
+                        <option value="Family" ${category == "Family" ? 'selected' : ''}>Family</option>
                     </select>
                 </div>
         
                 <input
-                    type="button"
+                    type="button" id="formButton"
                     class="max-w-md inline-block py-2 px-4 shadow-xl text-background font-black bg-yellow-400 hover:bg-yellow-300 hover:text-white rounded transition ease-in duration-400"
-                    value="Login"
-                     ` + method + ` 
+                    value="${ state === "addForm" ? 'Add' : 'Edit' }"
+                     ` + '' + ` 
                 >
-                <script>
-                    document.addEventListener("submit", (e) => {
-        
-                        e.preventDefault();
-                    });
-                </script>
+                
             </div>
 
         </form>
     </div>
     `;
 
-    if (item === undefined) {
-        state = "addForm";
-    } else {
-        state = "editForm";
+    const formButton = document.querySelector("#formButton");
+    if (method === "addTuDu") {
+        formButton.addEventListener("click", () => {
+            addTuDu(document.getElementById('add-note-form'));
+        })
+    } else if (method === "editTuDu") {
+        formButton.addEventListener("click", () => {
+            editTuDu(document.getElementById('add-note-form'), id);
+        })
     }
-}
 
+    const repetitionBox = document.querySelector("#repetition");
+    repetitionBox.addEventListener("change", () => {
+        checkCompletionDateRead();
+    })
+
+}
 
 
 
