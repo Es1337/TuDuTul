@@ -29,7 +29,7 @@ def get_time_delta(repetition_type):
 
 
 def get_repeated_notes_for_repetition(query_to_filter, date, repetition):
-    notes = query_to_filter.filter(repetition=repetition, creation_date__lt=date, completion_date__gte=date)
+    notes = query_to_filter.filter(repetition=repetition, creation_date__lte=date, completion_date__gte=date)
     res = None
     delta = get_time_delta(repetition)
     if not delta:
@@ -129,8 +129,8 @@ class NoteView(APIView):
 
         if 'date' in request.query_params.keys():
             filter_date = request.query_params['date']
-            query = query.filter(creation_date__range=[filter_date + ' 00:00', filter_date + ' 23:59'])
-            res = query.filter(repetition='N')
+            today = query.filter(creation_date__startswith=filter_date)
+            res = today.filter(repetition='N')
 
             daily_notes = get_repeated_notes_for_repetition(query, filter_date, 'D')
             if daily_notes:
@@ -192,7 +192,6 @@ class NoteView(APIView):
         answer = ""
         form = NoteForm(request.data, user_id)
 
-        print("NOTE CREATION DATE:", form.creation_date);
         if form.is_valid():
             form.save()
             answer = 'Note saved successfully'
