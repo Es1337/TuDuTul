@@ -69,6 +69,7 @@ const formatHourMinutes = date => {
 var day = String(today.getDate()).padStart(2, '0');
 var month = String(today.getMonth() + 1).padStart(2, '0');
 var year = today.getFullYear();
+let currentCalendarMonth = "0";
 
 
 const getTableId = () => {
@@ -148,13 +149,68 @@ const getMonthlyTodos = (month, year) => {
 
 }
 
+function loadOnlineCalendar() {
+    var curDate = $("#demoEvoCalendar").evoCalendar("getActiveDate");
+    var dateFormat = curDate.split(" ");
+    // var month = getMonthFromString(dateFormat[0]);
+    var month = $("#demoEvoCalendar").evoCalendar("getCurrentMonth");
+    var year = dateFormat[2];
+    var days = daysInMonth(month, year);
+    currentCalendarMonth = getDayInMonth(month);
+    let count = 0;
+
+    for (let i=1; i<=days; i++){
+        let current_day = [year, getDayInMonth(month), getDayInMonth(i)].join('-');
+
+        Promise.all([getNotesForDayAndTable(current_day)]).then( dailyTodos => {
+            console.log("The day is: " + current_day);
+            count ++;
+            document.getElementById("message").innerHTML = "Loading events...";
+            // if(month != $("#demoEvoCalendar").evoCalendar("getCurrentMonth")){
+            //     i = days;
+            // }
+
+            if (dailyTodos[0].length > 0) {
+                // console.log(dailyTodos[0]);
+                dailyTodos[0].forEach( dailyTodo => {
+                    // console.log(dailyTodo);
+                    console.log(dailyTodo.creation_date);
+                    let current_event = {
+                        id: "" + dailyTodo.id + i + month + year,
+                        name: dailyTodo.name,
+                        description: "Note author: " + dailyTodo.creator,
+                        badge: "" + isDoneBadge(dailyTodo.is_done),
+                        date: getRightDate(dailyTodo.creation_date),
+                        type: noteCategory(dailyTodo.category),
+                    }
+                    
+                    console.log(current_event);
+                    var eventExists = $("#demoEvoCalendar").evoCalendar("selectCalendarEvent", current_event);
+                    console.log(eventExists);
+                    if (!eventExists) {
+                        $("#demoEvoCalendar").evoCalendar("addCalendarEvent", current_event);
+                    }
+
+                });
+            }
+
+            if(count > days-2) { 
+                document.getElementById("message").innerHTML = "Welcome!";
+                console.log("Załaduj welcome");
+            }
+
+        });
+    }
+}
+
 
 $(document).ready(function() {
     $('#demoEvoCalendar').evoCalendar({
         format: "MM dd, yyyy",
         titleFormat: "MM"
-
     });
+
+    loadOnlineCalendar();
 
     // var curDate = $("#demoEvoCalendar").evoCalendar("getActiveDate");
     // var dateFormat = curDate.split(" ");
@@ -202,57 +258,67 @@ $(document).ready(function() {
     // }
     
 
-    $("#demoEvoCalendar").click( () =>  {
-        var curDate = $("#demoEvoCalendar").evoCalendar("getActiveDate");
-        var dateFormat = curDate.split(" ");
-        var month = getMonthFromString(dateFormat[0]);
-        var month = $("#demoEvoCalendar").evoCalendar("getCurrentMonth");
-        var year = dateFormat[2];
-        var days = daysInMonth(month, year);
-        let count = 0;
-
-        for (let i=1; i<=days; i++){
-            let current_day = [year, getDayInMonth(month), getDayInMonth(i)].join('-');
-
-            Promise.all([getNotesForDayAndTable(current_day)]).then( dailyTodos => {
-                console.log("The day is: " + current_day);
-                count ++;
-                document.getElementById("message").innerHTML = "Loading events...";
-                // if(month != $("#demoEvoCalendar").evoCalendar("getCurrentMonth")){
-                //     i = days;
-                // }
-
-                if (dailyTodos[0].length > 0) {
-                    // console.log(dailyTodos[0]);
-                    dailyTodos[0].forEach( dailyTodo => {
-                        // console.log(dailyTodo);
-                        console.log(dailyTodo.creation_date);
-                        let current_event = {
-                            id: "" + dailyTodo.id + i + month + year,
-                            name: dailyTodo.name,
-                            description: "Note author: " + dailyTodo.creator,
-                            badge: "" + isDoneBadge(dailyTodo.is_done),
-                            date: getRightDate(dailyTodo.creation_date),
-                            type: noteCategory(dailyTodo.category),
-                        }
-                        
-                        console.log(current_event);
-                        var eventExists = $("#demoEvoCalendar").evoCalendar("selectCalendarEvent", current_event);
-                        console.log(eventExists);
-                        if (!eventExists) {
-                            $("#demoEvoCalendar").evoCalendar("addCalendarEvent", current_event);
-                        }
-
-                    });
-                }
-
-                if(count > days-2) { 
-                    document.getElementById("message").innerHTML = "Welcome!";
-                    console.log("Załaduj welcome");
-                }
-
-            });
+    $("#demoEvoCalendar").click( function() {
+        console.log("Current month: ");
+        console.log(currentCalendarMonth);
+        let calMonth = $("#demoEvoCalendar").evoCalendar("getCurrentMonth");
+        console.log("Getting new month...");
+        console.log(getDayInMonth(calMonth));
+        
+        if(getDayInMonth(calMonth) != currentCalendarMonth) {
+            loadOnlineCalendar();
         }
+
+        // var curDate = $("#demoEvoCalendar").evoCalendar("getActiveDate");
+        // var dateFormat = curDate.split(" ");
+        // var month = getMonthFromString(dateFormat[0]);
+        // var month = $("#demoEvoCalendar").evoCalendar("getCurrentMonth");
+        // var year = dateFormat[2];
+        // var days = daysInMonth(month, year);
+        // let count = 0;
+
+        // for (let i=1; i<=days; i++){
+        //     let current_day = [year, getDayInMonth(month), getDayInMonth(i)].join('-');
+
+        //     Promise.all([getNotesForDayAndTable(current_day)]).then( dailyTodos => {
+        //         console.log("The day is: " + current_day);
+        //         count ++;
+        //         document.getElementById("message").innerHTML = "Loading events...";
+        //         // if(month != $("#demoEvoCalendar").evoCalendar("getCurrentMonth")){
+        //         //     i = days;
+        //         // }
+
+        //         if (dailyTodos[0].length > 0) {
+        //             // console.log(dailyTodos[0]);
+        //             dailyTodos[0].forEach( dailyTodo => {
+        //                 // console.log(dailyTodo);
+        //                 console.log(dailyTodo.creation_date);
+        //                 let current_event = {
+        //                     id: "" + dailyTodo.id + i + month + year,
+        //                     name: dailyTodo.name,
+        //                     description: "Note author: " + dailyTodo.creator,
+        //                     badge: "" + isDoneBadge(dailyTodo.is_done),
+        //                     date: getRightDate(dailyTodo.creation_date),
+        //                     type: noteCategory(dailyTodo.category),
+        //                 }
+                        
+        //                 console.log(current_event);
+        //                 var eventExists = $("#demoEvoCalendar").evoCalendar("selectCalendarEvent", current_event);
+        //                 console.log(eventExists);
+        //                 if (!eventExists) {
+        //                     $("#demoEvoCalendar").evoCalendar("addCalendarEvent", current_event);
+        //                 }
+
+        //             });
+        //         }
+
+        //         if(count > days-2) { 
+        //             document.getElementById("message").innerHTML = "Welcome!";
+        //             console.log("Załaduj welcome");
+        //         }
+
+        //     });
+        // }
 
     });
     

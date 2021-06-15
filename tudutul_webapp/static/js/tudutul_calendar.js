@@ -48,7 +48,7 @@ function loadCalendar() {
                     id: "" + j + i + month + year,
                     name: dailyTodos[j].name,
                     description: dailyTodos[j].content,
-                    badge: "Priorytet: " + dailyTodos[j].priority,
+                    badge: "Priority: " + dailyTodos[j].priority,
                     date: current_day,
                     type: dailyTodos[j].category,
                 }
