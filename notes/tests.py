@@ -109,20 +109,6 @@ class TestNotes(TestCase):
         expected = [self.note1.id, note2.id, note3.id]
         tested = [el['id'] for el in response.data['ans']]
         self.assertListEqual(expected, tested)
-    #
-    # def test_get_request_returns_only_from_specified_date(self):
-    #     note2 = Note.objects.create(
-    #         name='TestNote',
-    #         creator='TestUser',
-    #         content='TestContent',
-    #         creation_date='2021-12-23 16:30',
-    #         priority=5
-    #     )
-    #
-    #     response = self.client.get('/note/', {'date': '2021-12-23'})
-    #     expected = [note2.id]
-    #     tested = [el['id'] for el in response.data['ans']]
-    #     self.assertListEqual(expected, tested)
 
     def test_get_request_returns_only_from_specified_table(self):
         table2 = Table.objects.create(
