@@ -323,4 +323,3 @@ class NoteDetailView(APIView):
                                              f'no access to delete this note.'}, status=status.HTTP_401_UNAUTHORIZED)
 
         return response
-

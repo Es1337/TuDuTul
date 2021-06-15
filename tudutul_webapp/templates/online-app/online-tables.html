@@ -5,6 +5,7 @@
 {% block scripts %}
     <script type="module" src='{% static "js/render_functions.js" %}' defer></script>
     <script type="module" src='{% static "js/online-tables.js" %}' defer></script>
+    <script src='{% static "js/account.js" %}' defer></script>
 {% endblock %}
 
 {% block navbarbuttons %}
@@ -25,7 +26,7 @@
 
 {% if logged %}
         <li class="nav-item">
-        <a href="/logout" class="nav-link">
+        <a href="#" onclick="return sendLogout();" class="nav-link">
             <i class=" my-1 fas fa-sign-out-alt text-3xl sm:text-5xl text-yellow-300"></i>
             <span class="link-text text-yellow-300">Logout</span>
         </a>
