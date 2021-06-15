@@ -95,13 +95,27 @@ REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoS
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': 'db.sqlite3'
+    # },
+
     'default': {
         'ENGINE': 'djongo',
         'NAME': env('DATABASE_NAME'),
         'CLIENT': {
             'host': env('DATABASE_HOST')
         }
-    }
+    },
+
+    # 'postgres': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': env('POSTGRES_DATABASE_NAME'),
+    #     'USER': env('POSTGRES_DATABASE_USER'),
+    #     'PASSWORD': env('POSTGRES_DATABASE_PASSWORD'),
+    #     'HOST': env('POSTGRES_DATABASE_HOST'),
+    #     'PORT': env('POSTGRES_DATABASE_PORT')
+    # }
 }
 
 # Password validation

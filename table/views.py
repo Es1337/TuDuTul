@@ -231,7 +231,7 @@ class TableDetailView(APIView):
         except Table.DoesNotExist:
             return Response(data={"ans": "Table does not exist"})
         
-        if delete_table.owner != request.session['userLogin']:
+        if ('Authorization' not in request.headers) and ('userLogin' not in request.session or delete_table.owner != request.session['userLogin']):
             return Response(data={"ans": "Unauthorized"})
         
         try:
