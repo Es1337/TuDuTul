@@ -39,7 +39,8 @@ class TestTables(TestCase):
             name='TestNote',
             creator='TestCreator',
             content='TestContent',
-            completion_date='2021-12-21',
+            creation_date='2020-12-21',
+            completion_date='2022-12-21',
             priority=5,
             owning_table_id=self.table1.id
         )
@@ -78,7 +79,8 @@ class TestAPITables(APITestCase):
             name='TestNote',
             creator='TestCreator',
             content='TestContent',
-            completion_date='2021-12-21',
+            creation_date='2020-12-21',
+            completion_date='2022-12-21',
             priority=5,
             owning_table_id=self.table.id
         )     
