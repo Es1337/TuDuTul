@@ -251,7 +251,8 @@ const deleteTuDu = (id, todos, date, checkRepetition) => {
     console.log("SINGLE ITEM DELETIONS");
 
     turnOffModal();
-    allTodos = getFromLocalStorage(todoDate);
+    saveToLocalStorage(todos, date);
+    allTodos = getFromLocalStorage(date);
     renderTodos(allTodos);
 }
 
