@@ -239,6 +239,9 @@ const deleteTuDu = (id, todos, date, checkRepetition) => {
 
     if (checkRepetition && todos[index].repetition !== "N") {
         deleteRepeatingTudus(todos[index]);
+        allTodos = getFromLocalStorage(date);
+        getTuDuDisplayModule();
+        renderTodos(allTodos);
         return;
     }
 
