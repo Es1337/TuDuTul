@@ -1,8 +1,15 @@
 module.exports = {
   // mode: 'jit',
-  // purge: [
-  //     './tudutul_webapp/templates/tudutul-webapp/*.html'
-  // ],
+  purge: {
+    enabled: true,
+    content: [
+      './tudutul_webapp/templates/account/*.html',
+      './tudutul_webapp/templates/login/*.html',
+      './tudutul_webapp/templates/online-app/*.html',
+      './tudutul_webapp/templates/offline-app/*.html',
+      './tudutul_webapp/templates/register/*.html',
+    ]
+  },
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
