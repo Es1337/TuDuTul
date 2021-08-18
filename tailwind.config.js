@@ -8,6 +8,7 @@ module.exports = {
       './tudutul_webapp/templates/online-app/*.html',
       './tudutul_webapp/templates/offline-app/*.html',
       './tudutul_webapp/templates/register/*.html',
+      './tudutul_webapp/templates/*.html',
     ]
   },
   darkMode: false, // or 'media' or 'class'
